@@ -1153,6 +1153,145 @@
       .board-visual-box { height: 140px; }
     }
 
+  
+    /* ==========================================================
+       SLIDE 12: TRÒ CHƠI 3 THẺ BÍ ẨN (HẠT TAN BIẾN + LẬT THẺ 3D)
+       ========================================================== */
+    .s12-game-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.15rem;
+      margin-top: 0.45rem;
+      perspective: 1400px;
+    }
+    .s12-card-slot {
+      position: relative;
+      min-height: 410px;
+      height: 100%;
+      cursor: pointer;
+      perspective: 1200px;
+    }
+    .s12-particle-canvas {
+      position: absolute;
+      inset: -24px;
+      width: calc(100% + 48px);
+      height: calc(100% + 48px);
+      pointer-events: none;
+      z-index: 40;
+    }
+    .s12-mystery-cover {
+      position: absolute;
+      inset: 0;
+      z-index: 25;
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(56, 189, 248, 0.14) 0%, rgba(10, 28, 58, 0.96) 72%),
+        linear-gradient(155deg, rgba(16, 42, 86, 0.98), rgba(6, 18, 40, 0.98));
+      border: 1.5px solid rgba(125, 211, 252, 0.42);
+      box-shadow: 0 14px 36px rgba(6, 18, 40, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      transition: opacity 0.45s ease, transform 0.45s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .s12-mystery-cover:hover {
+      border-color: var(--accent-gold);
+      box-shadow: 0 18px 42px rgba(253, 224, 71, 0.22);
+    }
+    .s12-mystery-cover.dissolved {
+      opacity: 0;
+      transform: scale(0.92);
+      pointer-events: none;
+    }
+    .s12-mystery-icon {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      border: 2px dashed rgba(253, 224, 71, 0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--accent-gold);
+      background: rgba(253, 224, 71, 0.08);
+      box-shadow: 0 0 24px rgba(253, 224, 71, 0.2);
+    }
+    .s12-flip-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 410px;
+      transform-style: preserve-3d;
+      transition: transform 0.85s cubic-bezier(0.34, 1.35, 0.64, 1), opacity 0.45s ease;
+      opacity: 0;
+    }
+    .s12-card-slot.revealed-card .s12-flip-inner {
+      opacity: 1;
+    }
+    .s12-card-slot.flipped-photo .s12-flip-inner {
+      transform: rotateY(180deg);
+    }
+    .s12-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--bg-surface-strong);
+      border: 1px solid var(--border-cyan);
+      box-shadow: 0 12px 35px rgba(6, 18, 40, 0.5);
+      display: flex;
+      flex-direction: column;
+    }
+    .s12-face-back {
+      transform: rotateY(180deg);
+      border: 2px solid var(--accent-gold);
+      background: radial-gradient(circle at 50% 40%, rgba(253, 224, 71, 0.14), rgba(6, 18, 40, 0.98) 75%);
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      gap: 0.75rem;
+    }
+    .s12-photo-hero {
+      width: 100%;
+      height: 295px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #061226;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .s12-photo-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 15%;
+    }
+    .s12-photo-hero.mode-cutout-noframe {
+      background: radial-gradient(circle at 50% 60%, rgba(253, 224, 71, 0.18), transparent 72%);
+    }
+    .s12-photo-hero.mode-cutout-noframe img {
+      object-fit: contain;
+      filter: drop-shadow(0 6px 22px rgba(253, 224, 71, 0.42));
+    }
+    .s12-clue-box {
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+      gap: 0.65rem;
+    }
+    @media (max-width: 850px) {
+      .s12-game-grid { grid-template-columns: 1fr; }
+      .s12-card-slot, .s12-flip-inner { min-height: 360px; }
+    }
+
   </style>
   <script>
     window.openCurtain = function() {
@@ -1322,7 +1461,7 @@
           <div class="card-content-p">Là những <span class="hl-cyan">cột mốc cụ thể, đo lường được</span>: thi đỗ một ngôi trường, đạt một chứng chỉ, có một công việc ổn định.</div>
         </div>
         <div class="neo-card conic-glow-card">
-          <div class="badge-sub" style="background: var(--accent-gold); color: #0b1f3f;">CẤP ĐỘ 3 · RÊ CHUỘT NGHIÊNG 3D</div>
+          <div class="badge-sub" style="background: var(--accent-gold); color: #0b1f3f;">CẤP ĐỘ 3</div>
           <div class="card-title-lg">Ước mơ</div>
           <div class="card-content-p">Là <span class="hl-marker">tầm nhìn lớn xuyên suốt cuộc đời</span>, chiếc <span class="hl-underline now">la bàn</span> dẫn dắt mọi mục tiêu và hành động của ta.</div>
         </div>
@@ -1337,10 +1476,7 @@
       </div>
       <div class="lighthouse-panorama-scene" id="lighthousePanorama">
         <div class="panorama-dark-board" id="panoramaDarkBoard">
-          <div class="board-unlit-prompt">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/></svg>
-            <span>Nhấp chuột để ngọn hải đăng chiếu sáng bảng đen</span>
-          </div>
+
           <div class="board-illuminated-text">
             <div class="board-quote-highlight">
               “Nói cách khác, mục tiêu là <span class="hl-cyan">những bậc thang cụ thể</span>, còn ước mơ chính là <span class="hl-underline now">ngọn hải đăng chỉ hướng</span>.”
@@ -1585,7 +1721,7 @@
             “Phần lớn người trẻ không thiếu ước mơ, mà <span class="hl-rose">thiếu một sự khởi đầu</span>. Có ba chiếc gông cùm vô hình đang ghìm chặt bước chân ta:”
           </div>
           <div class="neo-card step-item" style="border-left: 4px solid var(--accent-rose);">
-            <div class="badge-sub" style="background: rgba(251, 113, 133, 0.25); color: #fecdd3;">GÔNG CÙM 1 · LOSS AVERSION</div>
+            <div class="badge-sub" style="background: rgba(251, 113, 133, 0.25); color: #fecdd3;">GÔNG CÙM 1 · TÂM LÝ SỢ MẤT MÁT</div>
             <div class="card-title-lg">1. Nỗi sợ thất bại và tâm lý sợ mất mát</div>
             <div class="card-content-p">
               Con người <span class="hl-marker">sợ mất mát nhiều hơn khao khát đạt được</span>. Ta chần chừ không phải vì không tin vào khả năng, mà vì <span class="hl-rose">sợ tốn công vô ích, sợ đối diện với sự vụng về của chính mình</span>.
@@ -1610,14 +1746,14 @@
       <div class="grid-asymmetric">
         <div style="display: flex; flex-direction: column; gap: 0.95rem;">
           <div class="neo-card step-item">
-            <div class="badge-sub">2 · PEER PRESSURE & SOCIAL JUDGMENT</div>
+            <div class="badge-sub">2 · ÁP LỰC ĐỒNG TRANG LỨA & SỢ PHÁN XÉT</div>
             <div class="card-title-lg">2. Áp lực đồng trang lứa và nỗi sợ phán xét</div>
             <div class="card-content-p">
               Lướt điện thoại thấy bạn bè khoe thành tích rực rỡ, ta dễ hụt hẫng. Nhưng sự so sánh ấy thật khập khiễng: ta đem <span class="hl-rose">tập phim hậu trường đầy vết xước</span> của mình đặt cạnh <span class="hl-underline">đoạn phim nổi bật đã cắt gọt</span> của người khác. Sợ bị chê cười, ta tự tay dâng quyền tự quyết cuộc đời cho ánh nhìn của thiên hạ.
             </div>
           </div>
           <div class="neo-card step-item" style="border-left: 4px solid var(--accent-gold);">
-            <div class="badge-sub" style="background: rgba(253, 224, 71, 0.22); color: var(--accent-gold);">3 · STATUS QUO BIAS & PERFECTIONISM</div>
+            <div class="badge-sub" style="background: rgba(253, 224, 71, 0.22); color: var(--accent-gold);">3 · THÓI QUEN AN TOÀN & CẦU TOÀN</div>
             <div class="card-title-lg">3. Sự ngụy trang tinh vi của chủ nghĩa cầu toàn</div>
             <div class="card-content-p">
               Ta hay tự huyễn hoặc: <em>“Mình cần chuẩn bị kỹ hơn”</em>, <em>“Chờ có cảm hứng rồi làm”</em>. Thực chất, cầu toàn là <span class="hl-rose">tấm bình phong hèn nhát</span> để né tránh sức nóng của thực tế, bởi bộ não luôn ưa sự quen thuộc hơn bất định của đổi thay.
@@ -1634,7 +1770,7 @@
               <div style="font-size: 0.96rem; color: #e2e8f0; font-weight: 500;">Mồ hôi, trăn trở và những lần thử sai</div>
             </div>
             <div class="reel-glass reel-glam">
-              <div style="font-size: 0.84rem; font-weight: 800; color: var(--accent-gold); letter-spacing: 0.08em;">★ HIGHLIGHT REEL</div>
+              <div style="font-size: 0.84rem; font-weight: 800; color: var(--accent-gold); letter-spacing: 0.08em;">★ ĐOẠN PHIM NỔI BẬT</div>
               <svg viewBox="0 0 64 64" style="width: 54px; height: 54px; margin: 0 auto; filter: drop-shadow(0 0 12px rgba(253,224,71,0.65));">
                 <path d="M18 10 H46 V26 C46 34 39 40 32 40 C25 40 18 34 18 26 Z" fill="#fde047"/>
                 <path d="M18 14 H10 V22 C10 28 14 30 18 30 M46 14 H54 V22 C54 28 50 30 46 30" fill="none" stroke="#fde047" stroke-width="3.5"/>
@@ -1658,14 +1794,14 @@
       <div class="grid-asymmetric">
         <div style="display: flex; flex-direction: column; gap: 0.95rem;">
           <div class="neo-card step-item">
-            <div class="badge-sub">BƯỚC 1 · CALCULATED RISK</div>
+            <div class="badge-sub">BƯỚC 1 · RỦI RO CÓ TÍNH TOÁN</div>
             <div class="card-title-lg">1. Đón nhận rủi ro có tính toán</div>
             <div class="card-content-p">
               Thất bại không phải bản án dành cho năng lực, mà là <span class="hl-cyan">dữ liệu quý để hiệu chỉnh hành trình</span>. Một lần thuyết trình run rẩy không phải dấu chấm hết, mà là bài học: mình cần chuẩn bị chu đáo hơn ở đâu? Khi coi va vấp là một phần của trải nghiệm, thất bại sẽ hóa thành <span class="hl-marker">bệ phóng cho sự trưởng thành</span>.
             </div>
           </div>
           <div class="neo-card conic-glow-card step-item">
-            <div class="badge-sub" style="background: rgba(253, 224, 71, 0.22); color: var(--accent-gold);">BƯỚC 2 · COMPETENCE</div>
+            <div class="badge-sub" style="background: rgba(253, 224, 71, 0.22); color: var(--accent-gold);">BƯỚC 2 · TÍCH LŨY THỰC LỰC</div>
             <div class="card-title-lg">2. Tích lũy thực lực tương xứng với khát vọng</div>
             <div class="card-content-p">
               Ước mơ không đi kèm năng lực chỉ là ảo tưởng. Cuộc đời chỉ tưởng thưởng cho những giá trị <span class="hl-underline">đã thành sản phẩm thực</span>, chẳng trả công cho ý tưởng nằm chết trong đầu. Muốn chạm tới đỉnh cao, ta phải tích lũy kỹ năng, kiến thức và sự nghiêm cẩn mỗi ngày.
@@ -1734,42 +1870,80 @@
       </div>
     </div>
 
-    <!-- SLIDE 12 (fx-12): V. LIÊN HỆ THỰC TẾ -->
-    <div class="slide" data-fx="fx-12" data-section="PHẦN V" data-title="Liên hệ thực tế: Từ đỉnh cao đến đời thường">
-      <div class="part-capsule step-item">V. LIÊN HỆ THỰC TẾ: TỪ ĐỈNH CAO ĐẾN ĐỜI THƯỜNG</div>
-      <h2 class="slide-title">Từ đỉnh cao đến đời thường</h2>
+    <!-- SLIDE 12 (fx-12): V. LIÊN HỆ THỰC TẾ (TRÒ CHƠI LẬT THẺ) -->
+    <div class="slide" data-fx="fx-12" data-section="PHẦN V" data-title="Liên hệ thực tế: Từ đời thường đến đỉnh cao">
+      <div class="part-capsule step-item">V. LIÊN HỆ THỰC TẾ: TỪ ĐỜI THƯỜNG ĐẾN ĐỈNH CAO</div>
+      <h2 class="slide-title">Từ đời thường đến đỉnh cao</h2>
       <p class="paragraph-body step-item">
         Hành trình vượt ngưỡng không phải chuyện cổ tích viển vông, mà hiện hữu sống động qua từng số phận:
       </p>
-      <div class="grid-trio step-item stagger-trio-step">
-        <div class="cinema-photo-card">
-          <div class="cinema-photo-wrap mode-cutout-noframe">
-            <img src="h-hen-nie.jpg.png" data-cutout="true" data-base="h-hen-nie" data-fallback-url="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="H'Hen Niê">
+      <div class="s12-game-grid step-item">
+        <!-- THẺ 1: H'HEN NIÊ -->
+        <div class="s12-card-slot" id="s12CardNie" onclick="event.stopPropagation(); window.handleS12CardClick('nie');">
+          <canvas class="s12-particle-canvas"></canvas>
+          <div class="s12-mystery-cover">
+            <div class="s12-mystery-icon">?</div>
+            <div style="font-size: 0.9rem; font-weight: 800; letter-spacing: 0.14em; color: #bae6fd;">THẺ BÍ ẨN 01</div>
           </div>
-          <div class="cinema-card-body">
-            <div class="badge-sub">VƯỢT LÊN ĐỊNH KIẾN XÃ HỘI</div>
-            <div class="card-title-lg">H’Hen Niê</div>
-            <div class="card-content-p">Lớn lên ở buôn làng nghèo, nơi hủ tục tảo hôn từng vây bủa số phận bao cô gái. Dám bước ra khỏi khuôn mẫu định sẵn, cô kiên định học tập, tự viết lại đời mình để trở thành Hoa hậu Hoàn vũ Việt Nam và ghi tên vào <span class="hl-underline now">Top <span class="count-num" data-count="5">0</span> Miss Universe</span>.</div>
+          <div class="s12-flip-inner">
+            <div class="s12-face s12-face-front" id="s12NieFront">
+              <div class="s12-clue-box">
+                <div class="badge-sub">GỢI Ý · VƯỢT LÊN ĐỊNH KIẾN XÃ HỘI</div>
+                <div class="card-title-lg" style="color: var(--accent-gold);">Nhân vật bí ẩn 01</div>
+                <div class="card-content-p">Lớn lên ở buôn làng nghèo, nơi hủ tục tảo hôn từng vây bủa số phận bao cô gái. Dám bước ra khỏi khuôn mẫu định sẵn, cô kiên định học tập, tự viết lại đời mình để trở thành Hoa hậu Hoàn vũ Việt Nam và ghi tên vào <span class="hl-underline now">Top <span class="count-num" data-count="5">0</span> Miss Universe</span>.</div>
+              </div>
+            </div>
+            <div class="s12-face s12-face-back">
+              <div class="s12-photo-hero mode-cutout-noframe">
+                <img src="h-hen-nie.jpg.png" data-cutout="true" data-base="h-hen-nie" data-fallback-url="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="H'Hen Niê">
+              </div>
+              <div class="card-title-lg" style="color: var(--accent-gold); text-align: center; margin-bottom: 0;">H’Hen Niê</div>
+            </div>
           </div>
         </div>
-        <div class="cinema-photo-card">
-          <div class="cinema-photo-wrap">
-            <img src="jk-rowling.jpg" data-base="jk-rowling" data-fallback-url="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/J._K._Rowling_2010.jpg/640px-J._K._Rowling_2010.jpg" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="J.K. Rowling">
+
+        <!-- THẺ 2: J.K. ROWLING -->
+        <div class="s12-card-slot" id="s12CardRowling" onclick="event.stopPropagation(); window.handleS12CardClick('rowling');">
+          <canvas class="s12-particle-canvas"></canvas>
+          <div class="s12-mystery-cover">
+            <div class="s12-mystery-icon">?</div>
+            <div style="font-size: 0.9rem; font-weight: 800; letter-spacing: 0.14em; color: #bae6fd;">THẺ BÍ ẨN 02</div>
           </div>
-          <div class="cinema-card-body">
-            <div class="badge-sub">BỀN BỈ TRƯỚC NGHỊCH CẢNH</div>
-            <div class="card-title-lg">J.K. Rowling</div>
-            <div class="card-content-p">Từng là bà mẹ đơn thân chật vật bên bờ vực suy sụp; bản thảo <em>Harry Potter</em> bị <span class="hl-rose"><span class="count-num" data-count="12">0</span> nhà xuất bản từ chối liên tiếp</span>. Bà không có tấm vé đảm bảo thành công, nhưng dứt khoát không để <span class="count-num" data-count="12">0</span> lần khước từ ấy thành dấu chấm hết cho ngòi bút.</div>
+          <div class="s12-flip-inner">
+            <div class="s12-face s12-face-front" id="s12RowlingFront">
+              <div class="s12-clue-box">
+                <div class="badge-sub">GỢI Ý · BỀN BỈ TRƯỚC NGHỊCH CẢNH</div>
+                <div class="card-title-lg" style="color: var(--accent-gold);">Nhân vật bí ẩn 02</div>
+                <div class="card-content-p">Từng là bà mẹ đơn thân chật vật bên bờ vực suy sụp; bản thảo <em>Harry Potter</em> bị <span class="hl-rose"><span class="count-num" data-count="12">0</span> nhà xuất bản từ chối liên tiếp</span>. Bà không có tấm vé đảm bảo thành công, nhưng dứt khoát không để <span class="count-num" data-count="12">0</span> lần khước từ ấy thành dấu chấm hết cho ngòi bút.</div>
+              </div>
+            </div>
+            <div class="s12-face s12-face-back">
+              <div class="s12-photo-hero">
+                <img src="jk-rowling.jpg" data-base="jk-rowling" data-fallback-url="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/J._K._Rowling_2010.jpg/640px-J._K._Rowling_2010.jpg" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="J.K. Rowling">
+              </div>
+              <div class="card-title-lg" style="color: var(--accent-gold); text-align: center; margin-bottom: 0;">J.K. Rowling</div>
+            </div>
           </div>
         </div>
-        <div class="cinema-photo-card conic-glow-card">
-          <div class="cinema-photo-wrap">
-            <img src="doi-thuong.jpg" data-base="doi-thuong" data-fallback-url="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="Người trẻ quanh ta">
+
+        <!-- THẺ 3: QUANH TA (TỰ ĐỘNG LẬT KHI CẢ HAI THẺ TRÊN LẬT XONG) -->
+        <div class="s12-card-slot" id="s12CardQuanhTa" onclick="event.stopPropagation();">
+          <canvas class="s12-particle-canvas"></canvas>
+          <div class="s12-mystery-cover">
+            <div class="s12-mystery-icon">?</div>
+            <div style="font-size: 0.9rem; font-weight: 800; letter-spacing: 0.14em; color: #bae6fd;">THẺ BÍ ẨN 03</div>
           </div>
-          <div class="cinema-card-body">
-            <div class="badge-sub" style="background: var(--accent-gold); color: #0b1f3f;">QUANH TA</div>
-            <div class="card-title-lg">Những bước chân thầm lặng</div>
-            <div class="card-content-p">Ta không cần ngước nhìn những tượng đài xa vời. Hãy nhìn người trẻ bên cạnh: học sinh từng run rẩy nay tự tin bảo vệ đề tài trước hội đồng; bạn trẻ dám tắt màn hình giải trí để thức khuya học ngoại ngữ. <span class="hl-marker">“Dám bước ra”</span> bắt đầu từ chính những khoảnh khắc đời thường ấy: dám chọn sự khó chịu hôm nay để đổi lấy vững vàng ngày mai.</div>
+          <div class="s12-flip-inner">
+            <div class="s12-face s12-face-front" style="border-color: var(--accent-gold);">
+              <div class="cinema-photo-wrap">
+                <img src="doi-thuong.jpg" data-base="doi-thuong" data-fallback-url="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="Người trẻ quanh ta">
+              </div>
+              <div class="cinema-card-body">
+                <div class="badge-sub" style="background: var(--accent-gold); color: #0b1f3f;">QUANH TA</div>
+                <div class="card-title-lg">Những bước chân thầm lặng</div>
+                <div class="card-content-p" style="font-size: 1.05rem;">Ta không cần ngước nhìn những tượng đài xa vời. Hãy nhìn người trẻ bên cạnh: học sinh từng run rẩy nay tự tin bảo vệ đề tài trước hội đồng; bạn trẻ dám tắt màn hình giải trí để thức khuya học ngoại ngữ. <span class="hl-marker">“Dám bước ra”</span> bắt đầu từ chính những khoảnh khắc đời thường ấy: dám chọn sự khó chịu hôm nay để đổi lấy vững vàng ngày mai.</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1872,8 +2046,8 @@
               <path class="b-leaf" style="--k:2" d="M152 14 Q 118 4, 100 14"/>
             </g>
           </svg>
-          <div class="card-title-lg" style="color: var(--accent-emerald); margin-top: 0.35rem;">Cuộc đời là một Solo Race</div>
-          <div class="card-content-p">– <strong>(Cuộc đua đơn độc của riêng bạn):</strong> Không có chuẩn thời gian chung nào ép ai cũng phải thành công ở tuổi hai mươi hay ba mươi. <span class="hl-cyan">Cây tre mất nhiều năm cắm sâu bộ rễ</span> dưới lòng đất trước khi vươn cao hàng chục mét; hoa mận không nở mùa hè, hoa hồng cũng chẳng khoe sắc giữa mùa đông.</div>
+          <div class="card-title-lg" style="color: var(--accent-emerald); margin-top: 0.35rem;">Cuộc đời là một cuộc đua đơn độc</div>
+          <div class="card-content-p">– Không có chuẩn thời gian chung nào ép ai cũng phải thành công ở tuổi hai mươi hay ba mươi. <span class="hl-cyan">Cây tre mất nhiều năm cắm sâu bộ rễ</span> dưới lòng đất trước khi vươn cao hàng chục mét; hoa mận không nở mùa hè, hoa hồng cũng chẳng khoe sắc giữa mùa đông.</div>
         </div>
 
         <div class="art-frame-flower neo-card">
@@ -2367,7 +2541,8 @@
       const activeSlide = slides[idx];
       if (!activeSlide) return;
       if (idx === 4) window.startAutoIroning();
-      if (idx === 10 || idx === 11 || idx === 12) window.runNumberCounters(activeSlide);
+      if (idx === 10 || idx === 12) window.runNumberCounters(activeSlide);
+      if (idx === 11 && typeof window.resetS12Game === 'function') window.resetS12Game();
       if (idx === 13) {
         window.runMatrixCipher();
         window.replayBambooGrowth();
@@ -2473,7 +2648,7 @@
     }
 
     slidesClickTrigger.addEventListener('click', (e) => {
-      if (e.target.closest('button, a, .flip-qa-stage, .ironing-banner-stage, .choice-flip-stage')) return;
+      if (e.target.closest('button, a, .flip-qa-stage, .ironing-banner-stage, .choice-flip-stage, .s12-card-slot')) return;
       const card = e.target.closest('.neo-card, .cinema-photo-card, .art-frame-bamboo, .art-frame-flower, .panorama-dark-board, .custom-image-frame');
       if (card && card.classList.contains('panorama-dark-board') && !isBoardLit) {
         advanceStepOrSlide();
@@ -2634,6 +2809,148 @@
 
       requestAnimationFrame(animateAllCanvases);
     }
+
+
+    // =========================================================================
+    // TRÒ CHƠI SLIDE 12: TAN BIẾN HẠT + LẬT ẢNH + LẬT LẠI THÔNG TIN + TỰ LẬT QUANH TA
+    // =========================================================================
+    (function() {
+      const state = { nie: 0, rowling: 0, quanhTaDone: false };
+      const FULL_CARDS = {
+        nie: `
+          <div class="cinema-photo-wrap mode-cutout-noframe">
+            <img src="h-hen-nie.jpg.png" data-cutout="true" data-base="h-hen-nie" data-fallback-url="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="H'Hen Niê">
+          </div>
+          <div class="cinema-card-body">
+            <div class="badge-sub">VƯỢT LÊN ĐỊNH KIẾN XÃ HỘI</div>
+            <div class="card-title-lg">H’Hen Niê</div>
+            <div class="card-content-p" style="font-size: 1.05rem;">Lớn lên ở buôn làng nghèo, nơi hủ tục tảo hôn từng vây bủa số phận bao cô gái. Dám bước ra khỏi khuôn mẫu định sẵn, cô kiên định học tập, tự viết lại đời mình để trở thành Hoa hậu Hoàn vũ Việt Nam và ghi tên vào <span class="hl-underline now">Top <span class="count-num" data-count="5">5</span> Miss Universe</span>.</div>
+          </div>`,
+        rowling: `
+          <div class="cinema-photo-wrap">
+            <img src="jk-rowling.jpg" data-base="jk-rowling" data-fallback-url="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/J._K._Rowling_2010.jpg/640px-J._K._Rowling_2010.jpg" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="J.K. Rowling">
+          </div>
+          <div class="cinema-card-body">
+            <div class="badge-sub">BỀN BỈ TRƯỚC NGHỊCH CẢNH</div>
+            <div class="card-title-lg">J.K. Rowling</div>
+            <div class="card-content-p" style="font-size: 1.05rem;">Từng là bà mẹ đơn thân chật vật bên bờ vực suy sụp; bản thảo <em>Harry Potter</em> bị <span class="hl-rose"><span class="count-num" data-count="12">12</span> nhà xuất bản từ chối liên tiếp</span>. Bà không có tấm vé đảm bảo thành công, nhưng dứt khoát không để <span class="count-num" data-count="12">12</span> lần khước từ ấy thành dấu chấm hết cho ngòi bút.</div>
+          </div>`
+      };
+      const CLUE_CARDS = {
+        nie: `
+          <div class="s12-clue-box">
+            <div class="badge-sub">GỢI Ý · VƯỢT LÊN ĐỊNH KIẾN XÃ HỘI</div>
+            <div class="card-title-lg" style="color: var(--accent-gold);">Nhân vật bí ẩn 01</div>
+            <div class="card-content-p">Lớn lên ở buôn làng nghèo, nơi hủ tục tảo hôn từng vây bủa số phận bao cô gái. Dám bước ra khỏi khuôn mẫu định sẵn, cô kiên định học tập, tự viết lại đời mình để trở thành Hoa hậu Hoàn vũ Việt Nam và ghi tên vào <span class="hl-underline now">Top <span class="count-num" data-count="5">0</span> Miss Universe</span>.</div>
+          </div>`,
+        rowling: `
+          <div class="s12-clue-box">
+            <div class="badge-sub">GỢI Ý · BỀN BỈ TRƯỚC NGHỊCH CẢNH</div>
+            <div class="card-title-lg" style="color: var(--accent-gold);">Nhân vật bí ẩn 02</div>
+            <div class="card-content-p">Từng là bà mẹ đơn thân chật vật bên bờ vực suy sụp; bản thảo <em>Harry Potter</em> bị <span class="hl-rose"><span class="count-num" data-count="12">0</span> nhà xuất bản từ chối liên tiếp</span>. Bà không có tấm vé đảm bảo thành công, nhưng dứt khoát không để <span class="count-num" data-count="12">0</span> lần khước từ ấy thành dấu chấm hết cho ngòi bút.</div>
+          </div>`
+      };
+
+      function burstParticlesOnSlot(slot) {
+        const cvs = slot.querySelector('.s12-particle-canvas');
+        if (!cvs) return;
+        const ctx = cvs.getContext('2d');
+        cvs.width = cvs.offsetWidth || 360;
+        cvs.height = cvs.offsetHeight || 440;
+        const w = cvs.width, h = cvs.height;
+        const colors = ['#fde047', '#38bdf8', '#ffffff', '#7dd3fc', '#fbbf24'];
+        const particles = [];
+        for (let i = 0; i < 85; i++) {
+          particles.push({
+            x: 24 + Math.random() * (w - 48),
+            y: 24 + Math.random() * (h - 48),
+            vx: (Math.random() - 0.5) * 4.5,
+            vy: (Math.random() - 0.5) * 4.5 - 1.2,
+            r: Math.random() * 3.5 + 1.5,
+            alpha: 1,
+            color: colors[i % colors.length]
+          });
+        }
+        (function loop() {
+          ctx.clearRect(0, 0, w, h);
+          let alive = false;
+          for (const pt of particles) {
+            pt.x += pt.vx;
+            pt.y += pt.vy;
+            pt.alpha -= 0.025;
+            if (pt.alpha > 0.02) {
+              alive = true;
+              ctx.globalAlpha = pt.alpha;
+              ctx.fillStyle = pt.color;
+              ctx.beginPath();
+              ctx.arc(pt.x, pt.y, pt.r, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+          ctx.globalAlpha = 1;
+          if (alive) requestAnimationFrame(loop);
+          else ctx.clearRect(0, 0, w, h);
+        })();
+      }
+
+      function autoRevealQuanhTa() {
+        if (state.quanhTaDone) return;
+        if (state.nie === 3 && state.rowling === 3) {
+          state.quanhTaDone = true;
+          const qSlot = document.getElementById('s12CardQuanhTa');
+          if (!qSlot) return;
+          setTimeout(() => {
+            burstParticlesOnSlot(qSlot);
+            const cov = qSlot.querySelector('.s12-mystery-cover');
+            if (cov) cov.classList.add('dissolved');
+            qSlot.classList.add('revealed-card');
+          }, 450);
+        }
+      }
+
+      window.handleS12CardClick = function(who) {
+        const slot = document.getElementById(who === 'nie' ? 's12CardNie' : 's12CardRowling');
+        const front = document.getElementById(who === 'nie' ? 's12NieFront' : 's12RowlingFront');
+        if (!slot || !front) return;
+
+        if (state[who] === 0) {
+          // Lần 1: Tan biến thành hạt nhỏ -> hiện thẻ gợi ý thông tin
+          state[who] = 1;
+          burstParticlesOnSlot(slot);
+          const cov = slot.querySelector('.s12-mystery-cover');
+          if (cov) cov.classList.add('dissolved');
+          slot.classList.add('revealed-card');
+          window.runNumberCounters(front);
+        } else if (state[who] === 1) {
+          // Lần 2: Lật 3D để hiện hình ảnh
+          state[who] = 2;
+          slot.classList.add('flipped-photo');
+        } else if (state[who] === 2) {
+          // Lần 3: Lật ngược lại và hiện thông tin đầy đủ như cũ và giữ nguyên
+          state[who] = 3;
+          front.innerHTML = FULL_CARDS[who];
+          slot.classList.remove('flipped-photo');
+          autoRevealQuanhTa();
+        }
+      };
+
+      window.resetS12Game = function() {
+        state.nie = 0;
+        state.rowling = 0;
+        state.quanhTaDone = false;
+        const nieFront = document.getElementById('s12NieFront');
+        const rowFront = document.getElementById('s12RowlingFront');
+        if (nieFront) nieFront.innerHTML = CLUE_CARDS.nie;
+        if (rowFront) rowFront.innerHTML = CLUE_CARDS.rowling;
+        ['s12CardNie', 's12CardRowling', 's12CardQuanhTa'].forEach(id => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.classList.remove('revealed-card', 'flipped-photo');
+          const cov = el.querySelector('.s12-mystery-cover');
+          if (cov) cov.classList.remove('dissolved');
+        });
+      };
+    })();
 
     // =========================================================================
     // ENGINE SÂN KHẤU CÓ BẢNG CHỮ (SLIDE 15: NỘI DUNG SLIDE 15 & 16 CŨ)
