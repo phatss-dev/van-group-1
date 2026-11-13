@@ -277,33 +277,35 @@
 
     /* SLIDE 8: RADAR 4 VÒNG TRÒN VÙNG AN TOÀN -> TĂNG TRƯỞNG (ĐÃ BỔ SUNG CSS HOÀN CHỈNH) */
     .zone-radar {
-      position: relative; width: 250px; height: 250px;
+      position: relative; width: 260px; height: 260px;
       display: flex; align-items: center; justify-content: center;
     }
     .z-ring {
       position: absolute; border-radius: 50%;
       display: flex; align-items: flex-start; justify-content: center;
-      font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+      font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;
+      text-align: center;
       transition: transform 0.35s ease;
     }
     .z-r4 {
-      width: 242px; height: 242px; padding-top: 9px; font-size: 0.72rem;
+      width: 254px; height: 254px; padding-top: 9px; font-size: 0.72rem;
       color: #6ee7b7; border: 1.5px dashed rgba(52, 211, 153, 0.65);
       background: radial-gradient(circle, transparent 62%, rgba(16, 185, 129, 0.14) 100%);
       animation: radarPulse 4s ease-in-out infinite alternate;
     }
     .z-r3 {
-      width: 186px; height: 186px; padding-top: 8px; font-size: 0.7rem;
+      width: 198px; height: 198px; padding-top: 8px; font-size: 0.7rem;
       color: #fde047; border: 1.5px solid rgba(253, 224, 71, 0.55);
       background: radial-gradient(circle, transparent 58%, rgba(253, 224, 71, 0.12) 100%);
     }
     .z-r2 {
-      width: 130px; height: 130px; padding-top: 8px; font-size: 0.68rem;
+      width: 142px; height: 142px; padding-top: 8px; font-size: 0.68rem;
       color: #fda4af; border: 1.5px solid rgba(251, 113, 133, 0.6);
       background: radial-gradient(circle, transparent 50%, rgba(251, 113, 133, 0.14) 100%);
     }
     .z-r1 {
-      width: 72px; height: 72px; align-items: center; padding-top: 0; font-size: 0.74rem;
+      width: 84px; height: 84px; align-items: center; justify-content: center;
+      padding: 6px; font-size: 0.72rem; line-height: 1.25;
       color: #ffffff; background: linear-gradient(135deg, #1e3a8a, #0f172a);
       border: 2px solid #7dd3fc; box-shadow: 0 0 20px rgba(56, 189, 248, 0.45);
     }
@@ -1595,7 +1597,7 @@
             <div class="z-ring z-r4">VÙNG TĂNG TRƯỞNG</div>
             <div class="z-ring z-r3">VÙNG HỌC HỎI</div>
             <div class="z-ring z-r2">VÙNG SỢ HÃI</div>
-            <div class="z-ring z-r1">VÙNG AN TOÀN</div>
+            <div class="z-ring z-r1">VÙNG<br>AN TOÀN</div>
           </div>
         </div>
       </div>
@@ -1692,7 +1694,7 @@
             <div class="badge-sub">VI BƯỚC 1 · TRANG SÁCH</div>
             <div class="card-title-lg">Không thể viết trọn một cuốn sách ngay?</div>
             <div class="card-content-p" style="color: #fff;">
-              • Hãy viết <span class="hl-marker"><span class="count-num" data-count="200">0</span> chữ mỗi sáng</span>.
+              • Hãy viết đúng <span class="hl-marker"><span class="count-num" data-count="200">0</span> chữ mỗi sáng</span>.
             </div>
           </div>
         </div>
