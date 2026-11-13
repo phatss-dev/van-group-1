@@ -554,9 +554,13 @@
     .revealed .hl-underline, .slide.active .hl-underline.now { background-size: 100% 3px; }
 
     .hl-marker {
-      background: linear-gradient(100deg, rgba(253, 224, 71, 0.28) 0%, rgba(56, 189, 248, 0.25) 100%);
-      color: #ffffff; font-weight: 700; padding: 0.08rem 0.48rem;
-      border-radius: 6px; border-bottom: 2.5px solid var(--accent-gold); box-shadow: 0 2px 12px rgba(253, 224, 71, 0.2);
+      color: var(--accent-gold); font-weight: 800;
+      background: linear-gradient(90deg, var(--accent-gold), var(--primary-cyan)) 0 100% / 0 3px no-repeat;
+      padding-bottom: 2px; transition: background-size 1s cubic-bezier(0.22, 1, 0.36, 1) 0.35s;
+      text-shadow: 0 0 16px rgba(253, 224, 71, 0.4);
+    }
+    .revealed .hl-marker, .slide.active .hl-marker.now, .subtext-reveal.visible .hl-marker, .choice-flip-face .hl-marker {
+      background-size: 100% 3px;
     }
     .hl-cyan { color: #bae6fd; font-weight: 700; border-bottom: 2.5px solid var(--primary-cyan); padding-bottom: 1px; }
     .hl-rose { color: #fecdd3; font-weight: 700; border-bottom: 2.5px dashed var(--accent-rose); padding-bottom: 1px; }
@@ -1548,7 +1552,7 @@
             <div class="badge-sub" style="background: rgba(253, 224, 71, 0.22); color: var(--accent-gold);">MINH CHỨNG TUỔI TRẺ</div>
             <div class="card-title-lg">Một bạn trẻ nuôi mộng làm bác sĩ</div>
             <div class="card-content-p">
-              Một bạn trẻ nuôi mộng làm bác sĩ sẽ có lý do để <span class="hl-underline">miệt mài bên trang sách</span>.
+              Sẽ có lý do để <span class="hl-underline">miệt mài bên trang sách</span>.
             </div>
           </div>
           <div class="quote-cinematic-banner step-item" style="margin-bottom: 0;">
