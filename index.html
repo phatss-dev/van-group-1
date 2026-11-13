@@ -1,0 +1,2270 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>DÁM ƯỚC MƠ, DÁM BƯỚC RA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+    @property --a {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+    :root {
+      --bg-surface: rgba(12, 32, 64, 0.82);
+      --bg-surface-strong: rgba(8, 24, 52, 0.94);
+      --border-cyan: rgba(125, 211, 252, 0.45);
+      --primary-cyan: #38bdf8;
+      --accent-glow: #7dd3fc;
+      --accent-gold: #fde047;
+      --accent-rose: #fb7185;
+      --accent-emerald: #34d399;
+      --text-pure: #ffffff;
+      --text-lead: #f8fafc;
+      --text-sub: #e2e8f0;
+      --font-body: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+      --font-title: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; margin: 0; }
+    body {
+      background:
+        radial-gradient(circle at 82% 16%, rgba(253, 224, 71, 0.22) 0%, rgba(251, 146, 60, 0.1) 28%, transparent 55%),
+        radial-gradient(circle at 18% 80%, rgba(56, 189, 248, 0.25) 0%, transparent 50%),
+        linear-gradient(145deg, #091c3a 0%, #133668 48%, #1d4d8c 82%, #2560a8 100%);
+      color: var(--text-lead);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+      perspective: 1500px;
+    }
+
+    /* NỀN CỰC QUANG CHUYỂN ĐỘNG */
+    .aurora { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+    .aurora i {
+      position: absolute; width: 55vmax; height: 55vmax; border-radius: 50%;
+      filter: blur(90px); opacity: 0.45; animation: auroraDrift 22s ease-in-out infinite alternate;
+    }
+    .aurora i:nth-child(1) { background: #1d4ed8; left: -15%; top: -20%; }
+    .aurora i:nth-child(2) { background: #0891b2; right: -20%; bottom: -25%; animation-delay: -8s; }
+    .aurora i:nth-child(3) { background: #f59e0b; width: 32vmax; height: 32vmax; right: 10%; top: -10%; opacity: 0.28; animation-delay: -14s; }
+    @keyframes auroraDrift { to { transform: translate(9vmax, 6vmax) scale(1.2); } }
+
+    /* MÀN CHE KHAI MÀN */
+    #curtainStage { position: fixed; inset: 0; z-index: 9999; display: flex; cursor: pointer; }
+    .curtain-wing {
+      flex: 1; height: 100%;
+      background:
+        repeating-linear-gradient(90deg, rgba(16,45,87,.98) 0 7%, rgba(28,72,130,.96) 8%, rgba(12,35,70,.98) 13%, rgba(22,58,108,.98) 18%),
+        linear-gradient(90deg, #0d2549, #1b4982 50%, #0f2952);
+      box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.65);
+      transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1);
+      pointer-events: none;
+    }
+    .curtain-left { border-right: 1px solid rgba(253, 224, 71, 0.45); }
+    .curtain-right { border-left: 1px solid rgba(253, 224, 71, 0.45); }
+    .curtain-content-overlay {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; z-index: 10; padding: 1.5rem;
+    }
+    #curtainStage.curtain-opened { pointer-events: none !important; }
+    #curtainStage.curtain-opened .curtain-left { transform: translateX(-105%); }
+    #curtainStage.curtain-opened .curtain-right { transform: translateX(105%); }
+    #curtainStage.curtain-opened .curtain-content-overlay { display: none !important; pointer-events: none !important; }
+
+    .curtain-title {
+      font-family: var(--font-title); font-size: clamp(42px, 5.8vw, 80px); font-weight: 900;
+      line-height: 1.18; color: #ffffff; margin-bottom: 1.25rem; text-align: center;
+      text-shadow: 0 4px 35px rgba(0, 0, 0, 0.45), 0 0 30px rgba(56, 189, 248, 0.5);
+    }
+    .curtain-title span { color: var(--accent-gold); }
+    .curtain-quote { font-style: italic; color: #e2e8f0; font-size: 1.45rem; max-width: 760px; text-align: center; margin-bottom: 2.2rem; line-height: 1.6; }
+    .btn-curtain-play {
+      position: relative; z-index: 20; cursor: pointer; padding: 1.1rem 3.2rem; font-size: 1.3rem; font-weight: 800;
+      color: #0b1f3f; background: linear-gradient(90deg, #fde047, #38bdf8); border: none; border-radius: 9999px;
+      box-shadow: 0 10px 35px rgba(56, 189, 248, 0.55); transition: all 0.25s ease; display: inline-flex; align-items: center; gap: 0.75rem;
+    }
+    .btn-curtain-play:hover { transform: scale(1.05); box-shadow: 0 12px 50px rgba(253, 224, 71, 0.85); }
+
+    .vertical-optic-axis {
+      position: fixed; top: 0; bottom: 0; left: 50%; width: 1px;
+      background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.14) 25%, rgba(253, 224, 71, 0.35) 50%, rgba(255, 255, 255, 0.14) 75%, transparent 100%);
+      transform: translateX(-50%); pointer-events: none; z-index: 2;
+    }
+    .pointer-halo {
+      position: absolute; left: 0; top: 0; z-index: 2; width: 280px; height: 280px; border-radius: 50%;
+      pointer-events: none; opacity: 0;
+      background: radial-gradient(circle, rgba(253,224,71,.16) 0%, rgba(56,189,248,.08) 35%, transparent 72%);
+      mix-blend-mode: screen; will-change: transform; transition: opacity .35s ease;
+    }
+    .pointer-halo.visible { opacity: .9; }
+    #spaceCanvas { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 1; }
+
+    header {
+      height: 58px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      z-index: 50; backdrop-filter: blur(20px); background: rgba(10, 28, 58, 0.72);
+    }
+    .brand-cluster { display: flex; align-items: center; gap: 0.75rem; font-weight: 800; letter-spacing: 0.08em; font-size: 1.1rem; color: var(--accent-gold); }
+    .brand-bead { width: 9px; height: 9px; border-radius: 50%; background: var(--accent-gold); box-shadow: 0 0 12px rgba(253, 224, 71, 0.9); }
+
+    /* ==========================================================
+       16 HIỆU ỨNG CHUYỂN CẢNH SLIDE RIÊNG BIỆT
+       ========================================================== */
+    .slides-wrapper {
+      position: relative; flex: 1; overflow: hidden; display: flex;
+      align-items: center; justify-content: center; padding: 1rem 2rem; z-index: 10; cursor: pointer;
+    }
+    .slide {
+      position: absolute; width: 100%; max-width: 1360px; height: 100%; max-height: 880px;
+      opacity: 0; visibility: hidden; pointer-events: none;
+      display: flex; flex-direction: column; justify-content: center; padding: 1rem 1.5rem; overflow-y: auto; overflow-x: hidden;
+      transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1), filter 0.75s ease, clip-path 0.8s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.75s;
+    }
+    .grid-duo > *, .grid-trio > *, .grid-asymmetric > *, .slide-11-grid > *, .slide-13-grid > *, .slide-16-grid > * {
+      min-width: 0;
+    }
+    .slide.out { transform: scale(1.08) !important; filter: blur(8px) !important; opacity: 0 !important; }
+
+    .slide[data-fx="fx-1"]  { transform: scale(0.84) translateY(25px); filter: blur(10px); }
+    .slide[data-fx="fx-2"]  { transform: translateX(120px) rotateY(-14deg); filter: blur(6px); }
+    .slide[data-fx="fx-3"]  { transform: translateY(70px) rotateX(22deg); transform-origin: 50% 100%; filter: blur(5px); }
+    .slide[data-fx="fx-4"]  { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); transform: translateX(-30px); }
+    .slide[data-fx="fx-5"]  { transform: rotate(-5deg) translateY(45px) scale(0.9); filter: blur(8px); }
+    .slide[data-fx="fx-6"]  { transform: scale(1.18); filter: blur(12px); }
+    .slide[data-fx="fx-7"]  { transform: translateX(-120px) rotateY(14deg); filter: blur(6px); }
+    .slide[data-fx="fx-8"]  { clip-path: circle(0% at 50% 50%); transform: scale(0.92); }
+    .slide[data-fx="fx-9"]  { transform: rotateY(28deg) translateX(70px); transform-origin: left center; filter: blur(5px); }
+    .slide[data-fx="fx-10"] { transform: translateY(-75px) rotateX(-18deg) scale(0.94); transform-origin: 50% 0%; }
+    .slide[data-fx="fx-11"] { clip-path: polygon(0 0, 0 0, 0 0); transform: translate(35px, 25px); }
+    .slide[data-fx="fx-12"] { transform: perspective(1200px) translateZ(-220px) rotateX(15deg); filter: blur(8px); }
+    .slide[data-fx="fx-13"] { clip-path: inset(0 50% 0 50%); transform: scaleX(0.9); }
+    .slide[data-fx="fx-14"] { transform: rotate(5deg) scale(0.85) translateY(-30px); filter: blur(8px); }
+    .slide[data-fx="fx-15"] { clip-path: inset(100% 0 0 0); transform: translateY(40px); }
+    .slide[data-fx="fx-16"] { transform: scale(0.75) rotateX(-15deg); filter: blur(12px); }
+
+    .slide.active {
+      opacity: 1; visibility: visible; pointer-events: auto;
+      transform: none !important; filter: none !important;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%) !important;
+      z-index: 20;
+    }
+    .slide[data-fx="fx-8"].active { clip-path: circle(150% at 50% 50%) !important; }
+    .slide[data-fx="fx-13"].active, .slide[data-fx="fx-15"].active { clip-path: inset(0 0 0 0) !important; }
+
+    /* ==========================================================
+       16 HIỆU ỨNG XUẤT HIỆN CHỮ RIÊNG BIỆT
+       ========================================================== */
+    .step-item {
+      opacity: 0; visibility: hidden; position: relative;
+      transition: opacity 0.65s ease, filter 0.65s ease, transform 0.75s cubic-bezier(0.34, 1.45, 0.64, 1), clip-path 0.7s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+    .slide[data-fx="fx-1"]  .step-item:not(.revealed) { transform: translateY(30px) scale(0.94); filter: blur(6px); }
+    .slide[data-fx="fx-2"]  .step-item:not(.revealed) { transform: translateX(-55px) skewX(5deg); filter: blur(5px); }
+    .slide[data-fx="fx-3"]  .step-item:not(.revealed) { transform: perspective(800px) rotateX(-28deg) translateY(28px); filter: blur(5px); }
+    .slide[data-fx="fx-4"]  .step-item:not(.revealed) { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); transform: translateX(-18px); }
+    .slide[data-fx="fx-5"]  .step-item:not(.revealed) { transform: scale(0.84) rotate(-3deg); filter: blur(6px); }
+    .slide[data-fx="fx-6"]  .step-item:not(.revealed) { transform: scale(1.14) translateY(-18px); filter: blur(6px); }
+    .slide[data-fx="fx-7"]  .step-item:not(.revealed) { transform: translateX(55px) skewX(-5deg); filter: blur(5px); }
+    .slide[data-fx="fx-8"]  .step-item:not(.revealed) { transform: scale(0.75); filter: blur(8px); }
+    .slide[data-fx="fx-9"]  .step-item:not(.revealed) { transform: perspective(800px) rotateY(-22deg) translateX(-35px); filter: blur(4px); }
+    .slide[data-fx="fx-10"] .step-item:not(.revealed) { transform: translateY(-35px) scaleY(0.85); filter: blur(5px); }
+    .slide[data-fx="fx-11"] .step-item:not(.revealed) { transform: translate(-35px, 25px) rotate(2deg); filter: blur(5px); }
+    .slide[data-fx="fx-12"] .step-item:not(.revealed) { transform: translateY(40px) scale(0.9); filter: blur(6px); }
+    .slide[data-fx="fx-13"] .step-item:not(.revealed) { transform: scaleX(0.8) translateY(15px); filter: blur(5px); }
+    .slide[data-fx="fx-14"] .step-item:not(.revealed) { transform: rotate(3deg) translateY(30px) scale(0.92); filter: blur(5px); }
+    .slide[data-fx="fx-15"] .step-item:not(.revealed) { transform: translateY(45px); filter: blur(8px); }
+    .slide[data-fx="fx-16"] .step-item:not(.revealed) { transform: perspective(900px) translateZ(-120px) scale(0.85); filter: blur(6px); }
+
+    .step-item.revealed {
+      opacity: 0.98; visibility: visible; filter: blur(0px); transform: none;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+    .step-item.active-step { opacity: 1 !important; border-color: var(--accent-gold) !important; }
+    .manual-focus {
+      border-color: var(--accent-gold) !important;
+      box-shadow: 0 0 0 2px var(--accent-gold), 0 18px 48px rgba(253, 224, 71, 0.35) !important;
+      transform: translateY(-4px) scale(1.015) !important;
+      z-index: 30;
+    }
+
+    /* HIỆU ỨNG LẬT TỪNG TỪ 3D TRONG TIÊU ĐỀ */
+    .slide-title .w {
+      display: inline-block; opacity: 0;
+      transform: translateY(0.55em) rotateX(-60deg);
+      filter: blur(5px); transform-origin: 50% 100%;
+    }
+    .slide.active .slide-title .w {
+      animation: wordFlipIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation-delay: calc(var(--i) * 55ms + 0.15s);
+    }
+    @keyframes wordFlipIn { to { opacity: 1; transform: none; filter: none; } }
+
+    /* KHUNG VISUAL STAGE CHUNG (ĐÃ BỔ SUNG TỪ BẢN VÁ 1) */
+    .visual-stage {
+      position: relative; width: 100%; height: 280px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 22px;
+      background: radial-gradient(circle at 50% 50%, rgba(14, 38, 76, 0.72) 0%, rgba(8, 22, 48, 0.35) 68%, transparent 100%);
+      border: 1px solid rgba(125, 211, 252, 0.28);
+      box-shadow: inset 0 0 40px rgba(56, 189, 248, 0.08);
+      overflow: hidden;
+    }
+
+    /* SLIDE 6: LA BÀN 3 TRỤ CỘT XOAY */
+    .tripod-ring-spin {
+      transform-origin: 210px 92px;
+      animation: tripodSpin 18s linear infinite;
+    }
+    .tripod-compass-needle {
+      transform-origin: 210px 92px;
+      animation: needleSway 4.2s ease-in-out infinite alternate;
+    }
+    @keyframes tripodSpin { to { transform: rotate(360deg); } }
+    @keyframes needleSway {
+      0% { transform: rotate(-18deg); }
+      100% { transform: rotate(18deg); }
+    }
+
+    /* SLIDE 7: NHỊP TIM ECG CHẠY LIÊN TỤC */
+    .ecg-pulse-line {
+      stroke-dasharray: 420;
+      stroke-dashoffset: 420;
+      filter: drop-shadow(0 0 8px rgba(253, 224, 71, 0.8));
+      animation: ecgTrace 2.8s linear infinite;
+    }
+    @keyframes ecgTrace {
+      0% { stroke-dashoffset: 420; opacity: 0.4; }
+      50% { opacity: 1; }
+      100% { stroke-dashoffset: 0; opacity: 0.9; }
+    }
+
+    /* SLIDE 8: RADAR 4 VÒNG TRÒN VÙNG AN TOÀN -> TĂNG TRƯỞNG (ĐÃ BỔ SUNG CSS HOÀN CHỈNH) */
+    .zone-radar {
+      position: relative; width: 250px; height: 250px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .z-ring {
+      position: absolute; border-radius: 50%;
+      display: flex; align-items: flex-start; justify-content: center;
+      font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+      transition: transform 0.35s ease;
+    }
+    .z-r4 {
+      width: 242px; height: 242px; padding-top: 9px; font-size: 0.72rem;
+      color: #6ee7b7; border: 1.5px dashed rgba(52, 211, 153, 0.65);
+      background: radial-gradient(circle, transparent 62%, rgba(16, 185, 129, 0.14) 100%);
+      animation: radarPulse 4s ease-in-out infinite alternate;
+    }
+    .z-r3 {
+      width: 186px; height: 186px; padding-top: 8px; font-size: 0.7rem;
+      color: #fde047; border: 1.5px solid rgba(253, 224, 71, 0.55);
+      background: radial-gradient(circle, transparent 58%, rgba(253, 224, 71, 0.12) 100%);
+    }
+    .z-r2 {
+      width: 130px; height: 130px; padding-top: 8px; font-size: 0.68rem;
+      color: #fda4af; border: 1.5px solid rgba(251, 113, 133, 0.6);
+      background: radial-gradient(circle, transparent 50%, rgba(251, 113, 133, 0.14) 100%);
+    }
+    .z-r1 {
+      width: 72px; height: 72px; align-items: center; padding-top: 0; font-size: 0.74rem;
+      color: #ffffff; background: linear-gradient(135deg, #1e3a8a, #0f172a);
+      border: 2px solid #7dd3fc; box-shadow: 0 0 20px rgba(56, 189, 248, 0.45);
+    }
+    @keyframes radarPulse {
+      0% { transform: scale(0.97); }
+      100% { transform: scale(1.03); }
+    }
+
+    /* SLIDE 9: REEL COMPARE ĐỒ HỌA TRỰC QUAN (TỪ BẢN VÁ 1) */
+    .reel-compare {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: 100%; height: 100%; padding: 0.35rem;
+    }
+    .reel-glass {
+      border-radius: 16px; padding: 1.05rem; position: relative; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: space-between; height: 100%;
+    }
+    .reel-raw {
+      background: linear-gradient(160deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
+      border: 1.5px solid rgba(148, 163, 184, 0.5);
+    }
+    .reel-glam {
+      background: linear-gradient(160deg, rgba(253, 224, 71, 0.22), rgba(244, 63, 94, 0.18));
+      border: 1.5px solid rgba(253, 224, 71, 0.7);
+      box-shadow: 0 0 30px rgba(253, 224, 71, 0.25);
+      animation: glamFloat 3.5s ease-in-out infinite alternate;
+    }
+    @keyframes glamFloat { to { transform: translateY(-6px); } }
+
+    /* SLIDE 11: ĐỒNG HỒ 1% MỖI NGÀY (TỪ BẢN VÁ 1) */
+    .micro-gauge-wrap {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.65rem; width: 100%; height: 100%; padding: 0.75rem;
+    }
+    .gauge-ring {
+      width: 130px; height: 130px; border-radius: 50%;
+      background: conic-gradient(var(--accent-gold) 0% 78%, rgba(255,255,255,0.12) 78% 100%);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 35px rgba(253, 224, 71, 0.4);
+      position: relative;
+    }
+    .gauge-inner {
+      width: 104px; height: 104px; border-radius: 50%; background: #0b2246;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+
+    /* ==========================================================
+       HIỆU ỨNG CHIẾC BÀN ỦI TỰ ĐỘNG LÀM PHẲNG NẾP NHĂN SỐ PHẬN (SLIDE 5)
+       ========================================================== */
+    .ironing-banner-stage {
+      position: relative;
+      width: 100%;
+      height: 95px;
+      margin-bottom: 0.9rem;
+      display: flex;
+      align-items: center;
+      background: radial-gradient(ellipse at 50% 50%, rgba(14, 38, 76, 0.7) 0%, rgba(8, 22, 48, 0.3) 75%, transparent 100%);
+      border-radius: 16px;
+      border: 1px solid rgba(125, 211, 252, 0.22);
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .iron-label-left {
+      position: absolute; left: 16px; top: 10px;
+      font-size: 0.78rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--primary-cyan); text-shadow: 0 0 12px rgba(56, 189, 248, 0.55); z-index: 8;
+    }
+    .iron-label-right {
+      position: absolute; right: 16px; top: 10px;
+      font-size: 0.78rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent-rose); text-shadow: 0 0 12px rgba(251, 113, 133, 0.55); z-index: 8;
+    }
+    .iron-track-box {
+      position: absolute; left: 0; right: 0; top: 54%;
+      height: 34px; transform: translateY(-50%); pointer-events: none;
+    }
+    .track-wrinkled {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      clip-path: inset(0 0 0 var(--iron-p, 0%));
+    }
+    .track-wrinkled svg {
+      width: 100%; height: 100%; stroke: var(--accent-rose); stroke-width: 3.2; fill: none;
+      filter: drop-shadow(0 0 10px rgba(251, 113, 133, 0.6));
+    }
+    .track-flattened {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      clip-path: inset(0 calc(100% - var(--iron-p, 0%)) 0 0);
+    }
+    .track-flattened svg {
+      width: 100%; height: 100%; stroke: var(--primary-cyan); stroke-width: 4; stroke-linecap: round; fill: none;
+      filter: drop-shadow(0 0 12px var(--primary-cyan)) drop-shadow(0 0 20px rgba(253, 224, 71, 0.6));
+    }
+    .iron-mover {
+      position: absolute; left: var(--iron-p, 0%); top: 52%;
+      width: 110px; height: 68px; transform: translate(-88%, -66%);
+      pointer-events: none; z-index: 12;
+      filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.65));
+    }
+    .iron-mover svg { width: 100%; height: 100%; display: block; overflow: visible; }
+    .iron-glow-sole {
+      position: absolute; left: 8px; bottom: 2px; width: 88px; height: 7px; border-radius: 99px;
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, var(--accent-gold) 45%, transparent 75%);
+      box-shadow: 0 0 22px var(--accent-gold); filter: blur(1.5px);
+    }
+    .steam-container {
+      position: absolute; left: var(--iron-p, 0%); top: 52%;
+      transform: translate(-105%, -55%); pointer-events: none; z-index: 6;
+    }
+    .steam-puff {
+      position: absolute; width: 10px; height: 10px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.85), rgba(125, 211, 252, 0.25) 70%, transparent);
+      filter: blur(3.5px); animation: steamRise 1.4s ease-out forwards;
+    }
+    @keyframes steamRise {
+      0% { opacity: 0.85; transform: translate(0, 0) scale(0.6); }
+      100% { opacity: 0; transform: translate(-32px, -36px) scale(3); }
+    }
+
+    /* Chữ vỡ 3D bay ghép lại (Slide 16) */
+    .shatter-assemble-title span.ch {
+      display: inline-block; opacity: 0;
+      transform: translate3d(var(--x, 0px), var(--y, 0px), 120px) rotate(var(--r, 0deg)) scale(2.2);
+      filter: blur(8px); will-change: transform, opacity, filter;
+    }
+    .shatter-assemble-title.go span.ch {
+      opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg) scale(1); filter: blur(0px);
+      transition: transform 1.15s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.85s ease, filter 0.85s ease;
+      transition-delay: calc(var(--i) * 32ms);
+    }
+
+    /* Giải mã chữ Matrix (Slide 14) */
+    .cipher-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: ui-monospace, 'Cascadia Code', Menlo, monospace;
+      font-weight: 800; font-size: 1.05rem; letter-spacing: 0.14em;
+      color: var(--accent-glow); background: rgba(8, 24, 52, 0.88);
+      border: 1px solid rgba(103, 232, 249, 0.5); padding: 0.35rem 1rem; border-radius: 10px;
+      box-shadow: 0 0 22px rgba(56, 189, 248, 0.22); margin-bottom: 0.65rem; width: fit-content;
+    }
+
+    /* Số đếm chạy mượt mà (Slide 11 & Slide 12 & Slide 13) */
+    .count-num {
+      font-weight: 900; color: var(--accent-gold); font-variant-numeric: tabular-nums;
+      text-shadow: 0 0 18px rgba(253, 224, 71, 0.55);
+    }
+
+    /* Thẻ nghiêng 3D + Viền sáng Conic xoay 360° + Phản quang chuột */
+    .conic-glow-card {
+      border: 2px solid transparent !important;
+      background:
+        linear-gradient(160deg, rgba(16, 42, 86, 0.94), rgba(8, 24, 52, 0.96)) padding-box,
+        conic-gradient(from var(--a), transparent 55%, var(--accent-gold) 78%, var(--primary-cyan) 92%, transparent) border-box !important;
+      animation: conicBorderSpin 3.6s linear infinite;
+    }
+    @keyframes conicBorderSpin { to { --a: 360deg; } }
+
+    .tilt-3d-ready { transform-style: preserve-3d; will-change: transform; }
+    .tilt-3d-ready::after {
+      content: ''; position: absolute; inset: 0; border-radius: inherit;
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.22) 0%, rgba(253, 224, 71, 0.08) 28%, transparent 60%);
+      opacity: var(--glare-op, 0); transition: opacity 0.3s ease; pointer-events: none; z-index: 5;
+    }
+
+    /* Lật thẻ Hỏi – Đáp 3D hai mặt (Slide 13: Rào cản 1) */
+    .flip-qa-stage { perspective: 1200px; width: 100%; height: 300px; cursor: pointer; position: relative; }
+    .flip-qa-inner {
+      position: relative; width: 100%; height: 100%;
+      transition: transform 0.95s cubic-bezier(0.34, 1.35, 0.64, 1); transform-style: preserve-3d;
+    }
+    .flip-qa-stage.flipped .flip-qa-inner { transform: rotateY(180deg); }
+    .flip-qa-face {
+      position: absolute; inset: 0; border-radius: 18px; padding: 1.15rem 1.25rem;
+      display: flex; flex-direction: column; justify-content: center; overflow-y: auto;
+      backface-visibility: hidden; -webkit-backface-visibility: hidden;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+    .flip-qa-front {
+      background: linear-gradient(155deg, rgba(68, 16, 36, 0.94), rgba(28, 12, 32, 0.96));
+      border: 1.5px solid rgba(251, 113, 133, 0.65);
+    }
+    .flip-qa-back {
+      background: linear-gradient(155deg, rgba(16, 48, 92, 0.96), rgba(10, 28, 58, 0.98));
+      border: 2px solid var(--accent-gold); transform: rotateY(180deg);
+      box-shadow: 0 18px 45px rgba(253, 224, 71, 0.25);
+    }
+    .flip-hint-pill {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.8rem; font-weight: 800; color: var(--accent-gold);
+      background: rgba(253, 224, 71, 0.16); border: 1px solid rgba(253, 224, 71, 0.45);
+      padding: 0.28rem 0.8rem; border-radius: 99px; width: fit-content;
+    }
+
+    /* Kính vỡ 3D đa giác có vết nứt (Slide 8) */
+    .shatter-overlay-box { position: absolute; inset: 0; z-index: 45; pointer-events: none; overflow: hidden; border-radius: 20px; }
+    .shatter-shard {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-title); font-weight: 900; font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+      color: #fecdd3; letter-spacing: 0.06em; text-transform: uppercase;
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.96), rgba(15, 23, 42, 0.98));
+      border: 1.5px solid rgba(255, 255, 255, 0.32);
+      text-shadow: 0 0 24px rgba(251, 113, 133, 0.65); box-shadow: inset 0 0 35px rgba(251, 113, 133, 0.22);
+      will-change: transform, opacity; transition: transform 1.15s cubic-bezier(0.55, 0.05, 0.85, 0.35), opacity 1.1s ease;
+    }
+
+    /* Cây tre mọc tuần tự (Slide 14) */
+    .bam-seq .bamboo-root-line { stroke-dasharray: 100; stroke-dashoffset: 100; }
+    .bam-seq .b-seg { transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(0); }
+    .bam-seq .b-leaf { transform-box: fill-box; transform-origin: 0% 100%; transform: scale(0); }
+    .bam-seq.go .bamboo-root-line { animation: rootGrowSeq 2.1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    .bam-seq.go .b-seg { animation: segShootUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards; animation-delay: calc(2.15s + var(--k) * 0.25s); }
+    .bam-seq.go .b-leaf { animation: leafPopOut 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; animation-delay: calc(3.05s + var(--k) * 0.18s); }
+    @keyframes rootGrowSeq { to { stroke-dashoffset: 0; } }
+    @keyframes segShootUp { to { transform: scaleY(1); } }
+    @keyframes leafPopOut { to { transform: scale(1); } }
+
+    /* Bóng tối rồi bừng sáng theo đèn sân khấu Spotlight (Slide 16) */
+    .spotlight-stage-wrap { position: relative; border-radius: 20px; padding: 0.65rem; overflow: hidden; }
+    .spotlight-dark-mask {
+      position: absolute; inset: 0; pointer-events: none; z-index: 25;
+      background: radial-gradient(circle at var(--sx, 15%) var(--sy, 50%), transparent 0%, rgba(253, 224, 71, 0.12) 90px, rgba(4, 10, 24, 0.92) 230px);
+      transition: opacity 0.6s ease;
+    }
+    .spotlight-stage-wrap.fully-lit .spotlight-dark-mask { opacity: 0.25; }
+
+    /* Bút dạ quang quét tuần tự + Chữ chìm La Mã (Slide 15) */
+    .ghost-roman-watermark {
+      position: absolute; right: 1.5rem; bottom: -1.5rem;
+      font-family: var(--font-title); font-weight: 900; font-size: clamp(8rem, 15vw, 13.5rem);
+      color: rgba(255, 255, 255, 0.055); line-height: 1; pointer-events: none; z-index: 0;
+    }
+    .seq-marker-bar { font-size: 1.34rem; font-weight: 700; color: #f8fafc; line-height: 1.75; }
+    .seq-marker-bar b {
+      background: linear-gradient(100deg, rgba(253, 224, 71, 0.58), rgba(56, 189, 248, 0.45)) 0 88% / 0% 58% no-repeat;
+      transition: background-size 0.9s cubic-bezier(0.22, 1, 0.36, 1); padding: 0.05rem 0.35rem; border-radius: 5px; color: #ffffff;
+    }
+    .seq-marker-bar.go b { background-size: 100% 58%; }
+    .seq-marker-bar.go b:nth-of-type(2) { transition-delay: 0.55s; }
+    .seq-marker-bar.go b:nth-of-type(3) { transition-delay: 1.1s; }
+
+    /* Canvas Pháo giấy 3D (Slide 16) */
+    #confettiCanvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 40; }
+
+    /* GẠCH CHÂN ĐỘNG & LÀM NỔI BẬT */
+    .hl-underline {
+      color: var(--accent-gold); font-weight: 800;
+      background: linear-gradient(90deg, var(--accent-gold), var(--primary-cyan)) 0 100% / 0 3px no-repeat;
+      padding-bottom: 2px; transition: background-size 1s cubic-bezier(0.22, 1, 0.36, 1) 0.35s;
+      text-shadow: 0 0 16px rgba(253, 224, 71, 0.4);
+    }
+    .revealed .hl-underline, .slide.active .hl-underline.now { background-size: 100% 3px; }
+
+    .hl-marker {
+      background: linear-gradient(100deg, rgba(253, 224, 71, 0.28) 0%, rgba(56, 189, 248, 0.25) 100%);
+      color: #ffffff; font-weight: 700; padding: 0.08rem 0.48rem;
+      border-radius: 6px; border-bottom: 2.5px solid var(--accent-gold); box-shadow: 0 2px 12px rgba(253, 224, 71, 0.2);
+    }
+    .hl-cyan { color: #bae6fd; font-weight: 700; border-bottom: 2.5px solid var(--primary-cyan); padding-bottom: 1px; }
+    .hl-rose { color: #fecdd3; font-weight: 700; border-bottom: 2.5px dashed var(--accent-rose); padding-bottom: 1px; }
+
+    /* KHUNG THẺ & ẢNH */
+    .custom-image-frame {
+      position: relative; display: flex; align-items: center; justify-content: center; margin: 0 auto; cursor: pointer;
+      transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+    }
+    .custom-image-frame.mode-remote-link {
+      width: 100%; height: 320px; border-radius: 22px; overflow: hidden; background: rgba(10, 28, 58, 0.85);
+      border: 1.5px solid rgba(253, 224, 71, 0.45); box-shadow: 0 16px 42px rgba(0, 0, 0, 0.45);
+    }
+    .custom-image-frame.mode-remote-link img { width: 100%; height: 100%; object-fit: cover; }
+    .custom-image-frame.mode-local-fit {
+      width: fit-content; height: auto; max-width: 100%; border-radius: 18px; overflow: hidden; background: transparent;
+      border: 2px solid rgba(253, 224, 71, 0.6); box-shadow: 0 18px 45px rgba(0, 0, 0, 0.55), 0 0 25px rgba(56, 189, 248, 0.2);
+    }
+    .custom-image-frame.mode-local-fit img {
+      display: block; max-width: 100%; max-height: 350px; width: auto; height: auto; object-fit: contain; border-radius: 16px;
+    }
+    .custom-image-frame.mode-cutout-noframe,
+    .hero-image-badge.mode-cutout-noframe {
+      background: transparent !important; border: none !important; box-shadow: none !important;
+      padding: 0 !important; overflow: visible !important; width: fit-content; height: auto;
+    }
+    .custom-image-frame.mode-cutout-noframe img,
+    .hero-image-badge.mode-cutout-noframe img {
+      display: block; max-width: 100%; max-height: 350px; width: auto; height: auto; object-fit: contain !important;
+      background: transparent !important; border: none !important;
+      filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.78)) drop-shadow(0 0 34px rgba(253, 224, 71, 0.45));
+    }
+    .hero-image-badge.mode-cutout-noframe img { max-height: 240px; }
+    .hero-image-badge {
+      position: relative; width: 240px; height: 240px; margin: 0 auto 1.2rem;
+      border-radius: 26px; overflow: hidden; border: 2px solid var(--accent-gold);
+      background: rgba(10, 28, 58, 0.75); box-shadow: 0 0 40px rgba(253, 224, 71, 0.35);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hero-image-badge img { width: 100%; height: 100%; object-fit: cover; }
+
+    .cinema-photo-card {
+      display: flex; flex-direction: column; border-radius: 16px; overflow: hidden;
+      background: var(--bg-surface-strong); border: 1px solid var(--border-cyan); box-shadow: 0 12px 35px rgba(6, 18, 40, 0.5); cursor: pointer;
+      transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease; position: relative;
+    }
+    .cinema-photo-card:hover { transform: translateY(-5px); border-color: var(--accent-gold); box-shadow: 0 18px 42px rgba(253, 224, 71, 0.22); }
+    .cinema-photo-wrap {
+      width: 100%; height: 225px; position: relative; overflow: hidden; background: #061226;
+      border-bottom: 1px solid rgba(125, 211, 252, 0.25);
+    }
+    .cinema-photo-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center 15%; display: block; }
+    .cinema-photo-wrap::after {
+      content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 62%, rgba(8, 24, 52, 0.92) 100%); pointer-events: none;
+    }
+    .cinema-photo-wrap.mode-cutout-noframe {
+      background: radial-gradient(circle at 50% 60%, rgba(253, 224, 71, 0.16), transparent 72%) !important;
+      border-bottom: none !important; padding-top: 6px;
+    }
+    .cinema-photo-wrap.mode-cutout-noframe::after { display: none; }
+    .cinema-photo-wrap.mode-cutout-noframe img {
+      object-fit: contain !important; object-position: center bottom !important; filter: drop-shadow(0 6px 22px rgba(253, 224, 71, 0.38));
+    }
+    .cinema-card-body { padding: 1.1rem 1.25rem; display: flex; flex-direction: column; flex: 1; }
+
+    /* CỠ CHỮ LỚN RÕ RÀNG */
+    .slide-title {
+      font-family: var(--font-title); font-size: clamp(2.1rem, 3.2vw, 2.55rem); line-height: 1.25;
+      color: #ffffff; margin-bottom: 0.8rem; font-weight: 800; text-shadow: 0 3px 16px rgba(6, 18, 40, 0.5);
+    }
+    .part-capsule {
+      display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.95rem;
+      text-transform: uppercase; letter-spacing: 0.12em; font-weight: 800;
+      color: var(--accent-gold); background: rgba(10, 28, 58, 0.78); border: 1px solid rgba(253, 224, 71, 0.45);
+      padding: 0.32rem 1.05rem; border-radius: 9999px; margin-bottom: 0.7rem; width: fit-content; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    }
+    .quote-cinematic-banner {
+      font-size: 1.35rem; font-style: italic; color: #ffffff; border-left: 4px solid var(--accent-gold);
+      padding: 0.7rem 1.25rem; margin-bottom: 0.9rem; background: linear-gradient(90deg, rgba(10, 28, 58, 0.82), rgba(10, 28, 58, 0.25));
+      border-radius: 0 12px 12px 0; line-height: 1.58;
+    }
+    .paragraph-body { font-size: 1.26rem; color: #f8fafc; margin-bottom: 0.85rem; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3); line-height: 1.62; }
+    .grid-duo { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.15rem; margin-top: 0.45rem; }
+    .grid-trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.15rem; margin-top: 0.45rem; }
+    .grid-asymmetric { display: grid; grid-template-columns: 1.18fr 1.02fr; gap: 1.4rem; align-items: center; margin-top: 0.3rem; }
+    .neo-card {
+      background: var(--bg-surface); border: 1px solid var(--border-cyan); border-radius: 16px; padding: 1.25rem 1.35rem;
+      backdrop-filter: blur(18px); box-shadow: 0 12px 32px rgba(6, 18, 40, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      position: relative; overflow: hidden; display: flex; flex-direction: column; cursor: pointer;
+    }
+    .badge-sub {
+      font-size: 0.88rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.22rem 0.72rem;
+      border-radius: 6px; width: fit-content; margin-bottom: 0.55rem; background: rgba(56, 189, 248, 0.22); color: #bae6fd; border: 1px solid rgba(125, 211, 252, 0.3);
+    }
+    .card-title-lg { font-size: 1.36rem; font-weight: 800; color: #ffffff; margin-bottom: 0.48rem; line-height: 1.32; }
+    .card-content-p { font-size: 1.18rem; color: #f1f5f9; line-height: 1.62; }
+
+    /* SLIDE 4: TOÀN CẢNH HẢI ĐĂNG */
+    .lighthouse-panorama-scene {
+      position: relative; width: 100%; height: 470px; border-radius: 20px; overflow: hidden;
+      background: radial-gradient(ellipse at 18% 22%, #173f73 0%, #0c254a 55%, #071733 100%);
+      border: 1px solid rgba(125, 211, 252, 0.4); box-shadow: 0 20px 60px rgba(6, 18, 40, 0.65); isolation: isolate;
+    }
+    .panorama-svg-layer { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 2; pointer-events: none; }
+    .ocean-wave-back { animation: waveSwayBack 7s ease-in-out infinite alternate; }
+    .ocean-wave-mid { animation: waveSwayMid 5.2s ease-in-out infinite alternate; }
+    .ocean-wave-front { animation: waveSwayFront 3.8s ease-in-out infinite alternate; }
+    @keyframes waveSwayBack { 0% { transform: translate3d(-18px, 0px, 0); } 100% { transform: translate3d(18px, 6px, 0); } }
+    @keyframes waveSwayMid { 0% { transform: translate3d(22px, 3px, 0); } 100% { transform: translate3d(-22px, -5px, 0); } }
+    @keyframes waveSwayFront { 0% { transform: translate3d(-26px, -2px, 0); } 100% { transform: translate3d(26px, 5px, 0); } }
+    .idle-sky-beam { transform-origin: 96px 158px; animation: idleBeamBreathe 4.5s ease-in-out infinite alternate; transition: opacity 0.5s ease; }
+    @keyframes idleBeamBreathe { 0% { transform: rotate(-5deg); opacity: 0.65; } 100% { transform: rotate(7deg); opacity: 0.92; } }
+
+    .panorama-dark-board {
+      --beam-pct: -15%; position: absolute; left: 35.5%; right: 4%; top: 6%; height: 63%;
+      border-radius: 32px; background: #040917; border: 1px solid rgba(148, 163, 184, 0.2);
+      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.85), inset 0 0 70px rgba(0, 0, 0, 0.95);
+      padding: 1.6rem 2rem; display: flex; flex-direction: column; justify-content: center;
+      z-index: 3; overflow: hidden; cursor: pointer; transition: border-color 0.6s ease, box-shadow 0.6s ease, transform 0.35s ease;
+    }
+    .panorama-dark-board.board-lit-active {
+      border-color: rgba(253, 224, 71, 0.65);
+      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.8), 0 0 45px rgba(253, 224, 71, 0.22), inset 0 0 50px rgba(56, 189, 248, 0.14);
+    }
+    .panorama-dark-board::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 0% 35%, rgba(253, 224, 71, 0.25) 0%, rgba(56, 189, 248, 0.16) 48%, rgba(10, 25, 56, 0.88) 100%);
+      -webkit-mask-image: linear-gradient(93deg, #000 0%, #000 calc(var(--beam-pct) - 8%), transparent calc(var(--beam-pct) + 4%));
+      mask-image: linear-gradient(93deg, #000 0%, #000 calc(var(--beam-pct) - 8%), transparent calc(var(--beam-pct) + 4%));
+      pointer-events: none; z-index: 0;
+    }
+    .panorama-dark-board::after {
+      content: ''; position: absolute; top: -10%; bottom: -10%; left: calc(var(--beam-pct) - 6%); width: 12%;
+      background: linear-gradient(90deg, transparent, rgba(254, 240, 138, 0.6), rgba(56, 189, 248, 0.45), transparent);
+      transform: skewX(-12deg); filter: blur(8px); pointer-events: none; z-index: 2;
+    }
+    .board-illuminated-text {
+      position: relative; z-index: 1;
+      -webkit-mask-image: linear-gradient(93deg, #000 0%, #000 calc(var(--beam-pct) - 10%), rgba(0,0,0,0.45) calc(var(--beam-pct) - 2%), transparent calc(var(--beam-pct) + 4%));
+      mask-image: linear-gradient(93deg, #000 0%, #000 calc(var(--beam-pct) - 10%), rgba(0,0,0,0.45) calc(var(--beam-pct) - 2%), transparent calc(var(--beam-pct) + 4%));
+    }
+    .board-quote-highlight {
+      font-family: var(--font-title); font-size: clamp(1.3rem, 1.8vw, 1.62rem); font-style: italic; font-weight: 700;
+      color: #fef08a; border-left: 4px solid var(--accent-gold); padding-left: 1rem; margin-bottom: 0.9rem; line-height: 1.48;
+    }
+    .board-unlit-prompt {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+      color: rgba(226, 232, 240, 0.55); font-size: 1rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      transition: opacity 0.4s ease; pointer-events: none; z-index: 4; padding: 1rem; text-align: center;
+    }
+    .panorama-dark-board.board-lit-active .board-unlit-prompt { opacity: 0; }
+
+    /* SLIDE 14: CÂY TRE & HOA MẬN */
+    .art-frame-bamboo, .art-frame-flower {
+      background: radial-gradient(circle at center, rgba(16, 185, 129, 0.2), rgba(10, 28, 58, 0.88));
+      border: 1px solid rgba(52, 211, 153, 0.45); border-radius: 16px; padding: 1.15rem; position: relative; overflow: hidden; cursor: pointer;
+    }
+    .art-frame-flower { background: radial-gradient(circle at center, rgba(244, 63, 94, 0.2), rgba(10, 28, 58, 0.88)); border-color: rgba(251, 113, 133, 0.45); }
+    .svg-cinematic-bamboo, .svg-cinematic-flower { width: 100%; height: 140px; }
+    .petal-bloom-outer, .petal-bloom-inner, .stamen-core { transform-origin: 0px 0px; transform: scale(0.12); }
+    .slide.active .petal-bloom-outer { animation: openOuterPetal 5.5s cubic-bezier(0.22, 1, 0.36, 1) infinite; }
+    .slide.active .petal-bloom-inner { animation: openInnerPetal 5.5s cubic-bezier(0.22, 1, 0.36, 1) infinite; }
+    .slide.active .stamen-core { animation: openStamen 5.5s cubic-bezier(0.34, 1.56, 0.64, 1) infinite; }
+    @keyframes openOuterPetal { 0%, 8% { transform: scale(0.14, 0.22); opacity: 0.35; } 45%, 88% { transform: scale(1, 1); opacity: 1; } 97%, 100% { transform: scale(0.14, 0.22); opacity: 0.35; } }
+    @keyframes openInnerPetal { 0%, 16% { transform: scale(0.1, 0.18); opacity: 0.2; } 55%, 88% { transform: scale(1, 1); opacity: 0.95; } 97%, 100% { transform: scale(0.1, 0.18); opacity: 0.2; } }
+    @keyframes openStamen { 0%, 25% { transform: scale(0.3); opacity: 0.3; } 60%, 88% { transform: scale(1.1); opacity: 1; } 97%, 100% { transform: scale(0.3); opacity: 0.3; } }
+
+    /* SLIDE 13: HAI CHIẾC VÍ 3D GLASSMORPHIC */
+    .dual-wallet-3d {
+      position: relative; width: 100%; height: 100%; min-height: 280px;
+      display: flex; flex-direction: column; justify-content: center; gap: 0.9rem;
+      padding: 0.85rem 0.75rem;
+    }
+    .w-card {
+      width: 94%; min-height: 112px; height: auto; border-radius: 16px; padding: 0.8rem 1rem;
+      backdrop-filter: blur(18px); position: relative;
+      display: flex; flex-direction: column; justify-content: center; gap: 0.25rem;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    .w-survival {
+      align-self: flex-start;
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.92), rgba(15, 23, 42, 0.96));
+      border: 1px solid rgba(125, 211, 252, 0.55);
+      transform: rotate(-2deg); z-index: 2;
+      animation: cardFloat1 3.8s ease-in-out infinite alternate;
+    }
+    .w-dream {
+      align-self: flex-end;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.92), rgba(217, 119, 6, 0.96));
+      border: 1px solid #fef08a;
+      transform: rotate(2deg); z-index: 3;
+      box-shadow: 0 16px 38px rgba(245, 158, 11, 0.35);
+      animation: cardFloat2 3.8s ease-in-out infinite alternate;
+    }
+    @keyframes cardFloat1 { from { transform: translateY(0px) rotate(-2deg); } to { transform: translateY(-5px) rotate(-0.8deg); } }
+    @keyframes cardFloat2 { from { transform: translateY(0px) rotate(2deg); } to { transform: translateY(5px) rotate(0.8deg); } }
+
+    .paraglider-soaring { animation: paraglideSoar 5.5s ease-in-out infinite alternate; }
+    @keyframes paraglideSoar { 0% { transform: translate(-12px, 6px) rotate(-5deg); } 100% { transform: translate(18px, -8px) rotate(6deg); } }
+
+    footer {
+      height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      padding: 0 2rem; border-top: 1px solid rgba(255, 255, 255, 0.14); z-index: 50;
+      background: rgba(12, 34, 68, 0.75); backdrop-filter: blur(16px);
+    }
+    .btn-step {
+      background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.25); color: var(--text-pure);
+      padding: 0.6rem 1.4rem; border-radius: 9999px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 0.45rem; transition: all 0.2s ease;
+    }
+    .btn-step:hover:not(:disabled) { background: var(--accent-gold); color: #0b1f3f; border-color: var(--accent-gold); }
+    .btn-nav-mini {
+      background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.22); color: #f8fafc;
+      padding: 0.32rem 0.75rem; border-radius: 9999px; font-size: 0.86rem; font-weight: 700; cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-nav-mini:hover:not(:disabled) { background: var(--accent-gold); color: #0b1f3f; border-color: var(--accent-gold); }
+    .btn-nav-mini:disabled { opacity: 0.35; cursor: not-allowed; }
+    .progress-line-track { flex: 1; max-width: 560px; margin: 0 auto; height: 6px; background: rgba(255, 255, 255, 0.18); border-radius: 9999px; overflow: hidden; }
+    .progress-line-fill { height: 100%; background: linear-gradient(90deg, #38bdf8, #fde047); width: 0%; transition: width 0.35s ease; box-shadow: 0 0 12px var(--accent-gold); }
+
+    @media (max-width: 1050px) {
+      .slide-13-grid { grid-template-columns: 1fr !important; }
+      .flip-qa-stage { height: 240px; }
+    }
+    @media (max-width: 850px) {
+      .grid-duo, .grid-trio, .grid-asymmetric { grid-template-columns: 1fr !important; }
+      .slide-11-grid, .slide-13-grid, .slide-16-grid { grid-template-columns: 1fr !important; }
+      .curtain-title { font-size: 2.4rem; }
+      .slide-title { font-size: 1.75rem; }
+      .panorama-dark-board { left: 26%; right: 3%; top: 5%; height: 66%; padding: 1.1rem; }
+      header, footer { padding: 0 1rem; }
+      .progress-line-track { margin: 0 0.5rem; }
+    }
+  </style>
+  <script>
+    window.openCurtain = function() {
+      var cs = document.getElementById('curtainStage');
+      if (!cs || cs.classList.contains('curtain-opened')) return;
+      cs.classList.add('curtain-opened');
+      if (typeof window._initSteps === 'function') window._initSteps();
+      setTimeout(function() { cs.style.display = 'none'; }, 950);
+    };
+    window.goToSlide = function(idx) {
+      if (typeof window._goToSlideImpl === 'function') window._goToSlideImpl(idx);
+    };
+    window.nextSlide = function() {
+      if (typeof window._nextSlideImpl === 'function') window._nextSlideImpl();
+    };
+    window.prevSlide = function() {
+      if (typeof window._prevSlideImpl === 'function') window._prevSlideImpl();
+    };
+
+    // BỘ DÒ TỰ ĐỘNG MỌI BIẾN THỂ ĐUÔI FILE TRONG VS CODE (.jpg.png, .png, .jpg, .jpg.jpg)
+    window.onImgLoad = function(img) {
+      var wrap = img.parentElement;
+      if (!wrap) return;
+      var rawSrc = (img.getAttribute('src') || '').trim();
+      var isRemote = /^https?:\/\//i.test(rawSrc);
+
+      if (wrap.classList.contains('custom-image-frame') || wrap.classList.contains('hero-image-badge')) {
+        wrap.classList.remove('mode-remote-link', 'mode-local-fit', 'mode-cutout-noframe');
+        if (isRemote) {
+          wrap.classList.add('mode-remote-link');
+        } else if (img.dataset.cutout === 'true' || /\.(png|svg|webp)$/i.test(rawSrc)) {
+          wrap.classList.add('mode-cutout-noframe');
+        } else {
+          wrap.classList.add('mode-local-fit');
+        }
+      } else if (wrap.classList.contains('cinema-photo-wrap')) {
+        if (!isRemote && (img.dataset.cutout === 'true' || /\.png$/i.test(rawSrc))) {
+          wrap.classList.add('mode-cutout-noframe');
+        } else {
+          wrap.classList.remove('mode-cutout-noframe');
+        }
+      }
+    };
+
+    window.resolveImg = function(img) {
+      var base = img.getAttribute('data-base') || '';
+      if (!img._candidates) {
+        var list = [];
+        if (base) {
+          var suffixes = ['.jpg.png', '.png', '.jpg', '.jpg.jpg', '.png.png', '.jpeg', '.webp'];
+          for (var i = 0; i < suffixes.length; i++) {
+            list.push(base + suffixes[i]);
+          }
+        }
+        img._candidates = list;
+        img._tryIndex = 0;
+      }
+
+      while (img._tryIndex < img._candidates.length) {
+        var nextCandidate = img._candidates[img._tryIndex++];
+        if (img.getAttribute('src') !== nextCandidate) {
+          img.setAttribute('src', nextCandidate);
+          return;
+        }
+      }
+
+      var fallback = img.getAttribute('data-fallback-url');
+      if (fallback && img.getAttribute('src') !== fallback) {
+        img.setAttribute('src', fallback);
+      }
+    };
+  </script>
+</head>
+<body>
+
+  <div class="aurora"><i></i><i></i><i></i></div>
+  <div class="vertical-optic-axis"></div>
+  <div class="pointer-halo" id="pointerHalo"></div>
+  <canvas id="spaceCanvas"></canvas>
+
+  <!-- MÀN CHE KHAI MÀN -->
+  <div id="curtainStage" onclick="openCurtain()">
+    <div class="curtain-wing curtain-left"></div>
+    <div class="curtain-wing curtain-right"></div>
+    <div class="curtain-content-overlay">
+      <h1 class="curtain-title">DÁM ƯỚC MƠ,<br><span>DÁM BƯỚC RA</span></h1>
+      <div class="curtain-quote">“Mục tiêu là những bậc thang cụ thể, còn ước mơ chính là ngọn hải đăng chỉ hướng.”</div>
+      <button type="button" class="btn-curtain-play" id="btnPlayKeynote" onclick="event.stopPropagation(); openCurtain();">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        KHAI MÀN TRÌNH DIỄN
+      </button>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand-cluster">
+      <span class="brand-bead"></span>
+      <span>DÁM ƯỚC MƠ, DÁM BƯỚC RA</span>
+    </div>
+    <div style="font-size: 0.95rem; color: #e2e8f0; text-transform: uppercase; font-weight: 700; letter-spacing: 0.1em;" id="sectionLabelTop">
+      MỞ ĐẦU
+    </div>
+  </header>
+
+  <!-- KHUNG 16 SLIDES -->
+  <main class="slides-wrapper" id="slidesClickTrigger" title="Nhấp chuột bất kỳ đâu để tiếp tục trình chiếu">
+
+    <!-- SLIDE 1 (fx-1): BÌA CHÍNH -->
+    <div class="slide active" data-fx="fx-1" data-section="MỞ ĐẦU" data-title="Dám ước mơ, Dám bước ra">
+      <div style="text-align: center; max-width: 1040px; margin: 0 auto;">
+        <div class="hero-image-badge mode-cutout-noframe">
+          <img src="ban-tay-uoc-mo.png" data-cutout="true" data-base="ban-tay-uoc-mo" data-fallback-url="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="Đôi bàn tay vươn tới ước mơ">
+        </div>
+        <h1 class="slide-title" style="font-size: clamp(46px,6vw,84px); line-height: 1.12; margin-bottom: 1.8rem; color: #fde047;">
+          DÁM ƯỚC MƠ, DÁM BƯỚC RA
+        </h1>
+        <div>
+          <button type="button" class="btn-step" id="btnStartPresentation" onclick="event.stopPropagation(); goToSlide(1);" style="padding: 1rem 3rem; font-size: 1.25rem; background: var(--accent-gold); color: #0b1f3f; position: relative; z-index: 35;">
+            Bắt đầu hành trình →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 (fx-2): I.1. ƯỚC MƠ LÀ GÌ? -->
+    <div class="slide" data-fx="fx-2" data-section="PHẦN I" data-title="1. Ước mơ là gì?">
+      <div class="part-capsule step-item">I. BẢN CHẤT CỦA ƯỚC MƠ VÀ Ý NGHĨA TỒN TẠI</div>
+      <h2 class="slide-title">1. Ước mơ là gì?</h2>
+      <div class="quote-cinematic-banner step-item">
+        “Người ta thường nói: Con người có thể tồn tại bằng hơi thở, nhưng chỉ thực sự sống khi có một ước mơ. Vậy trước khi bàn về hành trình theo đuổi ước mơ, ta hãy hiểu cho đúng: <span class="hl-underline">ước mơ thực sự là gì?</span>”
+      </div>
+      <div class="grid-asymmetric">
+        <div style="display: flex; flex-direction: column; gap: 0.95rem;">
+          <p class="paragraph-body step-item" style="margin-bottom: 0;">
+            • Ước mơ là những <span class="hl-underline">khát vọng tốt đẹp</span> mà con người ấp ủ cho tương lai và sẵn sàng nỗ lực để biến thành hiện thực.
+          </p>
+          <div class="neo-card conic-glow-card step-item">
+            <div class="card-title-lg" style="color: var(--accent-gold);">Lý tưởng định hình lẽ sống</div>
+            <div class="card-content-p">
+              Đó không chỉ là đích đến của hoài bão cá nhân, mà còn là <span class="hl-marker">lý tưởng định hình lẽ sống</span>, câu trả lời cho việc:
+              <div style="font-size: 1.32rem; font-weight: 800; color: #ffffff; margin-top: 0.55rem;">
+                “Ta muốn trở thành ai và muốn để lại giá trị gì cho đời.”
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="custom-image-frame mode-cutout-noframe">
+          <img src="ban-tay-uoc-mo.png" data-cutout="true" data-base="ban-tay-uoc-mo" data-fallback-url="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=900&q=80" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="Đôi bàn tay vươn tới ước mơ">
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 (fx-3): BA CẤP ĐỘ HOÀN TOÀN KHÁC NHAU -->
+    <div class="slide" data-fx="fx-3" data-section="PHẦN I" data-title="Ba cấp độ hoàn toàn khác nhau">
+      <div class="part-capsule step-item">I. BẢN CHẤT CỦA ƯỚC MƠ VÀ Ý NGHĨA TỒN TẠI</div>
+      <h2 class="slide-title" style="margin-bottom: 1.2rem;">Ba cấp độ hoàn toàn khác nhau</h2>
+      <div class="grid-trio step-item stagger-trio-step">
+        <div class="neo-card">
+          <div class="badge-sub">CẤP ĐỘ 1</div>
+          <div class="card-title-lg">Ý muốn nhất thời</div>
+          <div class="card-content-p">Chỉ là <span class="hl-rose">cảm xúc thoáng qua</span>, muốn sở hữu, muốn hưởng thụ, nhưng không đi kèm hành động lâu dài.</div>
+        </div>
+        <div class="neo-card">
+          <div class="badge-sub" style="background: rgba(253, 224, 71, 0.22); color: var(--accent-gold);">CẤP ĐỘ 2</div>
+          <div class="card-title-lg">Mục tiêu hành động</div>
+          <div class="card-content-p">Là những <span class="hl-cyan">cột mốc cụ thể, đo lường được</span>: thi đỗ một ngôi trường, đạt một chứng chỉ, có một công việc ổn định.</div>
+        </div>
+        <div class="neo-card conic-glow-card">
+          <div class="badge-sub" style="background: var(--accent-gold); color: #0b1f3f;">CẤP ĐỘ 3 · RÊ CHUỘT NGHIÊNG 3D</div>
+          <div class="card-title-lg">Ước mơ</div>
+          <div class="card-content-p">Là <span class="hl-marker">tầm nhìn lớn xuyên suốt cuộc đời</span>, chiếc <span class="hl-underline now">la bàn</span> dẫn dắt mọi mục tiêu và hành động của ta.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 (fx-4): BẬC THANG & NGỌN HẢI ĐĂNG -->
+    <div class="slide" data-fx="fx-4" data-section="PHẦN I" data-title="Bậc thang và Ngọn hải đăng">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.65rem; flex-wrap: wrap; gap: 0.5rem;">
+        <div class="part-capsule" style="margin-bottom: 0;">I. BẢN CHẤT CỦA ƯỚC MƠ VÀ Ý NGHĨA TỒN TẠI</div>
+        <h2 class="slide-title" style="font-size: 1.95rem; margin-bottom: 0;">Bậc thang cụ thể và Ngọn hải đăng chỉ hướng</h2>
+      </div>
+      <div class="lighthouse-panorama-scene" id="lighthousePanorama">
+        <div class="panorama-dark-board" id="panoramaDarkBoard">
+          <div class="board-unlit-prompt">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/></svg>
+            <span>Nhấp chuột để ngọn hải đăng chiếu sáng bảng đen</span>
+          </div>
+          <div class="board-illuminated-text">
+            <div class="board-quote-highlight">
+              “Nói cách khác, mục tiêu là <span class="hl-cyan">những bậc thang cụ thể</span>, còn ước mơ chính là <span class="hl-underline now">ngọn hải đăng chỉ hướng</span>.”
+            </div>
+            <p style="font-size: 1.24rem; color: #f8fafc; line-height: 1.65;">
+              Một ước mơ chân chính luôn đòi hỏi <span class="hl-marker">sự dấn thân và tinh thần sẵn sàng trả giá</span>; đó là ranh giới giữa <span class="hl-underline now">khát vọng sống đích thực</span> và <span class="hl-rose">mộng tưởng viển vông</span>.
+            </p>
+          </div>
+        </div>
+
+        <svg class="panorama-svg-layer" viewBox="0 0 1160 500" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="stoneTowerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#f8fafc"/><stop offset="50%" stop-color="#e2e8f0"/><stop offset="100%" stop-color="#64748b"/>
+            </linearGradient>
+            <linearGradient id="slateRoofGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#e11d48"/><stop offset="100%" stop-color="#881337"/>
+            </linearGradient>
+            <linearGradient id="seaBackGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#155e85"/><stop offset="100%" stop-color="#092c47"/></linearGradient>
+            <linearGradient id="seaMidGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2889b5"/><stop offset="100%" stop-color="#0e4568"/></linearGradient>
+            <linearGradient id="seaFrontGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#48b2de"/><stop offset="100%" stop-color="#16608a"/></linearGradient>
+            <linearGradient id="activeSpotlightGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/><stop offset="14%" stop-color="#fef08a" stop-opacity="0.72"/><stop offset="52%" stop-color="#38bdf8" stop-opacity="0.26"/><stop offset="100%" stop-color="#38bdf8" stop-opacity="0.02"/>
+            </linearGradient>
+            <linearGradient id="idleBeamGrad" x1="100%" y1="50%" x2="0%" y2="50%">
+              <stop offset="0%" stop-color="#fef08a" stop-opacity="0.8"/><stop offset="45%" stop-color="#38bdf8" stop-opacity="0.25"/><stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+            </linearGradient>
+            <radialGradient id="lanternFlare" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffffff"/><stop offset="40%" stop-color="#fde047" stop-opacity="0.95"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="215" cy="48" r="1.5" fill="#fff" opacity="0.8"/><circle cx="310" cy="72" r="2" fill="#7dd3fc" opacity="0.85"/><circle cx="380" cy="32" r="1.4" fill="#fde047" opacity="0.8"/>
+          <g class="idle-sky-beam" id="idleSkyBeam">
+            <polygon points="96,152 -60,70 -60,210" fill="url(#idleBeamGrad)"/>
+            <polygon points="96,152 310,15 365,65" fill="url(#idleBeamGrad)" opacity="0.55"/>
+          </g>
+          <polygon id="dynamicSweepBeam" points="96,152 96,152 96,152" fill="url(#activeSpotlightGrad)" style="mix-blend-mode: screen;"/>
+          <g class="ocean-wave-back"><path d="M-80 410 Q 90 385, 250 400 T 560 392 T 890 405 T 1240 388 L 1240 510 L -80 510 Z" fill="url(#seaBackGrad)"/></g>
+          <g class="ocean-wave-mid"><path d="M-80 432 Q 140 398, 310 422 T 650 415 T 980 428 T 1240 405 L 1240 510 L -80 510 Z" fill="url(#seaMidGrad)"/></g>
+          <g class="ocean-wave-front"><path d="M-80 458 Q 180 432, 370 456 T 730 448 T 1060 460 T 1240 442 L 1240 510 L -80 510 Z" fill="url(#seaFrontGrad)"/></g>
+          <g id="perspectiveStaircase">
+            <polygon points="650,496 815,496 808,487 653,487" fill="#334155" stroke="#7dd3fc"/><rect x="650" y="496" width="165" height="6" fill="#0f172a"/>
+            <polygon points="652,477 802,477 795,468 655,468" fill="#334155" stroke="#7dd3fc"/><rect x="652" y="477" width="150" height="10" fill="#131c2e"/>
+            <polygon points="648,458 786,458 779,450 651,450" fill="#3b4d63" stroke="#7dd3fc"/><rect x="648" y="458" width="138" height="10" fill="#152033"/>
+            <polygon points="642,439 768,439 761,431 645,431" fill="#3b4d63" stroke="#7dd3fc"/><rect x="642" y="439" width="126" height="10" fill="#172338"/>
+            <polygon points="635,421 748,421 741,414 638,414" fill="#435973" stroke="#7dd3fc"/><rect x="635" y="421" width="113" height="9" fill="#19273d"/>
+            <polygon points="628,404 728,404 722,397 631,397" fill="#435973" stroke="#93c5fd"/><rect x="628" y="404" width="100" height="9" fill="#1b2b42"/>
+            <polygon points="625,388 712,388 706,382 628,382" fill="#4d6685" stroke="#93c5fd"/><rect x="625" y="388" width="87" height="8" fill="#1e304a"/>
+            <polygon points="628,373 700,373 695,367 631,367" fill="#567396" stroke="#bae6fd"/><rect x="628" y="373" width="72" height="8" fill="#223654"/>
+            <polygon points="634,359 694,359 690,354 637,354" fill="#6080a8" stroke="#e0f2fe"/><rect x="634" y="359" width="60" height="7" fill="#253c5e"/>
+            <polygon points="642,346 690,346 687,341 645,341" fill="#fde047" stroke="#ffffff"/><rect x="642" y="346" width="48" height="6" fill="#2b456b"/>
+          </g>
+          <g id="classicLighthouseLeft">
+            <polygon points="48,445 140,445 120,190 68,190" fill="url(#stoneTowerGrad)"/>
+            <polygon points="61,235 127,235 131,285 57,285" fill="url(#slateRoofGrad)"/>
+            <polygon points="53,335 135,335 138,385 50,385" fill="url(#slateRoofGrad)"/>
+            <rect x="60" y="172" width="68" height="18" rx="3" fill="#1e293b"/>
+            <rect x="68" y="140" width="52" height="32" fill="rgba(254, 240, 138, 0.35)" stroke="#f8fafc" stroke-width="2"/>
+            <path d="M62 140 Q94 108 126 140 Z" fill="url(#slateRoofGrad)"/>
+            <path d="M-10 505 L-10 442 Q45 425 115 445 Q215 430 335 505 Z" fill="#0f172a" stroke="rgba(125,211,252,0.3)"/>
+            <circle cx="96" cy="152" r="28" fill="url(#lanternFlare)"/><circle cx="96" cy="152" r="8" fill="#ffffff"/>
+          </g>
+        </svg>
+      </div>
+      <span class="step-item lighthouse-beam-trigger" style="display:none;"></span>
+    </div>
+
+    <!-- SLIDE 5 (fx-5): MỞ ĐẦU PHẦN II (BÀN ỦI TỰ ĐỘNG LÀ PHẲNG NẾP NHĂN) -->
+    <div class="slide" data-fx="fx-5" data-section="PHẦN II" data-title="Vì sao tuổi trẻ cần có ước mơ?">
+      <div class="part-capsule step-item">II. VÌ SAO TUỔI TRẺ CẦN CÓ ƯỚC MƠ?</div>
+
+      <!-- KHUNG BÀN ỦI LÀM PHẲNG NẾP NHĂN TỰ ĐỘNG (CHẠY CHẬM RÃI 7.2 GIÂY, NHẤP ĐỂ CHẠY LẠI) -->
+      <div class="ironing-banner-stage" id="ironingStage" onclick="event.stopPropagation(); window.startAutoIroning();" title="Nhấp để chạy lại hiệu ứng chiếc bàn là tinh thần">
+        <div class="iron-label-left">✦ NIỀM TIN THUẦN KHIẾT (ỦI PHẲNG)</div>
+        <div class="iron-label-right">⚡ NẾP NHĂN SỐ PHẬN</div>
+        <div class="iron-track-box">
+          <div class="track-flattened">
+            <svg viewBox="0 0 1200 34" preserveAspectRatio="none">
+              <line x1="15" y1="17" x2="1185" y2="17" />
+            </svg>
+          </div>
+          <div class="track-wrinkled">
+            <svg viewBox="0 0 1200 34" preserveAspectRatio="none">
+              <path d="M 15 17 L 35 6 L 55 28 L 75 6 L 95 28 L 115 6 L 135 28 L 155 6 L 175 28 L 195 6 L 215 28 L 235 6 L 255 28 L 275 6 L 295 28 L 315 6 L 335 28 L 355 6 L 375 28 L 395 6 L 415 28 L 435 6 L 455 28 L 475 6 L 495 28 L 515 6 L 535 28 L 555 6 L 575 28 L 595 6 L 615 28 L 635 6 L 655 28 L 675 6 L 695 28 L 715 6 L 735 28 L 755 6 L 775 28 L 795 6 L 815 28 L 835 6 L 855 28 L 875 6 L 895 28 L 915 6 L 935 28 L 955 6 L 975 28 L 995 6 L 1015 28 L 1035 6 L 1055 28 L 1075 6 L 1095 28 L 1115 6 L 1135 28 L 1155 6 L 1175 28 L 1185 17" />
+            </svg>
+          </div>
+        </div>
+        <div class="steam-container" id="steamContainer"></div>
+        <div class="iron-mover" id="ironMover">
+          <div class="iron-glow-sole"></div>
+          <svg viewBox="0 0 240 160">
+            <defs>
+              <linearGradient id="soleGrad5" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff"/><stop offset="50%" stop-color="#cbd5e1"/><stop offset="100%" stop-color="#64748b"/>
+              </linearGradient>
+              <linearGradient id="ironBodyGrad5" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fde047"/><stop offset="55%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#b45309"/>
+              </linearGradient>
+              <linearGradient id="handleGrad5" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#0f2b5c"/>
+              </linearGradient>
+            </defs>
+            <path d="M12 110 Q-8 102 -14 90 Q-20 78 -12 68" fill="none" stroke="#64748b" stroke-width="5" stroke-linecap="round"/>
+            <path d="M18 114 C16 72 42 48 98 44 H168 C204 48 224 84 228 114 Z" fill="url(#ironBodyGrad5)" stroke="#fde047" stroke-width="2"/>
+            <path d="M28 106 C30 76 50 58 98 54 H160" fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="4" stroke-linecap="round"/>
+            <path d="M58 48 Q62 10 120 10 Q166 10 182 48 L162 50 Q152 26 120 26 Q88 26 78 52 Z" fill="url(#handleGrad5)" stroke="#7dd3fc" stroke-width="1.5"/>
+            <circle cx="68" cy="84" r="14" fill="#1e293b" stroke="#fde047" stroke-width="2.5"/>
+            <line x1="68" y1="84" x2="74" y2="76" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="112" cy="80" r="4" fill="#fb7185">
+              <animate attributeName="opacity" values="1;0.3;1" dur="1.2s" repeatCount="indefinite"/>
+            </circle>
+            <path d="M12 114 H202 Q238 120 228 136 Q220 144 204 144 H16 Q6 144 6 136 V122 Q6 114 12 114 Z" fill="url(#soleGrad5)" stroke="#475569" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </div>
+
+      <h2 class="slide-title">Vì sao tuổi trẻ cần có ước mơ?</h2>
+      <div class="grid-asymmetric">
+        <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+          <p class="paragraph-body step-item" style="margin-bottom: 0;">
+            Nhà văn <strong>Nguyễn Nhật Ánh</strong> từng chiêm nghiệm trong <em>Tôi là Bêtô</em>: ý nghĩa của ước mơ <span class="hl-cyan">không hẳn nằm ở chỗ nó có thành hiện thực ngay hay không</span>.
+          </p>
+          <div class="neo-card step-item" style="border-left: 4px solid var(--accent-gold); background: rgba(14, 38, 76, 0.9);">
+            <div class="card-content-p" style="color: #ffffff;">
+              Đôi khi, ước mơ là <span class="hl-underline">“chiếc bàn là tinh thần giúp ủi phẳng những nếp nhăn của số phận”</span>, cho ta được sống thêm một cuộc đời trọn vẹn với niềm tin thuần khiết của riêng mình.
+            </div>
+          </div>
+          <div class="neo-card step-item">
+            <div class="card-content-p">
+              Ước mơ không làm con đường ngắn lại, nhưng <span class="hl-underline">đủ sức thắp sáng để ta không lạc lối giữa đêm đen</span>.
+            </div>
+          </div>
+        </div>
+        <div class="custom-image-frame mode-local-fit">
+          <img src="toi-la-beto.jpg" data-base="toi-la-beto" data-fallback-url="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=900&q=80" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="Tôi là Bêtô - Nguyễn Nhật Ánh">
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6 (fx-6): PHẦN II - BA TRỤ CỘT (TRÍ - LỰC - THỜI) -->
+    <div class="slide" data-fx="fx-6" data-section="PHẦN II" data-title="Ba giá trị cốt lõi của ước mơ">
+      <div class="part-capsule step-item">II. VÌ SAO TUỔI TRẺ CẦN CÓ ƯỚC MƠ?</div>
+      <div class="grid-asymmetric" style="margin-bottom: 0.65rem;">
+        <div>
+          <h2 class="slide-title" style="margin-bottom: 0.3rem;">Ba trụ cột của ước mơ đối với tuổi trẻ</h2>
+        </div>
+        <div class="visual-stage" style="height: 165px; background: radial-gradient(circle, rgba(14,42,84,0.85), rgba(8,22,48,0.4));">
+          <svg viewBox="0 0 420 175" style="width: 100%; height: 100%; overflow: visible;">
+            <defs>
+              <linearGradient id="tripodBeam" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fde047"/>
+                <stop offset="50%" stop-color="#38bdf8"/>
+                <stop offset="100%" stop-color="#34d399"/>
+              </linearGradient>
+            </defs>
+            <polygon points="210,20 95,152 325,152" fill="rgba(56,189,248,0.08)" stroke="url(#tripodBeam)" stroke-width="2.5" stroke-dasharray="6 4"/>
+            <line x1="210" y1="20" x2="210" y2="92" stroke="rgba(253,224,71,0.5)" stroke-width="1.8"/>
+            <line x1="95" y1="152" x2="210" y2="92" stroke="rgba(56,189,248,0.5)" stroke-width="1.8"/>
+            <line x1="325" y1="152" x2="210" y2="92" stroke="rgba(52,211,153,0.5)" stroke-width="1.8"/>
+
+            <circle class="tripod-ring-spin" cx="210" cy="92" r="38" fill="rgba(9,25,51,0.9)" stroke="#7dd3fc" stroke-width="2" stroke-dasharray="8 4"/>
+            <circle cx="210" cy="92" r="30" fill="none" stroke="rgba(253,224,71,0.4)" stroke-width="1.2"/>
+            <g class="tripod-compass-needle">
+              <polygon points="210,56 218,92 210,128 202,92" fill="rgba(56,189,248,0.35)" stroke="#ffffff" stroke-width="1.5"/>
+              <polygon points="210,56 218,92 202,92" fill="#fde047"/>
+              <circle cx="210" cy="92" r="6" fill="#ffffff"/>
+            </g>
+
+            <g transform="translate(210, 20)">
+              <circle r="18" fill="#0b2246" stroke="#38bdf8" stroke-width="2.5"/>
+              <text y="4" text-anchor="middle" fill="#7dd3fc" font-size="10.5" font-weight="900">TRÍ</text>
+            </g>
+            <g transform="translate(95, 152)">
+              <circle r="18" fill="#0b2246" stroke="#fde047" stroke-width="2.5"/>
+              <text y="4" text-anchor="middle" fill="#fde047" font-size="10.5" font-weight="900">LỰC</text>
+            </g>
+            <g transform="translate(325, 152)">
+              <circle r="18" fill="#0b2246" stroke="#34d399" stroke-width="2.5"/>
+              <text y="4" text-anchor="middle" fill="#34d399" font-size="10.5" font-weight="900">THỜI</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="grid-trio step-item stagger-trio-step">
+        <div class="neo-card">
+          <div class="badge-sub">1 · TRÍ (KIM CHỈ NAM)</div>
+          <div class="card-title-lg">1. Kim chỉ nam định hướng (Trí)</div>
+          <div class="card-content-p">Ước mơ giữ người trẻ khỏi vòng xoáy hỗn loạn của những lựa chọn ngẫu nhiên. Như <span class="hl-cyan">tấm màng lọc tự nhiên</span>, nó giúp ta nhận ra điều gì đáng dồn tâm sức, điều gì nên dứt khoát buông bỏ, thay vì để đám đông và hoàn cảnh xô đẩy.</div>
+        </div>
+        <div class="neo-card">
+          <div class="badge-sub" style="background: rgba(253, 224, 71, 0.22); color: var(--accent-gold);">2 · LỰC (NỘI LỰC)</div>
+          <div class="card-title-lg">2. Nguồn nội lực bền bỉ (Lực)</div>
+          <div class="card-content-p">Ước mơ thổi bùng <span class="hl-underline now">động lực từ bên trong</span>, thứ sức mạnh nảy mầm từ niềm tin chứ không từ lời khen hay sự thúc ép. Chính ngọn lửa ấy kéo ta đứng dậy sau những ngày mỏi mệt, khi áp lực bên ngoài đã cạn.</div>
+        </div>
+        <div class="neo-card conic-glow-card">
+          <div class="badge-sub" style="background: var(--accent-gold); color: #0b1f3f;">3 · THỜI (ĐẶC QUYỀN)</div>
+          <div class="card-title-lg">3. Đặc quyền vô giá của tuổi trẻ (Thời)</div>
+          <div class="card-content-p">Tài sản lớn nhất của tuổi trẻ không phải tiền bạc hay kinh nghiệm, mà là <span class="hl-marker">thời gian và khả năng đứng dậy sau vấp ngã</span>. Hãy dám thử, dám sai, dám tạc nên bản sắc riêng trước khi cánh cửa thanh xuân dần khép lại.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7 (fx-7): VÍ DỤ BẠN TRẺ NUÔI MỘNG LÀM BÁC SĨ -->
+    <div class="slide" data-fx="fx-7" data-section="PHẦN II" data-title="Chủ động cầm lái số phận">
+      <div class="part-capsule step-item">II. VÌ SAO TUỔI TRẺ CẦN CÓ ƯỚC MƠ?</div>
+      <h2 class="slide-title">Chủ động cầm lái số phận</h2>
+      <div class="grid-asymmetric">
+        <div style="display: flex; flex-direction: column; gap: 0.95rem;">
+          <div class="neo-card step-item" style="border-left: 4px solid var(--accent-gold);">
+            <div class="badge-sub" style="background: rgba(253, 224, 71, 0.22); color: var(--accent-gold);">MINH CHỨNG TUỔI TRẺ</div>
+            <div class="card-title-lg">Một bạn trẻ nuôi mộng làm bác sĩ</div>
+            <div class="card-content-p">
+              Một bạn trẻ nuôi mộng làm bác sĩ sẽ có lý do để <span class="hl-underline">miệt mài bên trang sách</span>.
+            </div>
+          </div>
+          <div class="quote-cinematic-banner step-item" style="margin-bottom: 0;">
+            “Nếu sau này thấy hướng đi ấy chưa phù hợp, bạn vẫn có quyền rẽ lối; điều quý giá nhất là bạn đã <span class="hl-marker">chủ động cầm lái số phận</span>, thay vì <span class="hl-rose">phó mặc cho dòng đời đưa đẩy</span>.”
+          </div>
+        </div>
+        <div class="visual-stage">
+          <svg viewBox="0 0 380 240" style="width: 100%; height: 100%;">
+            <path d="M70 195 Q130 175 190 198 Q250 175 310 195 L310 145 Q250 125 190 148 Q130 125 70 145 Z" fill="rgba(30, 58, 138, 0.65)" stroke="#7dd3fc" stroke-width="2.2"/>
+            <line x1="190" y1="148" x2="190" y2="198" stroke="#fde047" stroke-width="2.5"/>
+
+            <circle cx="190" cy="86" r="52" fill="rgba(12, 34, 68, 0.9)" stroke="rgba(52, 211, 153, 0.6)" stroke-width="2"/>
+            <path d="M174 86 H206 M190 70 V102" stroke="#34d399" stroke-width="7" stroke-linecap="round"/>
+
+            <polyline class="ecg-pulse-line" points="25,86 115,86 132,58 148,118 166,42 184,112 200,72 214,86 355,86" fill="none" stroke="#fde047" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="190" y="224" text-anchor="middle" fill="#fde047" font-size="11.5" font-weight="800" letter-spacing="1.2">KHÁT VỌNG Y KHOA VÀ BẢN LĨNH TỰ CHỦ</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8 (fx-8): III. VÙNG AN TOÀN & GÔNG CÙM 1 (RADAR 4 VÒNG) -->
+    <div class="slide" data-fx="fx-8" data-section="PHẦN III" data-title="Cơ chế tâm lý vùng an toàn">
+      <div class="part-capsule step-item" style="font-size: clamp(1.35rem, 2.2vw, 1.9rem); padding: 0.6rem 1.5rem; margin-bottom: 1.15rem; letter-spacing: 0.08em; line-height: 1.3; text-shadow: 0 0 18px rgba(253, 224, 71, 0.45);">III. CƠ CHẾ TÂM LÝ GIỮ CHÂN TA TRONG VÙNG AN TOÀN</div>
+      <div class="grid-asymmetric" style="position: relative; min-height: 300px;">
+        <div style="display: flex; flex-direction: column; gap: 0.95rem;">
+          <div class="quote-cinematic-banner step-item" style="margin-bottom: 0;">
+            “Phần lớn người trẻ không thiếu ước mơ, mà <span class="hl-rose">thiếu một sự khởi đầu</span>. Có ba chiếc gông cùm vô hình đang ghìm chặt bước chân ta:”
+          </div>
+          <div class="neo-card step-item" style="border-left: 4px solid var(--accent-rose);">
+            <div class="badge-sub" style="background: rgba(251, 113, 133, 0.25); color: #fecdd3;">GÔNG CÙM 1 · LOSS AVERSION</div>
+            <div class="card-title-lg">1. Nỗi sợ thất bại và tâm lý sợ mất mát</div>
+            <div class="card-content-p">
+              Con người <span class="hl-marker">sợ mất mát nhiều hơn khao khát đạt được</span>. Ta chần chừ không phải vì không tin vào khả năng, mà vì <span class="hl-rose">sợ tốn công vô ích, sợ đối diện với sự vụng về của chính mình</span>.
+            </div>
+          </div>
+        </div>
+        <div class="visual-stage">
+          <div class="zone-radar">
+            <div class="z-ring z-r4">VÙNG TĂNG TRƯỞNG</div>
+            <div class="z-ring z-r3">VÙNG HỌC HỎI</div>
+            <div class="z-ring z-r2">VÙNG SỢ HÃI</div>
+            <div class="z-ring z-r1">AN TOÀN</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9 (fx-9): GÔNG CÙM 2 & 3 (REEL COMPARE ĐỒ HỌA TRỰC QUAN) -->
+    <div class="slide" data-fx="fx-9" data-section="PHẦN III" data-title="Áp lực đồng trang lứa và Chủ nghĩa cầu toàn">
+      <div class="part-capsule step-item">III. CƠ CHẾ TÂM LÝ GIỮ CHÂN TA TRONG VÙNG AN TOÀN</div>
+      <h2 class="slide-title">2. Áp lực đồng trang lứa và 3. Chủ nghĩa cầu toàn</h2>
+      <div class="grid-asymmetric">
+        <div style="display: flex; flex-direction: column; gap: 0.95rem;">
+          <div class="neo-card step-item">
+            <div class="badge-sub">2 · PEER PRESSURE & SOCIAL JUDGMENT</div>
+            <div class="card-title-lg">2. Áp lực đồng trang lứa và nỗi sợ phán xét</div>
+            <div class="card-content-p">
+              Lướt điện thoại thấy bạn bè khoe thành tích rực rỡ, ta dễ hụt hẫng. Nhưng sự so sánh ấy thật khập khiễng: ta đem <span class="hl-rose">tập phim hậu trường đầy vết xước</span> của mình đặt cạnh <span class="hl-underline">đoạn phim nổi bật đã cắt gọt</span> của người khác. Sợ bị chê cười, ta tự tay dâng quyền tự quyết cuộc đời cho ánh nhìn của thiên hạ.
+            </div>
+          </div>
+          <div class="neo-card step-item" style="border-left: 4px solid var(--accent-gold);">
+            <div class="badge-sub" style="background: rgba(253, 224, 71, 0.22); color: var(--accent-gold);">3 · STATUS QUO BIAS & PERFECTIONISM</div>
+            <div class="card-title-lg">3. Sự ngụy trang tinh vi của chủ nghĩa cầu toàn</div>
+            <div class="card-content-p">
+              Ta hay tự huyễn hoặc: <em>“Mình cần chuẩn bị kỹ hơn”</em>, <em>“Chờ có cảm hứng rồi làm”</em>. Thực chất, cầu toàn là <span class="hl-rose">tấm bình phong hèn nhát</span> để né tránh sức nóng của thực tế, bởi bộ não luôn ưa sự quen thuộc hơn bất định của đổi thay.
+            </div>
+          </div>
+        </div>
+        <div class="visual-stage" style="padding: 0.8rem;">
+          <div class="reel-compare">
+            <div class="reel-glass reel-raw">
+              <div style="font-size: 0.84rem; font-weight: 800; color: #94a3b8; letter-spacing: 0.08em;">● HẬU TRƯỜNG THẬT</div>
+              <svg viewBox="0 0 120 60" style="width: 100%; height: 58px;">
+                <polyline points="4,48 24,22 42,50 64,14 86,44 114,26" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+              <div style="font-size: 0.96rem; color: #e2e8f0; font-weight: 500;">Mồ hôi, trăn trở và những lần thử sai</div>
+            </div>
+            <div class="reel-glass reel-glam">
+              <div style="font-size: 0.84rem; font-weight: 800; color: var(--accent-gold); letter-spacing: 0.08em;">★ HIGHLIGHT REEL</div>
+              <svg viewBox="0 0 64 64" style="width: 54px; height: 54px; margin: 0 auto; filter: drop-shadow(0 0 12px rgba(253,224,71,0.65));">
+                <path d="M18 10 H46 V26 C46 34 39 40 32 40 C25 40 18 34 18 26 Z" fill="#fde047"/>
+                <path d="M18 14 H10 V22 C10 28 14 30 18 30 M46 14 H54 V22 C54 28 50 30 46 30" fill="none" stroke="#fde047" stroke-width="3.5"/>
+                <rect x="28" y="40" width="8" height="12" fill="#f59e0b"/>
+                <rect x="20" y="52" width="24" height="5" rx="2" fill="#fde047"/>
+              </svg>
+              <div style="font-size: 0.96rem; color: #ffffff; font-weight: 700;">Khoảnh khắc hào nhoáng đã cắt gọt</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 10 (fx-10): IV. LỘ TRÌNH THỰC CHIẾN -->
+    <div class="slide" data-fx="fx-10" data-section="PHẦN IV" data-title="Lộ trình thực chiến: Bước 1 và 2">
+      <div class="part-capsule step-item">IV. LỘ TRÌNH THỰC CHIẾN: BƯỚC RA KHỎI VÙNG AN TOÀN</div>
+      <h2 class="slide-title">Lộ trình được xây từ kỷ luật thép</h2>
+      <div class="quote-cinematic-banner step-item">
+        “Bước ra khỏi vùng an toàn không phải một cú nhảy liều lĩnh xuống vực thẳm, mà là <span class="hl-underline">lộ trình được xây từ kỷ luật thép</span>:”
+      </div>
+      <div class="grid-asymmetric">
+        <div style="display: flex; flex-direction: column; gap: 0.95rem;">
+          <div class="neo-card step-item">
+            <div class="badge-sub">BƯỚC 1 · CALCULATED RISK</div>
+            <div class="card-title-lg">1. Đón nhận rủi ro có tính toán</div>
+            <div class="card-content-p">
+              Thất bại không phải bản án dành cho năng lực, mà là <span class="hl-cyan">dữ liệu quý để hiệu chỉnh hành trình</span>. Một lần thuyết trình run rẩy không phải dấu chấm hết, mà là bài học: mình cần chuẩn bị chu đáo hơn ở đâu? Khi coi va vấp là một phần của trải nghiệm, thất bại sẽ hóa thành <span class="hl-marker">bệ phóng cho sự trưởng thành</span>.
+            </div>
+          </div>
+          <div class="neo-card conic-glow-card step-item">
+            <div class="badge-sub" style="background: rgba(253, 224, 71, 0.22); color: var(--accent-gold);">BƯỚC 2 · COMPETENCE</div>
+            <div class="card-title-lg">2. Tích lũy thực lực tương xứng với khát vọng</div>
+            <div class="card-content-p">
+              Ước mơ không đi kèm năng lực chỉ là ảo tưởng. Cuộc đời chỉ tưởng thưởng cho những giá trị <span class="hl-underline">đã thành sản phẩm thực</span>, chẳng trả công cho ý tưởng nằm chết trong đầu. Muốn chạm tới đỉnh cao, ta phải tích lũy kỹ năng, kiến thức và sự nghiêm cẩn mỗi ngày.
+            </div>
+          </div>
+        </div>
+        <div class="visual-stage">
+          <canvas id="competenceNetCanvas" width="400" height="240" style="width: 100%; max-width: 400px; height: 240px;"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 11 (fx-11): IV.3. ĐẬP TAN MA SÁT BẰNG NHỮNG VI BƯỚC -->
+    <div class="slide" data-fx="fx-11" data-section="PHẦN IV" data-title="3. Đập tan ma sát bằng những vi bước">
+      <div class="part-capsule step-item">IV. LỘ TRÌNH THỰC CHIẾN: BƯỚC RA KHỎI VÙNG AN TOÀN</div>
+      <h2 class="slide-title">3. Đập tan ma sát bằng những vi bước</h2>
+      <p class="paragraph-body step-item">
+        Một mục tiêu khổng lồ dễ khiến bộ não choáng ngợp rồi tìm cớ thoái lui. Hãy xé nhỏ nó thành <span class="hl-underline">những hành động nhỏ đến mức ta không thể từ chối</span>:
+      </p>
+      <div class="slide-11-grid" style="display: grid; grid-template-columns: 1fr 0.62fr 1fr; gap: 1.15rem; align-items: stretch;">
+        <div class="cinema-photo-card step-item">
+          <div class="cinema-photo-wrap">
+            <img src="viet-sach.jpg" data-base="viet-sach" data-fallback-url="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="Viết sách 200 chữ mỗi sáng">
+          </div>
+          <div class="cinema-card-body">
+            <div class="badge-sub">VI BƯỚC 1 · TRANG SÁCH</div>
+            <div class="card-title-lg">Không thể viết trọn một cuốn sách ngay?</div>
+            <div class="card-content-p" style="color: #fff;">
+              • Hãy viết đúng <span class="hl-marker"><span class="count-num" data-count="200">0</span> chữ mỗi sáng</span>.
+            </div>
+          </div>
+        </div>
+
+        <div class="visual-stage" style="height: auto; min-height: 225px; flex-direction: column; gap: 0.5rem;">
+          <div class="micro-gauge-wrap">
+            <div class="gauge-ring">
+              <div class="gauge-inner">
+                <span style="font-family: var(--font-title); font-size: 1.7rem; font-weight: 900; color: var(--accent-gold);"><span class="count-num" data-count="1">0</span>%</span>
+                <span style="font-size: 0.72rem; font-weight: 800; color: #bae6fd; letter-spacing: 0.08em;">MỖI NGÀY</span>
+              </div>
+            </div>
+            <div style="font-size: 0.85rem; font-weight: 800; color: var(--accent-gold); text-align: center; letter-spacing: 0.06em;">
+              ĐÁNH THỨC KỶ LUẬT
+            </div>
+          </div>
+        </div>
+
+        <div class="cinema-photo-card conic-glow-card step-item">
+          <div class="cinema-photo-wrap">
+            <img src="chong-day.jpg" data-base="chong-day" data-fallback-url="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=800&q=80" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="Chống đẩy tại sàn nhà">
+          </div>
+          <div class="cinema-card-body">
+            <div class="badge-sub" style="background: var(--accent-gold); color: #0b1f3f;">VI BƯỚC 2 · RÈN LUYỆN</div>
+            <div class="card-title-lg">Không thể tập 2 tiếng ở phòng gym?</div>
+            <div class="card-content-p" style="color: #fff;">
+              • Hãy bắt đầu bằng <span class="hl-marker"><span class="count-num" data-count="5">0</span> cái chống đẩy hoặc <span class="count-num" data-count="5">0</span> phút vận động</span> ngay tại sàn nhà.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="neo-card step-item" style="margin-top: 0.85rem; border-color: var(--accent-gold);">
+        <div class="card-content-p" style="color: #ffffff;">
+          • Chính những vi bước ấy sẽ <span class="hl-cyan">đánh thức kỷ luật trong bạn</span>. Bởi cảm hứng là nhiên liệu bấp bênh của <span class="hl-rose">kẻ nghiệp dư</span>; <span class="hl-underline now">kỷ luật hành động bất chấp cảm xúc</span> mới là bản lĩnh của người thực chiến.
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 12 (fx-12): V. LIÊN HỆ THỰC TẾ -->
+    <div class="slide" data-fx="fx-12" data-section="PHẦN V" data-title="Liên hệ thực tế: Từ đỉnh cao đến đời thường">
+      <div class="part-capsule step-item">V. LIÊN HỆ THỰC TẾ: TỪ ĐỈNH CAO ĐẾN ĐỜI THƯỜNG</div>
+      <h2 class="slide-title">Từ đỉnh cao đến đời thường</h2>
+      <p class="paragraph-body step-item">
+        Hành trình vượt ngưỡng không phải chuyện cổ tích viển vông, mà hiện hữu sống động qua từng số phận:
+      </p>
+      <div class="grid-trio step-item stagger-trio-step">
+        <div class="cinema-photo-card">
+          <div class="cinema-photo-wrap mode-cutout-noframe">
+            <img src="h-hen-nie.jpg.png" data-cutout="true" data-base="h-hen-nie" data-fallback-url="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="H'Hen Niê">
+          </div>
+          <div class="cinema-card-body">
+            <div class="badge-sub">VƯỢT LÊN ĐỊNH KIẾN XÃ HỘI</div>
+            <div class="card-title-lg">H’Hen Niê</div>
+            <div class="card-content-p">Lớn lên ở buôn làng nghèo, nơi hủ tục tảo hôn từng vây bủa số phận bao cô gái. Dám bước ra khỏi khuôn mẫu định sẵn, cô kiên định học tập, tự viết lại đời mình để trở thành Hoa hậu Hoàn vũ Việt Nam và ghi tên vào <span class="hl-underline now">Top <span class="count-num" data-count="5">0</span> Miss Universe</span>.</div>
+          </div>
+        </div>
+        <div class="cinema-photo-card">
+          <div class="cinema-photo-wrap">
+            <img src="jk-rowling.jpg" data-base="jk-rowling" data-fallback-url="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/J._K._Rowling_2010.jpg/640px-J._K._Rowling_2010.jpg" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="J.K. Rowling">
+          </div>
+          <div class="cinema-card-body">
+            <div class="badge-sub">BỀN BỈ TRƯỚC NGHỊCH CẢNH</div>
+            <div class="card-title-lg">J.K. Rowling</div>
+            <div class="card-content-p">Từng là bà mẹ đơn thân chật vật bên bờ vực suy sụp; bản thảo <em>Harry Potter</em> bị <span class="hl-rose"><span class="count-num" data-count="12">0</span> nhà xuất bản từ chối liên tiếp</span>. Bà không có tấm vé đảm bảo thành công, nhưng dứt khoát không để <span class="count-num" data-count="12">0</span> lần khước từ ấy thành dấu chấm hết cho ngòi bút.</div>
+          </div>
+        </div>
+        <div class="cinema-photo-card conic-glow-card">
+          <div class="cinema-photo-wrap">
+            <img src="doi-thuong.jpg" data-base="doi-thuong" data-fallback-url="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="Người trẻ quanh ta">
+          </div>
+          <div class="cinema-card-body">
+            <div class="badge-sub" style="background: var(--accent-gold); color: #0b1f3f;">QUANH TA</div>
+            <div class="card-title-lg">Những bước chân thầm lặng</div>
+            <div class="card-content-p">Ta không cần ngước nhìn những tượng đài xa vời. Hãy nhìn người trẻ bên cạnh: học sinh từng run rẩy nay tự tin bảo vệ đề tài trước hội đồng; bạn trẻ dám tắt màn hình giải trí để thức khuya học ngoại ngữ. <span class="hl-marker">“Dám bước ra”</span> bắt đầu từ chính những khoảnh khắc đời thường ấy: dám chọn sự khó chịu hôm nay để đổi lấy vững vàng ngày mai.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 13 (fx-13): VI. RÀO CẢN 1 (THẺ LẬT 3D HỎI - ĐÁP) -->
+    <div class="slide" data-fx="fx-13" data-section="PHẦN VI" data-title="Rào cản 1: Áp lực sinh kế">
+      <div class="part-capsule step-item">VI. ĐỐI DIỆN VÀ PHẢN BIỆN THỰC TẾ</div>
+      <h2 class="slide-title">Rào cản 1: Áp lực sinh kế và gánh nặng cơm áo gạo tiền</h2>
+      <div class="slide-13-grid" style="display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr) minmax(0, 1fr); gap: 1rem; align-items: stretch; margin-top: 0.4rem;">
+        <div class="flip-qa-stage step-item" id="flipCardRaoCan1" onclick="event.stopPropagation(); this.classList.toggle('flipped');">
+          <div class="flip-qa-inner">
+            <div class="flip-qa-face flip-qa-front">
+              <div>
+                <div class="badge-sub" style="background: rgba(251, 113, 133, 0.25); color: #fecdd3;">MẶT 1 · THỰC TẾ CHẤT VẤN</div>
+                <div class="card-title-lg" style="font-size: 1.24rem;">Thế kẹt giữa cơm áo và hoài bão</div>
+                <div class="card-content-p" style="font-size: 1.06rem; line-height: 1.55;">
+                  – Thực tế có người sẽ chất vấn: Hóa đơn cứ đến hạn mỗi tháng, chưa nuôi nổi mình mà đuổi theo giấc mơ xa vời thì thật <span class="hl-rose">thiếu trách nhiệm</span>. Vậy làm sao để không rơi vào thế kẹt?
+                </div>
+              </div>
+            </div>
+            <div class="flip-qa-face flip-qa-back">
+              <div>
+                <div class="badge-sub" style="background: var(--accent-gold); color: #091933;">MẶT 2 · LỜI GIẢI THỰC TẾ</div>
+                <div class="card-title-lg" style="color: var(--accent-gold); font-size: 1.24rem;">Chiến lược “Hai chiếc ví”</div>
+                <div class="card-content-p" style="font-size: 1.06rem; line-height: 1.55;">
+                  Dám ước mơ không đồng nghĩa với đánh cược liều lĩnh: Giữ <span class="hl-cyan">Ví 1 (Công việc ổn định)</span> để lo tròn trách nhiệm sinh nhai, và nuôi <span class="hl-marker">Ví 2 (Dự án tương lai)</span> sau giờ làm.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="visual-stage" style="height: auto; min-height: 300px;">
+          <div class="dual-wallet-3d">
+            <div class="w-card w-survival">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:0.4rem;flex-wrap:wrap;">
+                <span style="font-size: 0.74rem; font-weight: 800; color: #7dd3fc; letter-spacing: 0.06em;">VÍ 01 · SINH TỒN</span>
+                <span style="font-size: 0.76rem; color: #38bdf8; font-weight: 800; white-space: nowrap;">● ỔN ĐỊNH</span>
+              </div>
+              <div style="font-size: 1.08rem; font-weight: 800; color: #fff; line-height: 1.3;">Công việc ổn định trước mắt</div>
+              <div style="font-size: 0.86rem; color: #cbd5e1; line-height: 1.38;">Đảm bảo hóa đơn và trách nhiệm sinh nhai</div>
+            </div>
+            <div class="w-card w-dream">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:0.4rem;flex-wrap:wrap;">
+                <span style="font-size: 0.74rem; font-weight: 800; color: #091933; letter-spacing: 0.06em;">VÍ 02 · KHÁT VỌNG</span>
+                <span style="font-size: 0.76rem; color: #78350f; font-weight: 900; white-space: nowrap;">★ BỨT PHÁ</span>
+              </div>
+              <div style="font-size: 1.08rem; font-weight: 800; color: #091933; line-height: 1.3;">Dự án tương lai dài hạn</div>
+              <div style="font-size: 0.86rem; color: #1e293b; font-weight: 600; line-height: 1.38;">Tích lũy từng giờ và nguồn lực sau tan làm</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="neo-card conic-glow-card step-item">
+          <div class="badge-sub" style="background: rgba(253, 224, 71, 0.22); color: var(--accent-gold);">SONG HÀNH HAI NGUỒN LỰC</div>
+          <div class="card-title-lg">Song hành sinh nhai và tương lai</div>
+          <div class="card-content-p">
+            – <span class="hl-marker">Chiến lược “Hai chiếc ví”:</span> Một mặt, ta duy trì công việc ổn định trước mắt để gánh vác trọn vẹn trách nhiệm sinh nhai; mặt khác, ta kiên nhẫn chắt chiu từng khoảng thời gian và nguồn lực sau giờ làm để vun đắp cho dự án tương lai.
+          </div>
+        </div>
+      </div>
+      <div class="neo-card step-item" style="margin-top: 0.85rem; border-color: var(--accent-gold);">
+        <div class="card-content-p" style="color: #ffffff;">
+          Hơn nữa, ước mơ đâu phải đặc quyền của người rảnh rỗi: với người lao động gồng mình <span class="hl-cyan"><span class="count-num" data-count="12">0</span> tiếng mỗi ngày</span>, khát khao thoát nghèo và cho con một ngày mai tươi sáng hơn chính là điểm tựa để họ không bị quật ngã. <span class="hl-underline now">Ước mơ ở quy mô nào, miễn hướng về phía trước, đều cao quý như nhau.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 14 (fx-14): VI. RÀO CẢN 2 (GIẢI MÃ CHỮ MATRIX & CÂY TRE CẮM RỄ RỒI VỌT CAO) -->
+    <div class="slide" data-fx="fx-14" data-section="PHẦN VI" data-title="Rào cản 2: Chênh lệch xuất phát điểm">
+      <div style="display: flex; align-items: center; gap: 0.85rem; flex-wrap: wrap;">
+        <div class="part-capsule step-item">VI. ĐỐI DIỆN VÀ PHẢN BIỆN THỰC TẾ</div>
+        <div class="cipher-badge" id="cipherMatrixText">NHÌN THẲNG VÀO BẢN CHẤT</div>
+      </div>
+      <h2 class="slide-title">Rào cản 2: Sự chênh lệch xuất phát điểm và nguồn lực tiếp cận</h2>
+      <p class="paragraph-body step-item">
+        Một góc nhìn khác lại đặt câu hỏi: Xã hội vốn bất bình đẳng về vạch xuất phát, người thiếu vốn, thiếu quan hệ thì lấy gì để bước ra? Để trả lời, ta cần nhìn thẳng vào <span class="hl-underline">bản chất của sự nỗ lực</span>:
+      </p>
+      <div class="grid-trio step-item stagger-trio-step">
+        <div class="art-frame-bamboo neo-card" onclick="event.stopPropagation(); window.replayBambooGrowth();" title="Nhấp để xem lại quá trình tre cắm rễ và vươn cao">
+          <svg class="svg-cinematic-bamboo bam-seq" id="bambooSeqSvg" viewBox="0 0 320 185">
+            <rect x="10" y="106" width="300" height="72" rx="8" fill="#0d1b33" stroke="rgba(52,211,153,0.3)"/>
+            <line x1="10" y1="106" x2="310" y2="106" stroke="#34d399" stroke-width="2.2"/>
+            <text x="20" y="124" fill="#94a3b8" font-size="9.5" font-weight="800">4 NĂM CẮM RỄ DƯỚI ĐẤT</text>
+            <g stroke="#34d399" stroke-width="2.4" fill="none" stroke-linecap="round">
+              <path class="bamboo-root-line" pathLength="100" d="M160 106 Q 134 138, 96 172"/>
+              <path class="bamboo-root-line" pathLength="100" d="M160 106 Q 158 144, 160 176"/>
+              <path class="bamboo-root-line" pathLength="100" d="M160 106 Q 188 138, 224 172"/>
+            </g>
+            <g fill="#10b981">
+              <rect class="b-seg" style="--k:0" x="150" y="76" width="20" height="29" rx="3"/>
+              <rect class="b-seg" style="--k:1" x="151" y="47" width="18" height="28" rx="3"/>
+              <rect class="b-seg" style="--k:2" x="152" y="19" width="16" height="27" rx="3"/>
+              <rect class="b-seg" style="--k:3" x="153" y="-4" width="14" height="22" rx="3"/>
+            </g>
+            <g stroke="#6ee7b7" stroke-width="2.2" fill="none" stroke-linecap="round">
+              <path class="b-leaf" style="--k:0" d="M150 64 Q 112 52, 92 64"/>
+              <path class="b-leaf" style="--k:1" d="M168 38 Q 208 26, 230 38"/>
+              <path class="b-leaf" style="--k:2" d="M152 14 Q 118 4, 100 14"/>
+            </g>
+          </svg>
+          <div class="card-title-lg" style="color: var(--accent-emerald); margin-top: 0.35rem;">Cuộc đời là một Solo Race</div>
+          <div class="card-content-p">– <strong>(Cuộc đua đơn độc của riêng bạn):</strong> Không có chuẩn thời gian chung nào ép ai cũng phải thành công ở tuổi hai mươi hay ba mươi. <span class="hl-cyan">Cây tre mất nhiều năm cắm sâu bộ rễ</span> dưới lòng đất trước khi vươn cao hàng chục mét; hoa mận không nở mùa hè, hoa hồng cũng chẳng khoe sắc giữa mùa đông.</div>
+        </div>
+
+        <div class="art-frame-flower neo-card">
+          <svg class="svg-cinematic-flower" viewBox="0 0 300 180">
+            <defs>
+              <radialGradient id="petalGradOuter" cx="50%" cy="70%" r="70%"><stop offset="0%" stop-color="#ffffff"/><stop offset="60%" stop-color="#fbcfe8"/><stop offset="100%" stop-color="#f43f5e"/></radialGradient>
+              <radialGradient id="petalGradInner" cx="50%" cy="70%" r="70%"><stop offset="0%" stop-color="#fff1f2"/><stop offset="70%" stop-color="#fda4af"/><stop offset="100%" stop-color="#e11d48"/></radialGradient>
+              <radialGradient id="centerPollen" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fef08a"/><stop offset="100%" stop-color="#f59e0b"/></radialGradient>
+            </defs>
+            <g transform="translate(150, 92)">
+              <g transform="rotate(0)"><g class="petal-bloom-outer"><path d="M0,0 C-14,-12 -17,-38 0,-50 C17,-38 14,-12 0,0 Z" fill="url(#petalGradOuter)"/></g></g>
+              <g transform="rotate(45)"><g class="petal-bloom-outer"><path d="M0,0 C-14,-12 -17,-38 0,-50 C17,-38 14,-12 0,0 Z" fill="url(#petalGradOuter)"/></g></g>
+              <g transform="rotate(90)"><g class="petal-bloom-outer"><path d="M0,0 C-14,-12 -17,-38 0,-50 C17,-38 14,-12 0,0 Z" fill="url(#petalGradOuter)"/></g></g>
+              <g transform="rotate(135)"><g class="petal-bloom-outer"><path d="M0,0 C-14,-12 -17,-38 0,-50 C17,-38 14,-12 0,0 Z" fill="url(#petalGradOuter)"/></g></g>
+              <g transform="rotate(180)"><g class="petal-bloom-outer"><path d="M0,0 C-14,-12 -17,-38 0,-50 C17,-38 14,-12 0,0 Z" fill="url(#petalGradOuter)"/></g></g>
+              <g transform="rotate(225)"><g class="petal-bloom-outer"><path d="M0,0 C-14,-12 -17,-38 0,-50 C17,-38 14,-12 0,0 Z" fill="url(#petalGradOuter)"/></g></g>
+              <g transform="rotate(270)"><g class="petal-bloom-outer"><path d="M0,0 C-14,-12 -17,-38 0,-50 C17,-38 14,-12 0,0 Z" fill="url(#petalGradOuter)"/></g></g>
+              <g transform="rotate(315)"><g class="petal-bloom-outer"><path d="M0,0 C-14,-12 -17,-38 0,-50 C17,-38 14,-12 0,0 Z" fill="url(#petalGradOuter)"/></g></g>
+              <g transform="rotate(22.5)"><g class="petal-bloom-inner"><path d="M0,0 C-10,-8 -12,-26 0,-35 C12,-26 10,-8 0,0 Z" fill="url(#petalGradInner)"/></g></g>
+              <g transform="rotate(67.5)"><g class="petal-bloom-inner"><path d="M0,0 C-10,-8 -12,-26 0,-35 C12,-26 10,-8 0,0 Z" fill="url(#petalGradInner)"/></g></g>
+              <g transform="rotate(112.5)"><g class="petal-bloom-inner"><path d="M0,0 C-10,-8 -12,-26 0,-35 C12,-26 10,-8 0,0 Z" fill="url(#petalGradInner)"/></g></g>
+              <g transform="rotate(157.5)"><g class="petal-bloom-inner"><path d="M0,0 C-10,-8 -12,-26 0,-35 C12,-26 10,-8 0,0 Z" fill="url(#petalGradInner)"/></g></g>
+              <g transform="rotate(202.5)"><g class="petal-bloom-inner"><path d="M0,0 C-10,-8 -12,-26 0,-35 C12,-26 10,-8 0,0 Z" fill="url(#petalGradInner)"/></g></g>
+              <g transform="rotate(247.5)"><g class="petal-bloom-inner"><path d="M0,0 C-10,-8 -12,-26 0,-35 C12,-26 10,-8 0,0 Z" fill="url(#petalGradInner)"/></g></g>
+              <g transform="rotate(292.5)"><g class="petal-bloom-inner"><path d="M0,0 C-10,-8 -12,-26 0,-35 C12,-26 10,-8 0,0 Z" fill="url(#petalGradInner)"/></g></g>
+              <g transform="rotate(337.5)"><g class="petal-bloom-inner"><path d="M0,0 C-10,-8 -12,-26 0,-35 C12,-26 10,-8 0,0 Z" fill="url(#petalGradInner)"/></g></g>
+              <g class="stamen-core"><circle cx="0" cy="0" r="11" fill="url(#centerPollen)"/></g>
+            </g>
+          </svg>
+          <div class="card-title-lg" style="color: #fda4af; margin-top: 0.35rem;">“Bước ra” là vượt qua chính mình</div>
+          <div class="card-content-p">– Đích đến không phải thắng người khác, mà là hôm nay ta <span class="hl-marker">vượt qua được sự trì hoãn và nỗi sợ của chính mình hôm qua</span>.</div>
+        </div>
+
+        <div class="neo-card conic-glow-card">
+          <svg class="svg-cinematic-bamboo" viewBox="0 0 320 180">
+            <defs>
+              <linearGradient id="stepAscend" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#fde047"/>
+              </linearGradient>
+            </defs>
+            <rect x="35" y="130" width="36" height="32" rx="4" fill="rgba(56,189,248,0.25)" stroke="#38bdf8"/>
+            <rect x="88" y="106" width="36" height="56" rx="4" fill="rgba(56,189,248,0.4)" stroke="#38bdf8"/>
+            <rect x="141" y="78" width="36" height="84" rx="4" fill="rgba(253,224,71,0.45)" stroke="#fde047"/>
+            <rect x="194" y="46" width="36" height="116" rx="4" fill="url(#stepAscend)" stroke="#ffffff"/>
+            <path d="M45 118 L105 92 L158 64 L212 28" fill="none" stroke="#fde047" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="212" cy="28" r="6" fill="#ffffff" filter="drop-shadow(0 0 8px #fde047)"/>
+          </svg>
+          <div class="card-title-lg" style="color: var(--accent-gold); margin-top: 0.35rem;">Ý chí quyết định đường dài</div>
+          <div class="card-content-p">– <strong>Năng khiếu là điểm khởi đầu, ý chí mới quyết định đường dài:</strong> Xuất phát điểm chỉ tạo lợi thế ban đầu, còn <span class="hl-underline now">sự tôi luyện kiên cường qua năm tháng</span> mới định đoạt ai sẽ chạm tới vạch đích.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 15 (fx-15): VII. LỜI KẾT (BÚT DẠ QUANG QUÉT TUẦN TỰ + CHỮ CHÌM LA MÃ KHỔNG LỒ) -->
+    <div class="slide" data-fx="fx-15" data-section="PHẦN VII" data-title="Lời kết: Đôi bàn tay và đôi cánh">
+      <div class="ghost-roman-watermark">VII</div>
+      <div class="part-capsule step-item">VII. LỜI KẾT: BƯỚC LÊN SÂN KHẤU CUỘC ĐỜI</div>
+      <h2 class="slide-title">Đôi bàn tay nhẫn nại và Đôi cánh của khát vọng</h2>
+      <div class="grid-asymmetric" style="position: relative; z-index: 2;">
+        <div style="display: flex; flex-direction: column; gap: 0.9rem; justify-content: center;">
+          <div class="neo-card step-item" style="border-left: 4px solid var(--accent-gold);">
+            <div style="font-size: 1.34rem; font-weight: 700; color: #fef08a; margin-bottom: 0.45rem; line-height: 1.48;">
+              “Cơm áo gạo tiền có thể thử thách đôi chân, nhưng <span class="hl-underline">không có quyền giam cầm ánh mắt nhìn lên bầu trời</span>.”
+            </div>
+            <div class="card-content-p">
+              Người bản lĩnh không chọn giữa “sinh tồn” hay “mơ mộng”; họ dùng <span class="hl-marker">sự nhẫn nại của đôi bàn tay để nuôi lớn đôi cánh của khát vọng</span>.
+            </div>
+          </div>
+          <div class="neo-card step-item" style="border-color: var(--accent-gold);">
+            <div class="card-content-p">
+              Bạn không sinh ra để sống nhạt nhòa, lặp lại những ngày an toàn vô vị rồi nhắm mắt khi <span class="hl-rose">giấc mơ còn dang dở</span>. Nỗi đau bạn né tránh hôm nay chính là sức mạnh bạn đánh mất vào ngày mai. <span class="hl-underline now">Kỷ luật sắt đá là chiếc cầu duy nhất nối khát vọng với vinh quang.</span>
+            </div>
+          </div>
+          <div class="neo-card conic-glow-card step-item" style="padding: 0.95rem 1.25rem; text-align: center;">
+            <div class="seq-marker-bar" id="seqMarkerText">
+              Dám <b>ước mơ</b>, dám <b>bước ra</b>, sống bằng <b>kỷ luật sắt đá</b>!
+            </div>
+          </div>
+        </div>
+        <div class="visual-stage">
+          <svg viewBox="0 0 380 250" style="width: 100%; height: 100%;">
+            <defs>
+              <radialGradient id="sunHorizon" cx="50%" cy="55%" r="50%">
+                <stop offset="0%" stop-color="#ffffff"/><stop offset="28%" stop-color="#fde047" stop-opacity="0.9"/><stop offset="65%" stop-color="#f59e0b" stop-opacity="0.3"/><stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="bridgeBeam" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#38bdf8"/><stop offset="50%" stop-color="#fde047"/><stop offset="100%" stop-color="#38bdf8"/>
+              </linearGradient>
+            </defs>
+            <circle cx="190" cy="135" r="95" fill="url(#sunHorizon)"/>
+            <polygon points="0,245 75,148 155,205 245,128 325,188 380,145 380,245" fill="rgba(12, 32, 68, 0.85)" stroke="rgba(125,211,252,0.4)" stroke-width="1.5"/>
+            <polygon points="60,245 155,155 255,245" fill="rgba(8, 20, 44, 0.92)" stroke="#fde047" stroke-width="1.5"/>
+            <path d="M75 148 Q160 112 245 128" fill="none" stroke="url(#bridgeBeam)" stroke-width="4" stroke-linecap="round"/>
+            <g class="paraglider-soaring" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round">
+              <path d="M125 78 Q135 66 145 76 Q155 66 165 78"/>
+              <path d="M175 56 Q187 42 198 54 Q210 42 222 56" stroke="#fde047" stroke-width="2.6"/>
+              <path d="M232 82 Q240 72 248 80 Q256 72 264 82"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 16 (fx-16): KẾT THÚC (ĐÈN SÂN KHẤU + CHỮ VỠ GHÉP LẠI + PHÁO GIẤY 3D) -->
+    <div class="slide" data-fx="fx-16" data-section="KẾT THÚC" data-title="Hai sự lựa chọn và Đã đến lúc bước ra!">
+      <canvas id="confettiCanvas"></canvas>
+      <div class="part-capsule step-item" style="margin-inline: auto;">VII. LỜI KẾT: BƯỚC LÊN SÂN KHẤU CUỘC ĐỜI</div>
+      <div class="quote-cinematic-banner step-item" style="text-align: center; border-left: none; background: transparent; margin-bottom: 0.4rem;">
+        “Ngay tại giây phút này, bạn có <span class="hl-underline">hai sự lựa chọn</span>:”
+      </div>
+      <div class="spotlight-stage-wrap" id="spotlightStage">
+        <div class="slide-16-grid" style="display: grid; grid-template-columns: 1fr 0.85fr 1fr; gap: 1.1rem; align-items: center;">
+          <div class="neo-card step-item" style="border-color: rgba(251, 113, 133, 0.5);">
+            <div class="badge-sub" style="background: rgba(251, 113, 133, 0.25); color: #fecdd3;">LỰA CHỌN THỨ NHẤT</div>
+            <div class="card-content-p">
+              1. Tiếp tục ngồi đó, nuông chiều sự sợ hãi và <span class="hl-rose">làm khán giả vỗ tay cho cuộc đời người khác</span>;
+            </div>
+          </div>
+          <div class="visual-stage" style="height: 185px;">
+            <svg viewBox="0 0 300 185" style="width: 100%; height: 175px;">
+              <defs>
+                <linearGradient id="stageSpot" x1="50%" y1="0%" x2="50%" y2="100%">
+                  <stop offset="0%" stop-color="#fde047" stop-opacity="0.75"/>
+                  <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.05"/>
+                </linearGradient>
+              </defs>
+              <polygon points="150,8 55,168 245,168" fill="url(#stageSpot)"/>
+              <ellipse cx="150" cy="168" rx="92" ry="12" fill="rgba(56,189,248,0.3)" stroke="#fde047" stroke-width="2"/>
+              <polygon points="150,55 162,85 194,85 168,104 178,135 150,116 122,135 132,104 106,85 138,85" fill="#fde047" filter="drop-shadow(0 0 16px #fde047)"/>
+            </svg>
+          </div>
+          <div class="neo-card conic-glow-card step-item">
+            <div class="badge-sub" style="background: var(--accent-gold); color: #0b1f3f;">LỰA CHỌN THỨ HAI</div>
+            <div class="card-content-p" style="color: #ffffff;">
+              2. Hay đứng dậy, xóa sạch mọi lời ngụy biện, <span class="hl-marker">bước thẳng lên dưới ánh đèn sân khấu</span> để viết nên vở kịch rực rỡ nhất cho cuộc đời mình!
+            </div>
+          </div>
+        </div>
+        <div class="spotlight-dark-mask" id="spotlightMask"></div>
+      </div>
+
+      <div class="step-item" style="text-align: center; margin-top: 1rem; position: relative; z-index: 45;">
+        <h1 class="shatter-assemble-title" id="finaleAssembleTitle" style="font-family: var(--font-title); font-weight: 900; font-size: clamp(38px, 5.2vw, 68px); line-height: 1.1; margin-bottom: 0.85rem; color: #fde047; text-shadow: 0 0 32px rgba(253,224,71,0.55);">ĐÃ ĐẾN LÚC BƯỚC RA!</h1>
+        <button type="button" class="btn-step" onclick="event.stopPropagation(); goToSlide(0);" style="padding: 0.8rem 2.4rem; font-size: 1.05rem; background: var(--accent-gold); color: #0b1f3f;">
+          ↺ Xem lại từ đầu bài thuyết trình
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <button type="button" class="btn-nav-mini" id="btnPrevSlide" onclick="event.stopPropagation(); prevSlide();" title="Slide trước (←)">← Trước</button>
+      <button type="button" class="btn-nav-mini" id="btnNextSlide" onclick="event.stopPropagation(); nextSlide();" title="Slide tiếp (→)">Sau →</button>
+    </div>
+    <div class="progress-line-track">
+      <div class="progress-line-fill" id="progressFill"></div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 1.5rem;">
+      <span style="font-size: 0.95rem; font-weight: 700; color: #e2e8f0;" id="slideNumberDisplay">Slide 1 / 16</span>
+    </div>
+  </footer>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 0;
+    let currentStepIndex = 0;
+    const rnd = (a, b) => Math.random() * (b - a) + a;
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+    // Kiểm tra toàn bộ ảnh ngay khi trang khởi chạy
+    document.querySelectorAll('img[data-base]').forEach(img => {
+      if (img.complete && img.naturalWidth === 0) {
+        window.resolveImg(img);
+      } else if (img.complete && img.naturalWidth > 0) {
+        window.onImgLoad(img);
+      }
+    });
+
+    // Tách chữ tiêu đề thành từng từ (.w) để tạo hiệu ứng lật chữ 3D nối đuôi nhau
+    document.querySelectorAll('.slide-title').forEach(el => {
+      let i = 0;
+      const walk = n => [...n.childNodes].forEach(c => {
+        if (c.nodeType === 3) {
+          const f = document.createDocumentFragment();
+          c.textContent.split(/(\s+)/).forEach(t => {
+            if (!t) return;
+            if (/^\s+$/.test(t)) { f.append(' '); return; }
+            const s = document.createElement('span');
+            s.className = 'w';
+            s.style.setProperty('--i', i++);
+            s.textContent = t;
+            f.append(s);
+          });
+          c.replaceWith(f);
+        } else if (c.nodeName !== 'BR') walk(c);
+      });
+      walk(el);
+    });
+
+    // Chữ vỡ bay ghép lại (Slide 16: ĐÃ ĐẾN LÚC BƯỚC RA!)
+    const finaleTitle = document.getElementById('finaleAssembleTitle');
+    if (finaleTitle) {
+      const txt = finaleTitle.textContent.trim();
+      finaleTitle.innerHTML = [...txt].map((c, i) =>
+        c === ' ' ? '&nbsp;' : `<span class="ch" style="--i:${i};--x:${rnd(-180,180)|0}px;--y:${rnd(-130,130)|0}px;--r:${rnd(-180,180)|0}deg">${c}</span>`
+      ).join('');
+    }
+    window.runFinaleAssemble = async function() {
+      if (!finaleTitle) return;
+      finaleTitle.classList.remove('go');
+      finaleTitle.querySelectorAll('span.ch').forEach(s => {
+        s.style.setProperty('--x', (rnd(-180, 180) | 0) + 'px');
+        s.style.setProperty('--y', (rnd(-130, 130) | 0) + 'px');
+        s.style.setProperty('--r', (rnd(-180, 180) | 0) + 'deg');
+      });
+      void finaleTitle.offsetWidth;
+      await sleep(60);
+      finaleTitle.classList.add('go');
+    };
+
+    // Giải mã chữ Matrix (Slide 14)
+    let cipherToken = 0;
+    window.runMatrixCipher = async function() {
+      const id = ++cipherToken;
+      const el = document.getElementById('cipherMatrixText');
+      if (!el) return;
+      const target = 'NHÌN THẲNG VÀO BẢN CHẤT';
+      const pool = 'ABCDEFGHIKLMNOPQRSTUVXY0123456789#%&*';
+      for (let f = 0; f <= target.length * 2.5; f++) {
+        if (id !== cipherToken) return;
+        const k = Math.floor(f / 2.5);
+        el.textContent = [...target].map((c, i) => c === ' ' ? ' ' : (i < k ? c : pool[Math.random() * pool.length | 0])).join('');
+        await sleep(32);
+      }
+      el.textContent = target;
+    };
+
+    // Đếm số chạy mượt mà với hàm Easing Quartic Out
+    window.runNumberCounters = function(container) {
+      container.querySelectorAll('[data-count]').forEach(el => {
+        const target = +el.getAttribute('data-count');
+        const t0 = performance.now();
+        const dur = 1600;
+        (function tick(now) {
+          const p = Math.min((now - t0) / dur, 1);
+          const eased = 1 - Math.pow(1 - p, 4);
+          el.textContent = Math.round(target * eased);
+          if (p < 1) requestAnimationFrame(tick);
+        })(t0);
+      });
+    };
+
+    // Thẻ nghiêng 3D (Interactive 3D Tilt) + Ánh sáng Glare phản quang theo chuột
+    document.querySelectorAll('.neo-card, .cinema-photo-card, .custom-image-frame').forEach(card => {
+      card.classList.add('tilt-3d-ready');
+      card.addEventListener('pointermove', e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width;
+        const y = (e.clientY - r.top) / r.height;
+        const rotY = (x - 0.5) * 14;
+        const rotX = (0.5 - y) * 14;
+        card.style.transform = `perspective(900px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateY(-4px)`;
+        card.style.setProperty('--mx', (x * 100).toFixed(1) + '%');
+        card.style.setProperty('--my', (y * 100).toFixed(1) + '%');
+        card.style.setProperty('--glare-op', '1');
+      });
+      card.addEventListener('pointerleave', () => {
+        card.style.transform = '';
+        card.style.setProperty('--glare-op', '0');
+      });
+    });
+
+    // Cây tre cắm rễ 4 năm rồi vọt cao (Slide 14)
+    window.replayBambooGrowth = async function() {
+      const svg = document.getElementById('bambooSeqSvg');
+      if (!svg) return;
+      svg.classList.remove('go');
+      void svg.getBoundingClientRect();
+      await sleep(50);
+      svg.classList.add('go');
+    };
+
+    // Bóng tối rồi đèn sân khấu Spotlight soi sáng (Slide 16)
+    const spotStage = document.getElementById('spotlightStage');
+    const spotMask = document.getElementById('spotlightMask');
+    window.runSpotlightSweep = function() {
+      if (!spotStage || !spotMask) return;
+      spotStage.classList.remove('fully-lit');
+      spotMask.style.setProperty('--sx', '12%');
+      spotMask.style.setProperty('--sy', '50%');
+      const t0 = performance.now();
+      (function sweep(now) {
+        const p = Math.min((now - t0) / 2400, 1);
+        const e = p * p * (3 - 2 * p);
+        spotMask.style.setProperty('--sx', (12 + e * 74) + '%');
+        if (p < 1) requestAnimationFrame(sweep);
+        else spotStage.classList.add('fully-lit');
+      })(t0);
+    };
+    if (spotStage && spotMask) {
+      spotStage.addEventListener('pointermove', e => {
+        const r = spotStage.getBoundingClientRect();
+        spotStage.classList.remove('fully-lit');
+        spotMask.style.setProperty('--sx', (e.clientX - r.left) + 'px');
+        spotMask.style.setProperty('--sy', (e.clientY - r.top) + 'px');
+      });
+      spotStage.addEventListener('pointerleave', () => {
+        spotStage.classList.add('fully-lit');
+      });
+    }
+
+    // Bút dạ quang quét sáng tuần tự (Slide 15)
+    window.runSequentialMarker = async function() {
+      const el = document.getElementById('seqMarkerText');
+      if (!el) return;
+      el.classList.remove('go');
+      void el.offsetWidth;
+      await sleep(80);
+      el.classList.add('go');
+    };
+
+    // Pháo giấy 3D lật trong không trung (Slide 16)
+    let confettiFrame = null;
+    window.runConfettiCelebration = function() {
+      const c = document.getElementById('confettiCanvas');
+      if (!c) return;
+      if (confettiFrame) cancelAnimationFrame(confettiFrame);
+      const x = c.getContext('2d');
+      c.width = c.offsetWidth || window.innerWidth;
+      c.height = c.offsetHeight || window.innerHeight;
+      const colors = ['#fde047', '#38bdf8', '#fb7185', '#ffffff', '#34d399', '#a78bfa'];
+      const P = Array.from({ length: 110 }, () => ({
+        x: c.width / 2 + rnd(-120, 120),
+        y: c.height * 0.85,
+        vx: rnd(-7.5, 7.5),
+        vy: rnd(-16, -7.5),
+        w: rnd(6, 12),
+        h: rnd(4, 7),
+        r: rnd(0, 6.28),
+        vr: rnd(-0.22, 0.22),
+        tilt: rnd(0, 6.28),
+        vtilt: rnd(0.08, 0.22),
+        color: colors[Math.random() * colors.length | 0]
+      }));
+      (function loop() {
+        x.clearRect(0, 0, c.width, c.height);
+        let alive = false;
+        P.forEach(p => {
+          p.vy += 0.24;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vx *= 0.99;
+          p.r += p.vr;
+          p.tilt += p.vtilt;
+          if (p.y < c.height + 30) {
+            alive = true;
+            x.save();
+            x.translate(p.x, p.y);
+            x.rotate(p.r);
+            x.scale(1, Math.cos(p.tilt));
+            x.fillStyle = p.color;
+            x.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            x.restore();
+          }
+        });
+        if (alive) confettiFrame = requestAnimationFrame(loop);
+      })();
+    };
+
+    // =========================================================================
+    // ĐIỀU KHIỂN BÀN ỦI TỰ ĐỘNG CHẠY CHẬM RÃI LÀ PHẲNG NẾP NHĂN (SLIDE 5)
+    // =========================================================================
+    let ironAnimFrame = null;
+    let lastSteamTime = 0;
+
+    function createAutoSteamPuff() {
+      const box = document.getElementById('steamContainer');
+      if (!box) return;
+      const puff = document.createElement('div');
+      puff.className = 'steam-puff';
+      puff.style.left = (Math.random() * 16 - 8) + 'px';
+      puff.style.top = (Math.random() * 14 - 7) + 'px';
+      box.appendChild(puff);
+      setTimeout(() => puff.remove(), 1350);
+    }
+
+    window.startAutoIroning = function() {
+      const stage = document.getElementById('ironingStage');
+      const mover = document.getElementById('ironMover');
+      const steamBox = document.getElementById('steamContainer');
+      if (!stage || !mover) return;
+
+      if (ironAnimFrame) cancelAnimationFrame(ironAnimFrame);
+      if (steamBox) steamBox.innerHTML = '';
+
+      const duration = 7200;
+      const startTime = performance.now();
+
+      function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = progress < 0.5
+          ? 2 * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+        const currentPct = (eased * 100).toFixed(2);
+        stage.style.setProperty('--iron-p', currentPct + '%');
+
+        if (progress > 0.06 && progress < 0.94 && now - lastSteamTime > 135) {
+          lastSteamTime = now;
+          createAutoSteamPuff();
+        }
+
+        if (progress < 1) {
+          ironAnimFrame = requestAnimationFrame(step);
+        } else {
+          mover.style.transform = 'translate(-88%, -74%) rotate(-2deg)';
+        }
+      }
+
+      mover.style.transform = 'translate(-88%, -66%)';
+      stage.style.setProperty('--iron-p', '0%');
+      ironAnimFrame = requestAnimationFrame(step);
+    };
+
+    const progressFill = document.getElementById('progressFill');
+    const slideNumberDisplay = document.getElementById('slideNumberDisplay');
+    const sectionLabelTop = document.getElementById('sectionLabelTop');
+    const slidesClickTrigger = document.getElementById('slidesClickTrigger');
+    const curtainStage = document.getElementById('curtainStage');
+    const btnStartPresentation = document.getElementById('btnStartPresentation');
+    const btnPrevSlide = document.getElementById('btnPrevSlide');
+    const btnNextSlide = document.getElementById('btnNextSlide');
+
+    const panoramaDarkBoard = document.getElementById('panoramaDarkBoard');
+    const dynamicSweepBeam = document.getElementById('dynamicSweepBeam');
+    const idleSkyBeam = document.getElementById('idleSkyBeam');
+    let beamAnimFrame = null;
+    let isBoardLit = false;
+
+    const pointerHalo = document.getElementById('pointerHalo');
+    window.addEventListener('pointermove', e => {
+      pointerHalo.style.transform = `translate3d(${e.clientX - 140}px, ${e.clientY - 140}px, 0)`;
+      pointerHalo.classList.add('visible');
+    }, { passive: true });
+    window.addEventListener('pointerleave', () => pointerHalo.classList.remove('visible'));
+
+    function resetLighthouseBeam() {
+      if (beamAnimFrame) cancelAnimationFrame(beamAnimFrame);
+      isBoardLit = false;
+      if (panoramaDarkBoard) {
+        panoramaDarkBoard.style.setProperty('--beam-pct', '-15%');
+        panoramaDarkBoard.classList.remove('board-lit-active');
+      }
+      if (dynamicSweepBeam) dynamicSweepBeam.setAttribute('points', '96,152 96,152 96,152');
+      if (idleSkyBeam) idleSkyBeam.style.opacity = '1';
+    }
+
+    function playLighthouseSweep() {
+      if (isBoardLit) return;
+      isBoardLit = true;
+      if (idleSkyBeam) idleSkyBeam.style.opacity = '0';
+      if (panoramaDarkBoard) panoramaDarkBoard.classList.add('board-lit-active');
+
+      const duration = 2200;
+      const startTime = performance.now();
+      const lampX = 96, lampY = 152;
+      const boardLeftX = 420, boardRightX = 1115;
+      const boardTopY = 28, boardBottomY = 342;
+
+      function stepSweep(now) {
+        const elapsed = now - startTime;
+        const rawProgress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - rawProgress, 3);
+        const currentTargetX = boardLeftX + eased * (boardRightX - boardLeftX);
+
+        if (dynamicSweepBeam) {
+          dynamicSweepBeam.setAttribute('points', `${lampX},${lampY} ${currentTargetX},${boardTopY} ${currentTargetX},${boardBottomY}`);
+        }
+        if (panoramaDarkBoard) {
+          panoramaDarkBoard.style.setProperty('--beam-pct', `${(eased * 114).toFixed(2)}%`);
+        }
+        if (rawProgress < 1) beamAnimFrame = requestAnimationFrame(stepSweep);
+      }
+      beamAnimFrame = requestAnimationFrame(stepSweep);
+    }
+
+    function syncLighthouseBeamState() {
+      const beamTrigger = slides[3]?.querySelector('.lighthouse-beam-trigger');
+      if (beamTrigger && beamTrigger.classList.contains('revealed')) {
+        playLighthouseSweep();
+      } else {
+        resetLighthouseBeam();
+      }
+    }
+
+    function getCurrentSlideSteps() {
+      return slides[currentSlide].querySelectorAll('.step-item');
+    }
+
+    function clearManualFocus() {
+      document.querySelectorAll('.manual-focus').forEach(el => el.classList.remove('manual-focus'));
+    }
+
+    function triggerSlideSpecialEffects(idx) {
+      const activeSlide = slides[idx];
+      if (!activeSlide) return;
+      if (idx === 4) window.startAutoIroning();
+      if (idx === 10 || idx === 11 || idx === 12) window.runNumberCounters(activeSlide);
+      if (idx === 13) {
+        window.runMatrixCipher();
+        window.replayBambooGrowth();
+      }
+      if (idx === 14) window.runSequentialMarker();
+      if (idx === 15) {
+        window.runSpotlightSweep();
+        window.runFinaleAssemble();
+        window.runConfettiCelebration();
+      }
+    }
+
+    function initCurrentSlideSteps() {
+      clearManualFocus();
+      const steps = getCurrentSlideSteps();
+
+      if (currentSlide === 0) {
+        steps.forEach(s => {
+          s.classList.add('revealed');
+          s.classList.remove('active-step');
+        });
+        currentStepIndex = steps.length;
+      } else {
+        steps.forEach(s => s.classList.remove('revealed', 'active-step'));
+        currentStepIndex = 0;
+        if (currentSlide === 3) {
+          currentStepIndex = -1;
+        } else if (steps.length > 0) {
+          steps[0].classList.add('revealed', 'active-step');
+        }
+      }
+      syncLighthouseBeamState();
+      triggerSlideSpecialEffects(currentSlide);
+    }
+    window._initSteps = initCurrentSlideSteps;
+
+    function showSlide(index) {
+      if (index < 0 || index >= totalSlides) return;
+      if (currentSlide !== index) {
+        const oldSlide = slides[currentSlide];
+        oldSlide.classList.add('out');
+        setTimeout(() => oldSlide.classList.remove('out'), 750);
+      }
+      slides.forEach((s, idx) => {
+        s.classList.toggle('active', idx === index);
+        if (idx === index) s.scrollTop = 0;
+      });
+      currentSlide = index;
+      slideNumberDisplay.textContent = `Slide ${index + 1} / ${totalSlides}`;
+      progressFill.style.width = `${((index + 1) / totalSlides) * 100}%`;
+      if (btnPrevSlide) btnPrevSlide.disabled = index === 0;
+      if (btnNextSlide) btnNextSlide.disabled = index === totalSlides - 1;
+
+      const activeSlide = slides[index];
+      const sec = activeSlide.getAttribute('data-section') || 'BÀI NÓI';
+      const tit = activeSlide.getAttribute('data-title') || '';
+      sectionLabelTop.textContent = `${sec} — ${tit}`;
+
+      initCurrentSlideSteps();
+    }
+
+    window._goToSlideImpl = function(idx) { showSlide(idx); };
+    window._nextSlideImpl = function() { if (currentSlide < totalSlides - 1) showSlide(currentSlide + 1); };
+    window._prevSlideImpl = function() { if (currentSlide > 0) showSlide(currentSlide - 1); };
+
+    function advanceStepOrSlide() {
+      if (curtainStage && !curtainStage.classList.contains('curtain-opened')) {
+        window.openCurtain();
+        return;
+      }
+      if (currentSlide === 0) {
+        window.nextSlide();
+        return;
+      }
+      const steps = getCurrentSlideSteps();
+      if (currentStepIndex + 1 < steps.length) {
+        currentStepIndex++;
+        steps.forEach((s, i) => {
+          s.classList.remove('active-step');
+          if (i < currentStepIndex) {
+            s.classList.add('revealed');
+          } else if (i === currentStepIndex) {
+            s.classList.add('revealed', 'active-step');
+            if (s.style.display !== 'none') s.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            if (s.querySelectorAll('[data-count]').length > 0) window.runNumberCounters(s);
+            if (s.querySelector('#seqMarkerText')) window.runSequentialMarker();
+            if (s.querySelector('#finaleAssembleTitle')) {
+              window.runFinaleAssemble();
+              window.runConfettiCelebration();
+            }
+          }
+        });
+        syncLighthouseBeamState();
+        return;
+      }
+      window.nextSlide();
+    }
+
+    if (btnStartPresentation) {
+      btnStartPresentation.addEventListener('click', function(e) {
+        e.stopPropagation();
+        window.goToSlide(1);
+      });
+    }
+
+    slidesClickTrigger.addEventListener('click', (e) => {
+      if (e.target.closest('button, a, .flip-qa-stage, .ironing-banner-stage')) return;
+      const card = e.target.closest('.neo-card, .cinema-photo-card, .art-frame-bamboo, .art-frame-flower, .panorama-dark-board, .custom-image-frame');
+      if (card && card.classList.contains('panorama-dark-board') && !isBoardLit) {
+        advanceStepOrSlide();
+        return;
+      }
+      const isCardRevealed = card && (
+        card.classList.contains('revealed') ||
+        (card.parentElement && card.parentElement.classList.contains('revealed')) ||
+        card.classList.contains('cinema-photo-card') ||
+        card.classList.contains('custom-image-frame') ||
+        card.classList.contains('art-frame-bamboo') ||
+        card.classList.contains('art-frame-flower') ||
+        (card.classList.contains('panorama-dark-board') && isBoardLit)
+      );
+      if (isCardRevealed) {
+        const isAlreadyFocused = card.classList.contains('manual-focus');
+        clearManualFocus();
+        if (!isAlreadyFocused) card.classList.add('manual-focus');
+        return;
+      }
+      clearManualFocus();
+      advanceStepOrSlide();
+    });
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (curtainStage && !curtainStage.classList.contains('curtain-opened')) {
+        if (e.key === ' ' || e.key === 'Enter') {
+          e.preventDefault();
+          window.openCurtain();
+        }
+        return;
+      }
+      if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) {
+        e.preventDefault();
+        clearManualFocus();
+        advanceStepOrSlide();
+      } else if (['ArrowLeft', 'PageUp'].includes(e.key)) {
+        e.preventDefault();
+        clearManualFocus();
+        window.prevSlide();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        window.goToSlide(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        window.goToSlide(totalSlides - 1);
+      } else if (e.key.toLowerCase() === 'f') {
+        toggleFullscreen();
+      }
+    });
+
+    // 1. CANVAS BẦU TRỜI SAO NỀN
+    const canvas = document.getElementById('spaceCanvas');
+    const ctx = canvas.getContext('2d');
+    const stars = [];
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    for (let i = 0; i < 48; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.8 + 0.5,
+        vy: Math.random() * 0.28 + 0.1,
+        p: Math.random() * 6,
+        gold: i % 3 === 0
+      });
+    }
+
+    // 2. CANVAS SLIDE 10: MẠNG LƯỚI TINH THỂ NĂNG LỰC 5 TRỤ CỘT
+    const netCanvas = document.getElementById('competenceNetCanvas');
+    const nCtx = netCanvas ? netCanvas.getContext('2d') : null;
+    const netNodes = [
+      { x: 200, y: 120, label: 'THỰC LỰC', r: 26, core: true },
+      { x: 75,  y: 52,  label: 'SÁNG TẠO', r: 15, color: '#fde047' },
+      { x: 325, y: 52,  label: 'KIẾN THỨC', r: 15, color: '#fb7185' },
+      { x: 65,  y: 188, label: 'KINH NGHIỆM', r: 15, color: '#34d399' },
+      { x: 335, y: 188, label: 'KỸ NĂNG', r: 15, color: '#38bdf8' },
+      { x: 200, y: 34,  label: 'NGHIÊM CẨN', r: 15, color: '#a78bfa' }
+    ];
+
+    function animateAllCanvases(t) {
+      const time = t || 0;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach(p => {
+        p.y -= p.vy;
+        if (p.y < 0) { p.y = canvas.height; p.x = Math.random() * canvas.width; }
+        const alpha = 0.25 + 0.45 * Math.abs(Math.sin(time / 1200 + p.p));
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.gold ? `rgba(253, 224, 71, ${alpha})` : `rgba(186, 230, 253, ${alpha})`;
+        ctx.fill();
+      });
+
+      if (nCtx && currentSlide === 9) {
+        const w = netCanvas.width, h = netCanvas.height;
+        nCtx.clearRect(0, 0, w, h);
+        const center = netNodes[0];
+
+        for (let i = 1; i < netNodes.length; i++) {
+          const nd = netNodes[i];
+          const nx = nd.x + Math.sin(time / 900 + i) * 6;
+          const ny = nd.y + Math.cos(time / 1100 + i) * 6;
+
+          nCtx.beginPath();
+          nCtx.moveTo(center.x, center.y);
+          nCtx.lineTo(nx, ny);
+          nCtx.strokeStyle = 'rgba(125, 211, 252, 0.35)';
+          nCtx.lineWidth = 2;
+          nCtx.stroke();
+
+          const pulseP = ((time / 1200 + i * 0.2) % 1);
+          const px = nx + (center.x - nx) * pulseP;
+          const py = ny + (center.y - ny) * pulseP;
+          nCtx.beginPath();
+          nCtx.arc(px, py, 3.8, 0, Math.PI * 2);
+          nCtx.fillStyle = nd.color;
+          nCtx.fill();
+
+          nCtx.beginPath();
+          nCtx.arc(nx, ny, nd.r, 0, Math.PI * 2);
+          nCtx.fillStyle = 'rgba(12, 34, 68, 0.9)';
+          nCtx.fill();
+          nCtx.lineWidth = 2.2;
+          nCtx.strokeStyle = nd.color;
+          nCtx.stroke();
+
+          nCtx.fillStyle = '#ffffff';
+          nCtx.font = '800 11px "Be Vietnam Pro", sans-serif';
+          nCtx.textAlign = 'center';
+          nCtx.fillText(nd.label, nx, ny + 30);
+        }
+
+        nCtx.beginPath();
+        nCtx.arc(center.x, center.y, center.r + Math.sin(time / 500) * 2, 0, Math.PI * 2);
+        nCtx.fillStyle = '#fde047';
+        nCtx.fill();
+        nCtx.fillStyle = '#091933';
+        nCtx.font = '900 11px "Be Vietnam Pro", sans-serif';
+        nCtx.textAlign = 'center';
+        nCtx.fillText('THỰC LỰC', center.x, center.y + 4);
+      }
+
+      requestAnimationFrame(animateAllCanvases);
+    }
+    animateAllCanvases(0);
+    showSlide(0);
+  </script>
+</body>
+</html>
