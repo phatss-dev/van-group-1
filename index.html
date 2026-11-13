@@ -6,7 +6,7 @@
   <title>DÁM ƯỚC MƠ, DÁM BƯỚC RA</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
   <style>
     @property --a {
       syntax: '<angle>';
@@ -114,6 +114,32 @@
       height: 58px; display: flex; align-items: center; justify-content: space-between;
       padding: 0 2.2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.14);
       z-index: 50; backdrop-filter: blur(20px); background: rgba(10, 28, 58, 0.72);
+      transition: background 0.75s ease, border-color 0.75s ease;
+    }
+    body.theater-theme {
+      background: #020204;
+    }
+    body.theater-theme header {
+      background: linear-gradient(180deg, rgba(18, 4, 8, 0.96) 0%, rgba(10, 3, 6, 0.94) 100%);
+      border-bottom-color: rgba(251, 191, 36, 0.28);
+    }
+    body.theater-theme footer {
+      background: linear-gradient(180deg, rgba(8, 3, 5, 0.95) 0%, rgba(3, 2, 4, 0.98) 100%);
+      border-top-color: rgba(251, 191, 36, 0.28);
+    }
+    body.theater-theme .progress-line-fill {
+      background: linear-gradient(90deg, #9e1125, #f59e0b, #fde68a);
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.7);
+    }
+    body.theater-theme .btn-nav-mini {
+      background: rgba(158, 17, 37, 0.28);
+      border-color: rgba(251, 191, 36, 0.35);
+      color: #fde68a;
+    }
+    body.theater-theme .btn-nav-mini:hover:not(:disabled) {
+      background: #f59e0b;
+      color: #09090b;
+      border-color: #fde68a;
     }
     .brand-cluster { display: flex; align-items: center; gap: 0.75rem; font-weight: 800; letter-spacing: 0.08em; font-size: 1.1rem; color: var(--accent-gold); }
     .brand-bead { width: 9px; height: 9px; border-radius: 50%; background: var(--accent-gold); box-shadow: 0 0 12px rgba(253, 224, 71, 0.9); }
@@ -736,6 +762,7 @@
       height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
       padding: 0 2rem; border-top: 1px solid rgba(255, 255, 255, 0.14); z-index: 50;
       background: rgba(12, 34, 68, 0.75); backdrop-filter: blur(16px);
+      transition: background 0.75s ease, border-color 0.75s ease;
     }
     .btn-step {
       background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.25); color: var(--text-pure);
@@ -766,6 +793,360 @@
       header, footer { padding: 0 1rem; }
       .progress-line-track { margin: 0 0.5rem; }
     }
+  
+    /* =========================================================
+       SÂN KHẤU CÓ BẢNG CHỮ — SLIDE 15 (PHẦN KẾT)
+       ========================================================= */
+    :root {
+      --stage-gold: #f59e0b;
+      --stage-gold-bright: #fde68a;
+      --stage-glow: rgba(245, 158, 11, 0.38);
+      --screen-power: 0;
+    }
+    #finaleTheaterSlide {
+      max-width: 100% !important;
+      max-height: 100% !important;
+      width: 100% !important;
+      height: 100% !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      inset: 0;
+    }
+    .font-editorial { font-family: 'Playfair Display', Georgia, serif; }
+    .theater-stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: radial-gradient(ellipse 80% 55% at 50% 30%, #101320 0%, #06070d 58%, #010103 100%);
+    }
+    .backwall-architecture {
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 50% 34%, rgba(251, 191, 36, 0.08) 0%, transparent 60%),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 36px);
+      z-index: 1; pointer-events: none;
+    }
+    .screen-ambilight {
+      position: absolute; top: 8%; left: 50%; transform: translateX(-50%);
+      width: 78vw; max-width: 1180px; height: 52vh; border-radius: 48px;
+      background: radial-gradient(ellipse at center, rgba(245, 158, 11, 0.42) 0%, rgba(217, 119, 6, 0.16) 48%, transparent 76%);
+      filter: blur(55px); opacity: calc(var(--screen-power) * 0.95);
+      transition: opacity 1.5s cubic-bezier(0.22, 1, 0.36, 1), background 1.2s ease;
+      z-index: 2; pointer-events: none;
+    }
+    .screen-ambilight.finale-warmth {
+      background: radial-gradient(ellipse at center, rgba(251, 191, 36, 0.62) 0%, rgba(245, 158, 11, 0.28) 52%, transparent 80%);
+    }
+    .volumetric-lights {
+      position: absolute; top: -8%; left: 0; width: 100%; height: 90%;
+      z-index: 12; pointer-events: none; overflow: hidden;
+    }
+    .light-cone {
+      position: absolute; top: 0; width: 560px; height: 115%; transform-origin: top center;
+      background: conic-gradient(from 167deg at 50% 0%, transparent 0deg, rgba(253, 230, 138, 0.08) 9deg, rgba(255, 251, 235, 0.19) 13deg, rgba(253, 230, 138, 0.08) 17deg, transparent 26deg);
+      filter: blur(18px); mix-blend-mode: screen; opacity: 0.35;
+      transition: opacity 1.6s ease, transform 2.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .light-cone.cone-left { left: 16%; transform: rotate(-16deg); animation: driftLeftCone 10s ease-in-out infinite alternate; }
+    .light-cone.cone-center { left: calc(50% - 280px); transform: rotate(0deg) scaleX(1.35); opacity: 0.55; }
+    .light-cone.cone-right { right: 16%; transform: rotate(16deg); animation: driftRightCone 10s ease-in-out infinite alternate; }
+    .stage-lit .light-cone.cone-left, .stage-lit .light-cone.cone-right { opacity: 0.85; }
+    .stage-lit .light-cone.cone-center { opacity: 1; }
+    .theater-stage:not(.curtain-opened) .volumetric-lights,
+    .theater-stage:not(.curtain-opened) .screen-ambilight,
+    .theater-stage:not(.curtain-opened) #atmosphereDustCanvas {
+      opacity: 0 !important; visibility: hidden !important; transition: opacity 0.75s ease, visibility 0s linear 0.75s;
+    }
+    .theater-stage.curtain-opened .volumetric-lights,
+    .theater-stage.curtain-opened #atmosphereDustCanvas {
+      visibility: visible; transition: opacity 1.2s ease 0.25s, visibility 0s linear 0s;
+    }
+    @keyframes driftLeftCone { 0% { transform: rotate(-17deg); } 100% { transform: rotate(-11deg); } }
+    @keyframes driftRightCone { 0% { transform: rotate(17deg); } 100% { transform: rotate(11deg); } }
+
+    .giant-black-board-frame {
+      position: absolute; top: 5.5%; left: 50%;
+      transform: translateX(-50%) translateY(18px) scale(0.95);
+      width: 84vw; max-width: 1180px; height: 53%; min-height: 290px; max-height: 510px;
+      z-index: 6; border-radius: 18px; padding: 5px;
+      background: linear-gradient(160deg, #3f3f46 0%, #18181b 35%, #09090b 70%, #27272a 100%);
+      box-shadow: 0 35px 90px rgba(0, 0, 0, 0.98), 0 0 0 1px rgba(255, 255, 255, 0.08), 0 0 75px rgba(245, 158, 11, calc(var(--screen-power) * 0.22));
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 1.2s ease, visibility 0s linear 0.8s;
+    }
+    .curtain-opened .giant-black-board-frame {
+      opacity: 1; visibility: visible; pointer-events: auto;
+      transform: translateX(-50%) translateY(0) scale(0.985);
+      transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.28s, transform 1.25s cubic-bezier(0.16, 1, 0.3, 1) 0.28s, box-shadow 1.4s ease, visibility 0s linear 0s;
+    }
+    .curtain-opened.stage-lit .giant-black-board-frame { transform: translateX(-50%) translateY(0) scale(1); }
+    .giant-black-board-surface {
+      position: relative; width: 100%; height: 100%;
+      background: radial-gradient(circle at 50% 45%, #060609 0%, #010102 100%);
+      border-radius: 14px; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      padding: 1.35rem 2.2rem; text-align: center;
+      box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.98);
+    }
+    .board-oled-texture {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.03) 0.75px, transparent 0);
+      background-size: 3px 3px; pointer-events: none; z-index: 1;
+    }
+    .board-glass-sheen {
+      position: absolute; inset: 0;
+      background: linear-gradient(128deg, rgba(255, 255, 255, 0.032) 0%, rgba(255, 255, 255, 0.008) 36%, transparent 36.2%, transparent 100%);
+      pointer-events: none; z-index: 2;
+    }
+    .board-horizon-line {
+      position: absolute; left: 8%; width: 84%; height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(251, 191, 36, 0.75) 50%, transparent 100%);
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.8);
+      opacity: var(--screen-power); transform: scaleX(var(--screen-power));
+      transition: opacity 1.1s ease, transform 1.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 4;
+    }
+    .board-horizon-line.top-line { top: 14px; }
+    .board-horizon-line.bottom-line { bottom: 14px; }
+    .board-content-wrap {
+      position: relative; z-index: 10; width: 100%; max-width: 1040px; height: 100%; margin: 0 auto;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 0.55rem;
+      padding-top: 0.35rem;
+    }
+    .board-content-wrap.center-mode {
+      justify-content: center;
+      padding-top: 0;
+    }
+    .board-content-wrap.center-mode .board-main-stage {
+      flex: 0 1 auto;
+    }
+    .board-main-stage {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+    }
+    .board-main-stage.with-visual {
+      display: grid;
+      grid-template-columns: 1.38fr 0.82fr;
+      gap: 1.15rem;
+      align-items: center;
+      text-align: left;
+    }
+    .board-left-col {
+      transition: opacity 0.28s ease;
+    }
+    .board-left-col.fading-out {
+      opacity: 0;
+    }
+    .board-badge {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.28rem 1rem; border-radius: 9999px;
+      border: 1px solid rgba(251, 191, 36, 0.35); background: rgba(245, 158, 11, 0.08);
+      color: #fde68a; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.22em; font-weight: 700;
+      opacity: 0; transition: opacity 0.7s ease;
+    }
+    .board-badge.show { opacity: 1; }
+    .board-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #fbbf24; box-shadow: 0 0 8px #fbbf24; }
+    .board-main-heading {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.5rem, 2.8vw, 2.55rem); font-weight: 700; color: #f8fafc;
+      line-height: 1.28; letter-spacing: 0.02em; text-align: center;
+    }
+    .board-body-grid {
+      display: grid; grid-template-columns: 1.35fr 0.85fr; gap: 1.2rem; align-items: center; width: 100%; text-align: left;
+    }
+    .board-body-grid.no-visual {
+      grid-template-columns: 1fr; text-align: center; max-width: 920px;
+    }
+    .choice-flip-stage {
+      perspective: 1200px;
+      width: 100%;
+      max-width: 720px;
+      height: 148px;
+      margin: 0 auto;
+      cursor: pointer;
+      position: relative;
+    }
+    .choice-flip-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.9s cubic-bezier(0.34, 1.35, 0.64, 1);
+      transform-style: preserve-3d;
+    }
+    .choice-flip-stage.flipped .choice-flip-inner {
+      transform: rotateY(180deg);
+    }
+    .choice-flip-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      padding: 1rem 1.35rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: left;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      color: #f1f5f9;
+      font-size: clamp(0.98rem, 1.3vw, 1.16rem);
+      line-height: 1.55;
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    }
+    .choice-flip-front {
+      background: linear-gradient(155deg, rgba(68, 16, 36, 0.92), rgba(20, 12, 30, 0.96));
+      border: 1.5px solid rgba(251, 113, 133, 0.6);
+    }
+    .choice-flip-back {
+      background: linear-gradient(155deg, rgba(16, 48, 92, 0.96), rgba(10, 28, 58, 0.98));
+      border: 2px solid #fde047;
+      transform: rotateY(180deg);
+      box-shadow: 0 16px 42px rgba(253, 224, 71, 0.25);
+    }
+    .board-card {
+      background: rgba(15, 23, 42, 0.72); border: 1px solid rgba(251, 191, 36, 0.32);
+      border-radius: 14px; padding: 0.9rem 1.1rem; color: #f1f5f9; font-size: clamp(0.92rem, 1.2vw, 1.08rem); line-height: 1.55;
+    }
+    .board-visual-box {
+      display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(circle at 50% 50%, rgba(14, 38, 76, 0.55) 0%, rgba(8, 22, 48, 0.25) 75%, transparent 100%);
+      border: 1px solid rgba(125, 211, 252, 0.28); border-radius: 16px; padding: 0.5rem; height: 195px;
+    }
+    .char-unit {
+      display: inline-block; opacity: 0; transform: translateY(14px) scale(0.94); filter: blur(8px);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.8s ease;
+      will-change: opacity, transform, filter;
+    }
+    .char-unit.visible {
+      opacity: 1; transform: translateY(0) scale(1); filter: blur(0px);
+      text-shadow: 0 0 24px rgba(251, 191, 36, 0.45), 0 2px 10px rgba(0, 0, 0, 0.9);
+    }
+    .char-unit.fresh-glow { color: #fef3c7; text-shadow: 0 0 18px #fbbf24, 0 0 34px #f59e0b; }
+    .subtext-reveal {
+      opacity: 0; filter: blur(4px);
+      transition: opacity 0.55s ease, filter 0.55s ease; width: 100%;
+    }
+    .subtext-reveal.visible { opacity: 1; filter: blur(0px); }
+
+    .stage-deck-perspective {
+      position: absolute; bottom: 13.5%; left: -10%; width: 120%; height: 31%;
+      z-index: 5; perspective: 650px; opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity 0.75s ease, visibility 0s linear 0.75s;
+    }
+    .curtain-opened .stage-deck-perspective {
+      opacity: 1; visibility: visible; transition: opacity 1.1s ease 0.22s, visibility 0s linear 0s;
+    }
+    .stage-deck-surface {
+      position: relative; width: 100%; height: 100%; transform: rotateX(60deg); transform-origin: top center;
+      background:
+        radial-gradient(ellipse 52% 70% at 50% 12%, rgba(245, 158, 11, calc(var(--screen-power) * 0.25)) 0%, rgba(15, 23, 42, 0.35) 52%, #040407 90%),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.022) 0px, rgba(255,255,255,0.022) 1px, transparent 1px, transparent 85px),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.028) 0px, rgba(255,255,255,0.028) 1px, transparent 1px, transparent 42px);
+      border-top: 1.5px solid rgba(255, 255, 255, 0.14);
+      box-shadow: inset 0 30px 70px rgba(0, 0, 0, 0.92); transition: background 1.2s ease;
+    }
+    .floor-mirrored-text {
+      position: absolute; top: 8px; left: 50%; transform: translateX(-50%) scaleY(-0.52);
+      width: 66%; text-align: center; font-family: 'Playfair Display', serif; font-weight: 700;
+      font-size: clamp(1rem, 2.1vw, 1.85rem); color: rgba(253, 230, 138, 0.55); filter: blur(6px);
+      opacity: calc(var(--screen-power) * 0.26); transition: opacity 0.9s ease;
+      pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .stage-apron-edge {
+      position: absolute; bottom: 17.5%; left: 0; width: 100%; height: 18px; z-index: 8;
+      background: linear-gradient(90deg, #050507 0%, #1c1917 20%, #292524 50%, #1c1917 80%, #050507 100%);
+      border-top: 1.5px solid rgba(251, 191, 36, 0.42); border-bottom: 4px solid #000000;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.98), 0 -3px 20px rgba(245, 158, 11, 0.18);
+      display: flex; align-items: center; justify-content: space-evenly; padding: 0 8vw;
+      opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.75s ease, visibility 0s linear 0.75s;
+    }
+    .curtain-opened .stage-apron-edge {
+      opacity: 1; visibility: visible; transition: opacity 1.1s ease 0.25s, visibility 0s linear 0s;
+    }
+    .apron-footlight {
+      width: 14px; height: 4px; border-radius: 999px; background: #fde68a;
+      box-shadow: 0 -4px 16px #f59e0b, 0 -1px 6px #ffffff;
+      opacity: calc(0.25 + var(--screen-power) * 0.75); transition: opacity 1s ease;
+    }
+    .speaker-stage-position {
+      position: absolute; bottom: 18.2%; left: 50%;
+      transform: translateX(-50%) translateY(26px) scale(0.95); z-index: 10;
+      display: flex; flex-direction: column; align-items: center; pointer-events: none;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.85s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.75s;
+    }
+    .curtain-opened .speaker-stage-position {
+      opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0) scale(1);
+      transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.32s, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.32s, visibility 0s linear 0s;
+    }
+    .speaker-spotlight-pool {
+      position: absolute; bottom: -10px; width: 220px; height: 42px; border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(255, 251, 235, 0.36) 0%, rgba(245, 158, 11, 0.26) 45%, transparent 76%);
+      filter: blur(5px); z-index: -1;
+    }
+    .speaker-floor-shadow {
+      position: absolute; bottom: -24px; width: 150px; height: 40px; border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.5) 55%, transparent 78%);
+      transform: scaleY(0.6); z-index: -2;
+    }
+    .speaker-figure-svg {
+      width: clamp(135px, 14vh, 175px); height: clamp(210px, 23vh, 275px);
+      filter: drop-shadow(0 -3px 16px rgba(251, 191, 36, calc(var(--screen-power) * 0.35)));
+      animation: speakerNaturalBreathing 4.2s ease-in-out infinite alternate; transition: filter 0.8s ease;
+    }
+    @keyframes speakerNaturalBreathing { 0% { transform: translateY(0px); } 100% { transform: translateY(-3.5px); } }
+    .speaker-upper-body { transform-origin: 100px 182px; transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1); }
+    .speaker-head-group { transform-origin: 100px 84px; transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+    .speaker-right-arm { transform-origin: 126px 118px; transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1); }
+    .speaker-left-arm { transform-origin: 74px 118px; transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1); }
+    .pose-presenting .speaker-right-arm { animation: gracefulGestureRight 2.2s ease-in-out infinite alternate; }
+    .pose-presenting .speaker-left-arm { animation: gracefulGestureLeft 2.8s ease-in-out infinite alternate; }
+    .pose-presenting .speaker-head-group { animation: speakerHeadNod 2.4s ease-in-out infinite alternate; }
+    @keyframes gracefulGestureRight { 0% { transform: rotate(-18deg) translateY(-2px); } 50% { transform: rotate(-36deg) translateY(-5px); } 100% { transform: rotate(-24deg) translateY(-3px); } }
+    @keyframes gracefulGestureLeft { 0% { transform: rotate(8deg); } 100% { transform: rotate(20deg) translateY(-2px); } }
+    @keyframes speakerHeadNod { 0% { transform: rotate(-2.5deg) translateY(0px); } 100% { transform: rotate(3deg) translateY(-1.5px); } }
+    .pose-bowing .speaker-upper-body { transform: rotate(16deg) translateY(8px); }
+    .pose-bowing .speaker-head-group { transform: rotate(14deg) translateY(4px); }
+    .pose-bowing .speaker-right-arm { transform: rotate(22deg) translateX(-8px) translateY(-4px); }
+    .pose-bowing .speaker-left-arm { transform: rotate(-14deg) translateX(6px); }
+
+    .audience-pit-container {
+      position: absolute; bottom: 0; left: 0; width: 100%; height: 22vh; min-height: 140px; max-height: 210px;
+      z-index: 20; pointer-events: none; display: flex; flex-direction: column; justify-content: flex-end;
+      opacity: 0; visibility: hidden; transform: translateY(48px);
+      transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.85s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.75s;
+    }
+    .curtain-opened .audience-pit-container {
+      opacity: 1; visibility: visible; transform: translateY(0);
+      transition: opacity 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.35s, transform 1.25s cubic-bezier(0.16, 1, 0.3, 1) 0.35s, visibility 0s linear 0s;
+    }
+    .audience-tier { width: 104%; margin-left: -2%; transition: transform 0.6s ease, filter 1s ease; }
+    .audience-tier-back { height: 5.5rem; transform: translateY(34px) scale(0.95); filter: drop-shadow(0 -3px 8px rgba(245, 158, 11, calc(var(--screen-power) * 0.16))); animation: audienceBreathingBack 7.5s ease-in-out infinite alternate; }
+    .audience-tier-mid { height: 6.5rem; margin-top: -3rem; transform: translateY(18px) scale(0.98); filter: drop-shadow(0 -2px 6px rgba(255, 255, 255, 0.06)); animation: audienceBreathingMid 6.8s ease-in-out infinite alternate; }
+    .audience-tier-front { height: 7.5rem; margin-top: -3.5rem; transform: translateY(2px); filter: drop-shadow(0 -2px 5px rgba(0, 0, 0, 0.95)); animation: audienceBreathingFront 8.2s ease-in-out infinite alternate; }
+    @keyframes audienceBreathingBack { 0% { transform: translateY(34px) translateX(-3px) scale(0.95); } 100% { transform: translateY(31px) translateX(3px) scale(0.95); } }
+    @keyframes audienceBreathingMid { 0% { transform: translateY(18px) translateX(4px) scale(0.98); } 100% { transform: translateY(15px) translateX(-4px) scale(0.98); } }
+    @keyframes audienceBreathingFront { 0% { transform: translateY(3px) translateX(-2px); } 100% { transform: translateY(0px) translateX(2px); } }
+    .applause-hands-layer { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .audience-applauding .applause-hands-layer { opacity: 1; transform: translateY(0px); animation: clappingMotion 0.28s ease-in-out infinite alternate; }
+    .audience-applauding .audience-tier-mid { animation: audienceExcitedNod 0.45s ease-in-out infinite alternate; }
+    @keyframes clappingMotion { 0% { transform: translateY(2px) scaleY(0.96); } 100% { transform: translateY(-5px) scaleY(1.04); } }
+    @keyframes audienceExcitedNod { 0% { transform: translateY(18px) scale(0.98); } 100% { transform: translateY(13px) scale(0.985); } }
+    .theater-canvas-layer { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .micro-step-dots {
+      position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); z-index: 40;
+      display: flex; align-items: center; gap: 6px; opacity: 0.35; pointer-events: none; transition: opacity 0.6s ease;
+    }
+    .micro-dot { width: 6px; height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.35); transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+    .micro-dot.active { width: 20px; background: #fbbf24; box-shadow: 0 0 8px rgba(251, 191, 36, 0.8); }
+    @media (max-width: 850px) {
+      .board-body-grid, .board-choices-grid { grid-template-columns: 1fr; }
+      .board-visual-box { height: 140px; }
+    }
+
   </style>
   <script>
     window.openCurtain = function() {
@@ -1540,99 +1921,184 @@
       </div>
     </div>
 
-    <!-- SLIDE 15 (fx-15): VII. LỜI KẾT (BÚT DẠ QUANG QUÉT TUẦN TỰ + CHỮ CHÌM LA MÃ KHỔNG LỒ) -->
-    <div class="slide" data-fx="fx-15" data-section="PHẦN VII" data-title="Lời kết: Đôi bàn tay và đôi cánh">
-      <div class="ghost-roman-watermark">VII</div>
-      <div class="part-capsule step-item">VII. LỜI KẾT: BƯỚC LÊN SÂN KHẤU CUỘC ĐỜI</div>
-      <h2 class="slide-title">Đôi bàn tay nhẫn nại và Đôi cánh của khát vọng</h2>
-      <div class="grid-asymmetric" style="position: relative; z-index: 2;">
-        <div style="display: flex; flex-direction: column; gap: 0.9rem; justify-content: center;">
-          <div class="neo-card step-item" style="border-left: 4px solid var(--accent-gold);">
-            <div style="font-size: 1.34rem; font-weight: 700; color: #fef08a; margin-bottom: 0.45rem; line-height: 1.48;">
-              “Cơm áo gạo tiền có thể thử thách đôi chân, nhưng <span class="hl-underline">không có quyền giam cầm ánh mắt nhìn lên bầu trời</span>.”
-            </div>
-            <div class="card-content-p">
-              Người bản lĩnh không chọn giữa “sinh tồn” hay “mơ mộng”; họ dùng <span class="hl-marker">sự nhẫn nại của đôi bàn tay để nuôi lớn đôi cánh của khát vọng</span>.
+    <!-- SLIDE 15 (fx-15): SÂN KHẤU CÓ BẢNG CHỮ — KẾT HỢP NỘI DUNG SLIDE 15 & 16 -->
+    <div class="slide" id="finaleTheaterSlide" data-fx="fx-15" data-section="PHẦN VII" data-title="Lời kết: Bước lên sân khấu cuộc đời">
+      <div id="stageViewport" class="theater-stage">
+        <div class="backwall-architecture"></div>
+        <div id="screenAmbilight" class="screen-ambilight"></div>
+
+        <div class="volumetric-lights">
+          <div class="light-cone cone-left"></div>
+          <div class="light-cone cone-center"></div>
+          <div class="light-cone cone-right"></div>
+        </div>
+
+        <!-- BẢNG ĐEN CHẠY CHỮ PHÍA SAU -->
+        <section class="giant-black-board-frame" aria-label="Bảng đen trình chiếu sân khấu">
+          <div class="giant-black-board-surface">
+            <div class="board-oled-texture"></div>
+            <div class="board-glass-sheen"></div>
+            <div class="board-horizon-line top-line"></div>
+            <div class="board-horizon-line bottom-line"></div>
+
+            <div id="boardContentWrap" class="board-content-wrap">
+              <div id="slideTopBadge" class="board-badge">
+                <span class="board-badge-dot"></span>
+                <span id="slideBadgeText">VII. LỜI KẾT: BƯỚC LÊN SÂN KHẤU CUỘC ĐỜI</span>
+                <span class="board-badge-dot"></span>
+              </div>
+              <h1 id="slideMainHeading" class="board-main-heading"></h1>
+              <div id="boardMainStage" class="board-main-stage">
+                <div id="boardLeftCol" class="board-left-col" style="width: 100%;">
+                  <div id="slideSubHeading" class="subtext-reveal"></div>
+                </div>
+                <div id="boardPersistentVisual" class="board-visual-box" style="display: none;">
+                  <svg viewBox="0 0 380 250" style="width: 100%; height: 100%; max-height: 175px;">
+                    <defs>
+                      <radialGradient id="sunHorizonT" cx="50%" cy="55%" r="50%">
+                        <stop offset="0%" stop-color="#ffffff"/><stop offset="28%" stop-color="#fde047" stop-opacity="0.9"/><stop offset="65%" stop-color="#f59e0b" stop-opacity="0.3"/><stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+                      </radialGradient>
+                      <linearGradient id="bridgeBeamT" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#38bdf8"/><stop offset="50%" stop-color="#fde047"/><stop offset="100%" stop-color="#38bdf8"/>
+                      </linearGradient>
+                    </defs>
+                    <circle cx="190" cy="135" r="95" fill="url(#sunHorizonT)"/>
+                    <polygon points="0,245 75,148 155,205 245,128 325,188 380,145 380,245" fill="rgba(12, 32, 68, 0.85)" stroke="rgba(125,211,252,0.4)" stroke-width="1.5"/>
+                    <polygon points="60,245 155,155 255,245" fill="rgba(8, 20, 44, 0.92)" stroke="#fde047" stroke-width="1.5"/>
+                    <path d="M75 148 Q160 112 245 128" fill="none" stroke="url(#bridgeBeamT)" stroke-width="4" stroke-linecap="round"/>
+                    <g class="paraglider-soaring" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round">
+                      <path d="M125 78 Q135 66 145 76 Q155 66 165 78"/>
+                      <path d="M175 56 Q187 42 198 54 Q210 42 222 56" stroke="#fde047" stroke-width="2.6"/>
+                      <path d="M232 82 Q240 72 248 80 Q256 72 264 82"/>
+                    </g>
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="neo-card step-item" style="border-color: var(--accent-gold);">
-            <div class="card-content-p">
-              Bạn không sinh ra để sống nhạt nhòa, lặp lại những ngày an toàn vô vị rồi nhắm mắt khi <span class="hl-rose">giấc mơ còn dang dở</span>. Nỗi đau bạn né tránh hôm nay chính là sức mạnh bạn đánh mất vào ngày mai. <span class="hl-underline now">Kỷ luật sắt đá là chiếc cầu duy nhất nối khát vọng với vinh quang.</span>
-            </div>
-          </div>
-          <div class="neo-card conic-glow-card step-item" style="padding: 0.95rem 1.25rem; text-align: center;">
-            <div class="seq-marker-bar" id="seqMarkerText">
-              Dám <b>ước mơ</b>, dám <b>bước ra</b>, sống bằng <b>kỷ luật sắt đá</b>!
-            </div>
+        </section>
+
+        <!-- SÀN SÂN KHẤU & CHỮ PHẢN CHIẾU -->
+        <div class="stage-deck-perspective">
+          <div class="stage-deck-surface">
+            <div id="floorMirrorText" class="floor-mirrored-text"></div>
           </div>
         </div>
-        <div class="visual-stage">
-          <svg viewBox="0 0 380 250" style="width: 100%; height: 100%;">
+
+        <!-- MÉP SÂN KHẤU & ĐÈN CHÂN -->
+        <div class="stage-apron-edge">
+          <div class="apron-footlight"></div><div class="apron-footlight"></div><div class="apron-footlight"></div>
+          <div class="apron-footlight"></div><div class="apron-footlight"></div><div class="apron-footlight"></div>
+          <div class="apron-footlight"></div><div class="apron-footlight"></div><div class="apron-footlight"></div>
+          <div class="apron-footlight"></div><div class="apron-footlight"></div>
+        </div>
+
+        <!-- DIỄN GIẢ TRÊN SÂN KHẤU -->
+        <div id="speakerContainer" class="speaker-stage-position">
+          <div class="speaker-spotlight-pool"></div>
+          <div class="speaker-floor-shadow"></div>
+          <svg class="speaker-figure-svg" viewBox="0 0 200 310" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <radialGradient id="sunHorizon" cx="50%" cy="55%" r="50%">
-                <stop offset="0%" stop-color="#ffffff"/><stop offset="28%" stop-color="#fde047" stop-opacity="0.9"/><stop offset="65%" stop-color="#f59e0b" stop-opacity="0.3"/><stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
-              </radialGradient>
-              <linearGradient id="bridgeBeam" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#38bdf8"/><stop offset="50%" stop-color="#fde047"/><stop offset="100%" stop-color="#38bdf8"/>
+              <linearGradient id="speakerRimLight" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fffbeb" stop-opacity="0.95"/>
+                <stop offset="45%" stop-color="#fbbf24" stop-opacity="0.75"/>
+                <stop offset="100%" stop-color="#d97706" stop-opacity="0.12"/>
+              </linearGradient>
+              <linearGradient id="tailoredSuitGrad" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stop-color="#1e293b"/>
+                <stop offset="45%" stop-color="#0f172a"/>
+                <stop offset="100%" stop-color="#030712"/>
+              </linearGradient>
+              <linearGradient id="trouserGrad" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stop-color="#0f172a"/>
+                <stop offset="100%" stop-color="#02040a"/>
+              </linearGradient>
+              <linearGradient id="silkTieGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#fbbf24"/>
+                <stop offset="50%" stop-color="#d97706"/>
+                <stop offset="100%" stop-color="#78350f"/>
               </linearGradient>
             </defs>
-            <circle cx="190" cy="135" r="95" fill="url(#sunHorizon)"/>
-            <polygon points="0,245 75,148 155,205 245,128 325,188 380,145 380,245" fill="rgba(12, 32, 68, 0.85)" stroke="rgba(125,211,252,0.4)" stroke-width="1.5"/>
-            <polygon points="60,245 155,155 255,245" fill="rgba(8, 20, 44, 0.92)" stroke="#fde047" stroke-width="1.5"/>
-            <path d="M75 148 Q160 112 245 128" fill="none" stroke="url(#bridgeBeam)" stroke-width="4" stroke-linecap="round"/>
-            <g class="paraglider-soaring" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round">
-              <path d="M125 78 Q135 66 145 76 Q155 66 165 78"/>
-              <path d="M175 56 Q187 42 198 54 Q210 42 222 56" stroke="#fde047" stroke-width="2.6"/>
-              <path d="M232 82 Q240 72 248 80 Q256 72 264 82"/>
+            <g id="speakerLowerBody">
+              <path d="M77 182 L73 282 L89 282 L97 206 L104 282 L120 282 L117 182 Z" fill="url(#trouserGrad)" stroke="rgba(255,255,255,0.14)" stroke-width="1.2"/>
+              <line x1="82" y1="192" x2="81" y2="278" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+              <line x1="112" y1="192" x2="112" y2="278" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+              <path d="M64 281 C64 277, 81 276, 89 281 L90 290 L62 290 Z" fill="#05070c" stroke="rgba(253,230,138,0.35)" stroke-width="1.1"/>
+              <path d="M104 281 C112 276, 129 277, 129 281 L131 290 L103 290 Z" fill="#05070c" stroke="rgba(253,230,138,0.35)" stroke-width="1.1"/>
+            </g>
+            <g class="speaker-upper-body">
+              <g class="speaker-left-arm">
+                <path d="M71 102 C54 112, 48 138, 56 162 C59 169, 68 167, 67 158 C62 140, 66 124, 76 114 Z" fill="url(#tailoredSuitGrad)" stroke="url(#speakerRimLight)" stroke-width="1.5"/>
+                <path d="M56 160 L66 157 L67 162 L57 165 Z" fill="#f8fafc"/>
+                <ellipse cx="62" cy="167" rx="6" ry="5.5" fill="#dfb18b"/>
+              </g>
+              <path d="M68 96 C86 90, 114 90, 132 96 L124 186 C108 190, 92 190, 76 186 Z" fill="url(#tailoredSuitGrad)" stroke="url(#speakerRimLight)" stroke-width="1.8"/>
+              <path d="M87 94 L100 138 L113 94 Z" fill="#f8fafc"/>
+              <path d="M97 102 L103 102 L105 142 L100 149 L95 142 Z" fill="url(#silkTieGrad)"/>
+              <path d="M86 94 L77 124 L98 140" stroke="rgba(255,255,255,0.22)" stroke-width="1.5" fill="none"/>
+              <path d="M114 94 L123 124 L102 140" stroke="rgba(255,255,255,0.22)" stroke-width="1.5" fill="none"/>
+              <path d="M111 122 L119 119 L117 125 Z" fill="#fbbf24" opacity="0.85"/>
+              <g class="speaker-right-arm">
+                <path d="M129 102 C146 112, 154 132, 146 154 C143 162, 133 159, 135 149 C140 133, 136 120, 124 113 Z" fill="url(#tailoredSuitGrad)" stroke="url(#speakerRimLight)" stroke-width="1.6"/>
+                <path d="M135 148 L145 151 L144 156 L134 153 Z" fill="#f8fafc"/>
+                <ellipse cx="140" cy="159" rx="6.5" ry="5.5" transform="rotate(-18 140 159)" fill="#dfb18b"/>
+                <rect x="142" y="152" width="13" height="3.8" rx="1.9" transform="rotate(-32 142 152)" fill="#1e293b" stroke="#fde68a" stroke-width="0.9"/>
+              </g>
+              <g class="speaker-head-group">
+                <rect x="93" y="80" width="14" height="17" rx="5" fill="#d09e72"/>
+                <path d="M93 84 Q100 90 107 84" fill="rgba(0,0,0,0.25)"/>
+                <ellipse cx="80" cy="64" rx="3.2" ry="6" fill="#d09e72"/>
+                <ellipse cx="120" cy="64" rx="3.2" ry="6" fill="#d09e72"/>
+                <path d="M81 54 C81 38, 119 38, 119 54 C119 72, 111 84, 100 84 C89 84, 81 72, 81 54 Z" fill="#e4b892" stroke="url(#speakerRimLight)" stroke-width="1.5"/>
+                <path d="M88 57 Q93 55 96 57" stroke="#1e293b" stroke-width="1.6" stroke-linecap="round"/>
+                <path d="M104 57 Q107 55 112 57" stroke="#1e293b" stroke-width="1.6" stroke-linecap="round"/>
+                <circle cx="92" cy="61" r="1.6" fill="#0f172a"/>
+                <circle cx="108" cy="61" r="1.6" fill="#0f172a"/>
+                <path d="M100 59 L99 67 L102 68" stroke="#b8845b" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+                <path d="M94 74 Q100 77.5 106 74" stroke="#9c6644" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+                <path d="M79 58 C76 42, 83 28, 98 27 C106 26, 117 29, 121 38 C124 44, 122 53, 119 58 C118 48, 113 42, 104 41 C94 40, 84 44, 79 58 Z" fill="#0f172a" stroke="url(#speakerRimLight)" stroke-width="1.7"/>
+                <path d="M119 65 C121 71, 115 75, 107 75" stroke="#fbbf24" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+                <circle cx="106" cy="75" r="1.8" fill="#fde68a"/>
+              </g>
             </g>
           </svg>
         </div>
-      </div>
-    </div>
 
-    <!-- SLIDE 16 (fx-16): KẾT THÚC (ĐÈN SÂN KHẤU + CHỮ VỠ GHÉP LẠI + PHÁO GIẤY 3D) -->
-    <div class="slide" data-fx="fx-16" data-section="KẾT THÚC" data-title="Hai sự lựa chọn và Đã đến lúc bước ra!">
-      <canvas id="confettiCanvas"></canvas>
-      <div class="part-capsule step-item" style="margin-inline: auto;">VII. LỜI KẾT: BƯỚC LÊN SÂN KHẤU CUỘC ĐỜI</div>
-      <div class="quote-cinematic-banner step-item" style="text-align: center; border-left: none; background: transparent; margin-bottom: 0.4rem;">
-        “Ngay tại giây phút này, bạn có <span class="hl-underline">hai sự lựa chọn</span>:”
-      </div>
-      <div class="spotlight-stage-wrap" id="spotlightStage">
-        <div class="slide-16-grid" style="display: grid; grid-template-columns: 1fr 0.85fr 1fr; gap: 1.1rem; align-items: center;">
-          <div class="neo-card step-item" style="border-color: rgba(251, 113, 133, 0.5);">
-            <div class="badge-sub" style="background: rgba(251, 113, 133, 0.25); color: #fecdd3;">LỰA CHỌN THỨ NHẤT</div>
-            <div class="card-content-p">
-              1. Tiếp tục ngồi đó, nuông chiều sự sợ hãi và <span class="hl-rose">làm khán giả vỗ tay cho cuộc đời người khác</span>;
-            </div>
-          </div>
-          <div class="visual-stage" style="height: 185px;">
-            <svg viewBox="0 0 300 185" style="width: 100%; height: 175px;">
-              <defs>
-                <linearGradient id="stageSpot" x1="50%" y1="0%" x2="50%" y2="100%">
-                  <stop offset="0%" stop-color="#fde047" stop-opacity="0.75"/>
-                  <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.05"/>
-                </linearGradient>
-              </defs>
-              <polygon points="150,8 55,168 245,168" fill="url(#stageSpot)"/>
-              <ellipse cx="150" cy="168" rx="92" ry="12" fill="rgba(56,189,248,0.3)" stroke="#fde047" stroke-width="2"/>
-              <polygon points="150,55 162,85 194,85 168,104 178,135 150,116 122,135 132,104 106,85 138,85" fill="#fde047" filter="drop-shadow(0 0 16px #fde047)"/>
-            </svg>
-          </div>
-          <div class="neo-card conic-glow-card step-item">
-            <div class="badge-sub" style="background: var(--accent-gold); color: #0b1f3f;">LỰA CHỌN THỨ HAI</div>
-            <div class="card-content-p" style="color: #ffffff;">
-              2. Hay đứng dậy, xóa sạch mọi lời ngụy biện, <span class="hl-marker">bước thẳng lên dưới ánh đèn sân khấu</span> để viết nên vở kịch rực rỡ nhất cho cuộc đời mình!
-            </div>
-          </div>
-        </div>
-        <div class="spotlight-dark-mask" id="spotlightMask"></div>
-      </div>
+        <!-- BỤI VÀNG & RÈM NHUNG 3D -->
+        <canvas id="atmosphereDustCanvas" class="theater-canvas-layer" style="z-index: 15;"></canvas>
+        <canvas id="velvetCurtainCanvas" class="theater-canvas-layer" style="z-index: 30;"></canvas>
 
-      <div class="step-item" style="text-align: center; margin-top: 1rem; position: relative; z-index: 45;">
-        <h1 class="shatter-assemble-title" id="finaleAssembleTitle" style="font-family: var(--font-title); font-weight: 900; font-size: clamp(38px, 5.2vw, 68px); line-height: 1.1; margin-bottom: 0.85rem; color: #fde047; text-shadow: 0 0 32px rgba(253,224,71,0.55);">ĐÃ ĐẾN LÚC BƯỚC RA!</h1>
-        <button type="button" class="btn-step" onclick="event.stopPropagation(); goToSlide(0);" style="padding: 0.8rem 2.4rem; font-size: 1.05rem; background: var(--accent-gold); color: #0b1f3f;">
-          ↺ Xem lại từ đầu bài thuyết trình
-        </button>
+        <!-- KHÁN GIẢ 3 TẦNG -->
+        <section id="audienceContainer" class="audience-pit-container" aria-label="Khán giả ngồi dưới sân khấu">
+          <svg class="audience-tier audience-tier-back" viewBox="0 0 1600 130" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="backRowRim" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stop-color="#27272a"/><stop offset="30%" stop-color="#11131c"/><stop offset="100%" stop-color="#040508"/>
+              </linearGradient>
+            </defs>
+            <path fill="url(#backRowRim)" stroke="rgba(253, 230, 138, 0.18)" stroke-width="1.2" d="M0,130 L0,88 C18,86 26,82 36,78 C32,64 38,48 52,48 C66,48 72,64 68,78 C80,82 90,88 104,90 C118,88 128,82 140,76 C135,60 144,42 160,42 C176,42 184,60 180,76 C194,82 204,88 220,90 C235,88 245,84 256,78 C252,62 260,46 276,46 C292,46 300,62 296,78 C310,84 322,88 338,90 C352,88 364,80 378,74 C372,56 382,38 400,38 C418,38 428,56 422,74 C436,80 448,88 465,90 C480,88 492,82 505,78 C500,62 510,48 525,48 C540,48 550,62 545,78 C558,82 570,88 588,90 C604,88 618,80 632,74 C626,56 636,40 654,40 C672,40 682,56 676,74 C690,80 704,88 722,90 C738,88 750,82 764,78 C758,64 768,50 782,50 C796,50 806,64 800,78 C814,82 826,88 844,90 C860,88 874,80 888,74 C882,56 892,38 910,38 C928,38 938,56 932,74 C946,80 960,88 978,90 C994,88 1006,82 1020,78 C1015,62 1024,46 1040,46 C1056,46 1065,62 1060,78 C1074,82 1086,88 1104,90 C1120,88 1134,80 1148,74 C1142,56 1152,40 1170,40 C1188,40 1198,56 1192,74 C1206,80 1220,88 1238,90 C1254,88 1266,82 1280,78 C1275,64 1284,48 1300,48 C1316,48 1325,64 1320,78 C1334,82 1346,88 1364,90 C1380,88 1394,80 1408,74 C1402,58 1412,42 1430,42 C1448,42 1458,58 1452,74 C1466,80 1480,88 1498,90 C1514,88 1528,82 1542,78 C1538,64 1546,50 1562,50 C1578,50 1586,64 1582,78 C1590,82 1596,86 1600,88 L1600,130 Z"/>
+          </svg>
+          <svg class="audience-tier audience-tier-mid" viewBox="0 0 1600 140" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="midRowRim" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stop-color="#18181b"/><stop offset="35%" stop-color="#090a10"/><stop offset="100%" stop-color="#020305"/>
+              </linearGradient>
+            </defs>
+            <g class="applause-hands-layer" fill="#1e293b" stroke="rgba(253, 230, 138, 0.35)" stroke-width="1.2">
+              <ellipse cx="155" cy="58" rx="9" ry="14" transform="rotate(-15 155 58)"/><ellipse cx="170" cy="56" rx="9" ry="14" transform="rotate(12 170 56)"/>
+              <ellipse cx="445" cy="52" rx="10" ry="15" transform="rotate(-12 445 52)"/><ellipse cx="462" cy="50" rx="10" ry="15" transform="rotate(14 462 50)"/>
+              <ellipse cx="735" cy="55" rx="9" ry="14" transform="rotate(-18 735 55)"/><ellipse cx="752" cy="54" rx="9" ry="14" transform="rotate(15 752 54)"/>
+              <ellipse cx="1025" cy="50" rx="10" ry="15" transform="rotate(-10 1025 50)"/><ellipse cx="1042" cy="52" rx="10" ry="15" transform="rotate(16 1042 52)"/>
+              <ellipse cx="1315" cy="56" rx="9" ry="14" transform="rotate(-14 1315 56)"/><ellipse cx="1332" cy="55" rx="9" ry="14" transform="rotate(12 1332 55)"/>
+            </g>
+            <path fill="url(#midRowRim)" stroke="rgba(255, 255, 255, 0.15)" stroke-width="1.4" d="M0,140 L0,92 C25,90 42,82 58,74 C50,52 62,32 84,32 C106,32 118,52 110,74 C128,82 145,90 168,92 C190,90 208,80 226,72 C218,48 232,26 256,26 C280,26 294,48 286,72 C304,80 322,90 348,92 C372,90 390,82 408,74 C400,52 414,34 436,34 C458,34 472,52 464,74 C482,82 502,90 528,92 C552,90 572,78 592,70 C582,44 598,22 624,22 C650,22 666,44 656,70 C676,78 696,90 724,92 C748,90 768,82 786,74 C778,52 792,32 814,32 C836,32 850,52 842,74 C860,82 880,90 906,92 C930,90 950,78 970,70 C960,46 976,24 1002,24 C1028,24 1044,46 1034,70 C1054,78 1074,90 1102,92 C1126,90 1146,82 1164,74 C1156,52 1170,32 1192,32 C1214,32 1228,52 1220,74 C1238,82 1258,90 1284,92 C1308,90 1328,78 1348,70 C1338,46 1354,26 1380,26 C1406,26 1422,46 1412,70 C1432,78 1452,90 1480,92 C1504,90 1524,82 1542,74 C1534,54 1548,36 1568,36 C1588,36 1598,54 1592,74 C1596,80 1598,86 1600,90 L1600,140 Z"/>
+          </svg>
+          <svg class="audience-tier audience-tier-front" viewBox="0 0 1600 150" preserveAspectRatio="none">
+            <path fill="#030407" stroke="rgba(255, 255, 255, 0.18)" stroke-width="1.6" d="M0,150 L0,84 C18,74 28,42 54,42 C80,42 92,74 114,86 C145,92 175,92 205,84 C225,70 236,28 268,28 C300,28 312,70 334,84 C368,92 402,92 436,84 C456,72 468,34 498,34 C528,34 540,72 562,84 C598,92 634,92 670,84 C692,68 706,22 740,22 C774,22 788,68 810,84 C848,92 886,92 924,84 C944,72 958,32 988,32 C1018,32 1032,72 1054,84 C1090,92 1126,92 1162,84 C1184,68 1198,26 1230,26 C1262,26 1276,68 1298,84 C1334,92 1370,92 1406,84 C1428,72 1442,34 1472,34 C1502,34 1516,72 1538,84 C1562,90 1582,90 1600,86 L1600,150 Z"/>
+          </svg>
+        </section>
+
+        <div id="microDotsContainer" class="micro-step-dots"></div>
       </div>
     </div>
 
@@ -1648,7 +2114,7 @@
       <div class="progress-line-fill" id="progressFill"></div>
     </div>
     <div style="display: flex; align-items: center; gap: 1.5rem;">
-      <span style="font-size: 0.95rem; font-weight: 700; color: #e2e8f0;" id="slideNumberDisplay">Slide 1 / 16</span>
+      <span style="font-size: 0.95rem; font-weight: 700; color: #e2e8f0;" id="slideNumberDisplay">Slide 1 / 15</span>
     </div>
   </footer>
 
@@ -1690,26 +2156,7 @@
       walk(el);
     });
 
-    // Chữ vỡ bay ghép lại (Slide 16: ĐÃ ĐẾN LÚC BƯỚC RA!)
-    const finaleTitle = document.getElementById('finaleAssembleTitle');
-    if (finaleTitle) {
-      const txt = finaleTitle.textContent.trim();
-      finaleTitle.innerHTML = [...txt].map((c, i) =>
-        c === ' ' ? '&nbsp;' : `<span class="ch" style="--i:${i};--x:${rnd(-180,180)|0}px;--y:${rnd(-130,130)|0}px;--r:${rnd(-180,180)|0}deg">${c}</span>`
-      ).join('');
-    }
-    window.runFinaleAssemble = async function() {
-      if (!finaleTitle) return;
-      finaleTitle.classList.remove('go');
-      finaleTitle.querySelectorAll('span.ch').forEach(s => {
-        s.style.setProperty('--x', (rnd(-180, 180) | 0) + 'px');
-        s.style.setProperty('--y', (rnd(-130, 130) | 0) + 'px');
-        s.style.setProperty('--r', (rnd(-180, 180) | 0) + 'deg');
-      });
-      void finaleTitle.offsetWidth;
-      await sleep(60);
-      finaleTitle.classList.add('go');
-    };
+
 
     // Giải mã chữ Matrix (Slide 14)
     let cipherToken = 0;
@@ -1773,92 +2220,7 @@
       svg.classList.add('go');
     };
 
-    // Bóng tối rồi đèn sân khấu Spotlight soi sáng (Slide 16)
-    const spotStage = document.getElementById('spotlightStage');
-    const spotMask = document.getElementById('spotlightMask');
-    window.runSpotlightSweep = function() {
-      if (!spotStage || !spotMask) return;
-      spotStage.classList.remove('fully-lit');
-      spotMask.style.setProperty('--sx', '12%');
-      spotMask.style.setProperty('--sy', '50%');
-      const t0 = performance.now();
-      (function sweep(now) {
-        const p = Math.min((now - t0) / 2400, 1);
-        const e = p * p * (3 - 2 * p);
-        spotMask.style.setProperty('--sx', (12 + e * 74) + '%');
-        if (p < 1) requestAnimationFrame(sweep);
-        else spotStage.classList.add('fully-lit');
-      })(t0);
-    };
-    if (spotStage && spotMask) {
-      spotStage.addEventListener('pointermove', e => {
-        const r = spotStage.getBoundingClientRect();
-        spotStage.classList.remove('fully-lit');
-        spotMask.style.setProperty('--sx', (e.clientX - r.left) + 'px');
-        spotMask.style.setProperty('--sy', (e.clientY - r.top) + 'px');
-      });
-      spotStage.addEventListener('pointerleave', () => {
-        spotStage.classList.add('fully-lit');
-      });
-    }
 
-    // Bút dạ quang quét sáng tuần tự (Slide 15)
-    window.runSequentialMarker = async function() {
-      const el = document.getElementById('seqMarkerText');
-      if (!el) return;
-      el.classList.remove('go');
-      void el.offsetWidth;
-      await sleep(80);
-      el.classList.add('go');
-    };
-
-    // Pháo giấy 3D lật trong không trung (Slide 16)
-    let confettiFrame = null;
-    window.runConfettiCelebration = function() {
-      const c = document.getElementById('confettiCanvas');
-      if (!c) return;
-      if (confettiFrame) cancelAnimationFrame(confettiFrame);
-      const x = c.getContext('2d');
-      c.width = c.offsetWidth || window.innerWidth;
-      c.height = c.offsetHeight || window.innerHeight;
-      const colors = ['#fde047', '#38bdf8', '#fb7185', '#ffffff', '#34d399', '#a78bfa'];
-      const P = Array.from({ length: 110 }, () => ({
-        x: c.width / 2 + rnd(-120, 120),
-        y: c.height * 0.85,
-        vx: rnd(-7.5, 7.5),
-        vy: rnd(-16, -7.5),
-        w: rnd(6, 12),
-        h: rnd(4, 7),
-        r: rnd(0, 6.28),
-        vr: rnd(-0.22, 0.22),
-        tilt: rnd(0, 6.28),
-        vtilt: rnd(0.08, 0.22),
-        color: colors[Math.random() * colors.length | 0]
-      }));
-      (function loop() {
-        x.clearRect(0, 0, c.width, c.height);
-        let alive = false;
-        P.forEach(p => {
-          p.vy += 0.24;
-          p.x += p.vx;
-          p.y += p.vy;
-          p.vx *= 0.99;
-          p.r += p.vr;
-          p.tilt += p.vtilt;
-          if (p.y < c.height + 30) {
-            alive = true;
-            x.save();
-            x.translate(p.x, p.y);
-            x.rotate(p.r);
-            x.scale(1, Math.cos(p.tilt));
-            x.fillStyle = p.color;
-            x.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
-            x.restore();
-          }
-        });
-        if (alive) confettiFrame = requestAnimationFrame(loop);
-      })();
-    };
 
     // =========================================================================
     // ĐIỀU KHIỂN BÀN ỦI TỰ ĐỘNG CHẠY CHẬM RÃI LÀ PHẲNG NẾP NHĂN (SLIDE 5)
@@ -2004,11 +2366,10 @@
         window.runMatrixCipher();
         window.replayBambooGrowth();
       }
-      if (idx === 14) window.runSequentialMarker();
-      if (idx === 15) {
-        window.runSpotlightSweep();
-        window.runFinaleAssemble();
-        window.runConfettiCelebration();
+      if (idx === 14 && typeof window.enterTheaterSlide === 'function') {
+        window.enterTheaterSlide();
+      } else if (typeof window.leaveTheaterSlide === 'function') {
+        window.leaveTheaterSlide();
       }
     }
 
@@ -2048,6 +2409,7 @@
         if (idx === index) s.scrollTop = 0;
       });
       currentSlide = index;
+      document.body.classList.toggle('theater-theme', index === totalSlides - 1);
       slideNumberDisplay.textContent = `Slide ${index + 1} / ${totalSlides}`;
       progressFill.style.width = `${((index + 1) / totalSlides) * 100}%`;
       if (btnPrevSlide) btnPrevSlide.disabled = index === 0;
@@ -2074,6 +2436,10 @@
         window.nextSlide();
         return;
       }
+      if (currentSlide === totalSlides - 1 && typeof window.theaterAdvance === 'function') {
+        window.theaterAdvance();
+        return;
+      }
       const steps = getCurrentSlideSteps();
       if (currentStepIndex + 1 < steps.length) {
         currentStepIndex++;
@@ -2085,11 +2451,6 @@
             s.classList.add('revealed', 'active-step');
             if (s.style.display !== 'none') s.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             if (s.querySelectorAll('[data-count]').length > 0) window.runNumberCounters(s);
-            if (s.querySelector('#seqMarkerText')) window.runSequentialMarker();
-            if (s.querySelector('#finaleAssembleTitle')) {
-              window.runFinaleAssemble();
-              window.runConfettiCelebration();
-            }
           }
         });
         syncLighthouseBeamState();
@@ -2106,7 +2467,7 @@
     }
 
     slidesClickTrigger.addEventListener('click', (e) => {
-      if (e.target.closest('button, a, .flip-qa-stage, .ironing-banner-stage')) return;
+      if (e.target.closest('button, a, .flip-qa-stage, .ironing-banner-stage, .choice-flip-stage')) return;
       const card = e.target.closest('.neo-card, .cinema-photo-card, .art-frame-bamboo, .art-frame-flower, .panorama-dark-board, .custom-image-frame');
       if (card && card.classList.contains('panorama-dark-board') && !isBoardLit) {
         advanceStepOrSlide();
@@ -2154,7 +2515,11 @@
       } else if (['ArrowLeft', 'PageUp'].includes(e.key)) {
         e.preventDefault();
         clearManualFocus();
-        window.prevSlide();
+        if (currentSlide === totalSlides - 1 && typeof window.theaterBack === 'function') {
+          if (!window.theaterBack()) window.prevSlide();
+        } else {
+          window.prevSlide();
+        }
       } else if (e.key === 'Home') {
         e.preventDefault();
         window.goToSlide(0);
@@ -2263,6 +2628,492 @@
 
       requestAnimationFrame(animateAllCanvases);
     }
+
+    // =========================================================================
+    // ENGINE SÂN KHẤU CÓ BẢNG CHỮ (SLIDE 15: NỘI DUNG SLIDE 15 & 16 CŨ)
+    // =========================================================================
+    (function() {
+      const SLIDE15_SVG = `
+        <svg viewBox="0 0 380 250" style="width: 100%; height: 100%; max-height: 180px;">
+          <defs>
+            <radialGradient id="sunHorizonT" cx="50%" cy="55%" r="50%">
+              <stop offset="0%" stop-color="#ffffff"/><stop offset="28%" stop-color="#fde047" stop-opacity="0.9"/><stop offset="65%" stop-color="#f59e0b" stop-opacity="0.3"/><stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="bridgeBeamT" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#38bdf8"/><stop offset="50%" stop-color="#fde047"/><stop offset="100%" stop-color="#38bdf8"/>
+            </linearGradient>
+          </defs>
+          <circle cx="190" cy="135" r="95" fill="url(#sunHorizonT)"/>
+          <polygon points="0,245 75,148 155,205 245,128 325,188 380,145 380,245" fill="rgba(12, 32, 68, 0.85)" stroke="rgba(125,211,252,0.4)" stroke-width="1.5"/>
+          <polygon points="60,245 155,155 255,245" fill="rgba(8, 20, 44, 0.92)" stroke="#fde047" stroke-width="1.5"/>
+          <path d="M75 148 Q160 112 245 128" fill="none" stroke="url(#bridgeBeamT)" stroke-width="4" stroke-linecap="round"/>
+          <g class="paraglider-soaring" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round">
+            <path d="M125 78 Q135 66 145 76 Q155 66 165 78"/>
+            <path d="M175 56 Q187 42 198 54 Q210 42 222 56" stroke="#fde047" stroke-width="2.6"/>
+            <path d="M232 82 Q240 72 248 80 Q256 72 264 82"/>
+          </g>
+        </svg>`;
+
+      const THEATER_SLIDES = [
+        {
+          badge: "VII. LỜI KẾT: BƯỚC LÊN SÂN KHẤU CUỘC ĐỜI",
+          mainText: "Đôi bàn tay nhẫn nại và Đôi cánh của khát vọng",
+          keepVisual: true,
+          subHtml: `
+            <div class="board-card" style="border-left: 4px solid #fde047;">
+              <div style="font-weight: 700; color: #fef08a; margin-bottom: 0.4rem;">
+                “Cơm áo gạo tiền có thể thử thách đôi chân, nhưng <span class="hl-underline now">không có quyền giam cầm ánh mắt nhìn lên bầu trời</span>.”
+              </div>
+              <div>
+                Người bản lĩnh không chọn giữa “sinh tồn” hay “mơ mộng”; họ dùng <span class="hl-marker">sự nhẫn nại của đôi bàn tay để nuôi lớn đôi cánh của khát vọng</span>.
+              </div>
+            </div>`,
+          speakerPose: "presenting",
+          finaleMode: false
+        },
+        {
+          badge: "VII. LỜI KẾT: BƯỚC LÊN SÂN KHẤU CUỘC ĐỜI",
+          mainText: "Kỷ luật sắt đá là chiếc cầu nối khát vọng",
+          keepVisual: true,
+          subHtml: `
+            <div style="display: flex; flex-direction: column; gap: 0.55rem;">
+              <div class="board-card" style="padding: 0.78rem 1rem; font-size: clamp(0.88rem, 1.12vw, 1.02rem);">
+                Bạn không sinh ra để sống nhạt nhòa, lặp lại những ngày an toàn vô vị rồi nhắm mắt khi <span class="hl-rose">giấc mơ còn dang dở</span>. Nỗi đau bạn né tránh hôm nay chính là sức mạnh bạn đánh mất vào ngày mai. <span class="hl-underline now">Kỷ luật sắt đá là chiếc cầu duy nhất nối khát vọng với vinh quang.</span>
+              </div>
+              <div class="board-card" style="padding: 0.68rem 1rem; text-align: center; font-weight: 700; border-color: #fde047; font-size: clamp(0.9rem, 1.15vw, 1.04rem);">
+                Dám <span class="hl-marker">ước mơ</span>, dám <span class="hl-marker">bước ra</span>, sống bằng <span class="hl-marker">kỷ luật sắt đá</span>!
+              </div>
+            </div>`,
+          speakerPose: "presenting",
+          finaleMode: false
+        },
+        {
+          badge: "VII. LỜI KẾT: BƯỚC LÊN SÂN KHẤU CUỘC ĐỜI",
+          mainText: "“Ngay tại giây phút này, bạn có hai sự lựa chọn:”",
+          keepVisual: false,
+          subHtml: `
+            <div class="choice-flip-stage" onclick="event.stopPropagation(); this.classList.toggle('flipped');">
+              <div class="choice-flip-inner">
+                <div class="choice-flip-face choice-flip-front">
+                  <div class="badge-sub" style="background: rgba(251, 113, 133, 0.25); color: #fecdd3; margin-bottom: 0.4rem;">LỰA CHỌN THỨ NHẤT</div>
+                  <div>1. Tiếp tục ngồi đó, nuông chiều sự sợ hãi và <span class="hl-rose">làm khán giả vỗ tay cho cuộc đời người khác</span>;</div>
+                </div>
+                <div class="choice-flip-face choice-flip-back">
+                  <div class="badge-sub" style="background: #fde047; color: #0b1f3f; margin-bottom: 0.4rem;">LỰA CHỌN THỨ HAI</div>
+                  <div>2. Hay đứng dậy, xóa sạch mọi lời ngụy biện, <span class="hl-marker">bước thẳng lên dưới ánh đèn sân khấu</span> để viết nên vở kịch rực rỡ nhất cho cuộc đời mình!</div>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top: 0.7rem; font-weight: 900; font-size: clamp(1.4rem, 2.5vw, 2.1rem); color: #fde047; text-shadow: 0 0 24px rgba(253, 224, 71, 0.65);">
+              ĐÃ ĐẾN LÚC BƯỚC RA!
+            </div>`,
+          speakerPose: "presenting",
+          finaleMode: false
+        },
+        {
+          badge: "LỜI KẾT",
+          mainText: "TRÂN TRỌNG CẢM ƠN!",
+          subHtml: `
+            <div style="font-size: clamp(1.55rem, 2.5vw, 2.25rem); font-weight: 600; color: #fef3c7; font-style: italic; line-height: 1.4; margin-bottom: 1.15rem; text-shadow: 0 0 18px rgba(251, 191, 36, 0.35);">
+              Cảm ơn thầy cô và các bạn đã lắng nghe.
+            </div>
+            <button type="button" class="btn-step" onclick="event.stopPropagation(); goToSlide(0);" style="padding: 0.65rem 2rem; font-size: 0.98rem; background: #fde047; color: #0b1f3f;">
+              ↺ Xem lại từ đầu bài thuyết trình
+            </button>`,
+          speakerPose: "bowing",
+          finaleMode: true
+        }
+      ];
+
+      let theaterStep = 0;
+      const THEATER_TOTAL = THEATER_SLIDES.length + 1;
+      let isTypingText = false;
+      let currentCharTimers = [];
+      let activeCharElements = [];
+      let theaterActive = false;
+      let theaterRaf = null;
+      let audioCtx = null;
+
+      function ensureAudio() {
+        if (!audioCtx) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (AC) audioCtx = new AC();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        return audioCtx;
+      }
+
+      function playTheatricalSound(effect) {
+        return; // Đã tắt âm thanh sân khấu theo yêu cầu
+        try {
+          const c = ensureAudio();
+          if (!c) return;
+          const now = c.currentTime;
+          if (effect === 'curtainSweep') {
+            const dur = 1.6, bufSize = Math.floor(c.sampleRate * dur);
+            const buf = c.createBuffer(1, bufSize, c.sampleRate), data = buf.getChannelData(0);
+            for (let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1) * Math.sin((i / bufSize) * Math.PI);
+            const src = c.createBufferSource(); src.buffer = buf;
+            const flt = c.createBiquadFilter(); flt.type = 'bandpass';
+            flt.frequency.setValueAtTime(190, now); flt.frequency.exponentialRampToValueAtTime(480, now + 1.3); flt.Q.value = 1.4;
+            const g = c.createGain(); g.gain.setValueAtTime(0.005, now); g.gain.linearRampToValueAtTime(0.065, now + 0.55); g.gain.exponentialRampToValueAtTime(0.001, now + dur);
+            src.connect(flt); flt.connect(g); g.connect(c.destination); src.start(now);
+          } else if (effect === 'slideChime') {
+            const osc = c.createOscillator(), g = c.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(330, now); osc.frequency.exponentialRampToValueAtTime(440, now + 0.45);
+            g.gain.setValueAtTime(0.001, now); g.gain.linearRampToValueAtTime(0.055, now + 0.06); g.gain.exponentialRampToValueAtTime(0.0008, now + 0.65);
+            osc.connect(g); g.connect(c.destination); osc.start(now); osc.stop(now + 0.7);
+          } else if (effect === 'finaleChord') {
+            [261.63, 329.63, 392.00, 523.25].forEach((f, idx) => {
+              const osc = c.createOscillator(), g = c.createGain();
+              osc.type = 'triangle'; osc.frequency.setValueAtTime(f, now + idx * 0.06);
+              g.gain.setValueAtTime(0.001, now + idx * 0.06); g.gain.linearRampToValueAtTime(0.035, now + idx * 0.06 + 0.15); g.gain.exponentialRampToValueAtTime(0.0008, now + 2.2);
+              osc.connect(g); g.connect(c.destination); osc.start(now + idx * 0.06); osc.stop(now + 2.3);
+            });
+          }
+        } catch (e) {}
+      }
+
+      const curtainCanvas = document.getElementById('velvetCurtainCanvas');
+      const cCtx = curtainCanvas ? curtainCanvas.getContext('2d') : null;
+      const dustCanvas = document.getElementById('atmosphereDustCanvas');
+      const dCtx = dustCanvas ? dustCanvas.getContext('2d') : null;
+      const stageViewport = document.getElementById('stageViewport');
+      const curtainPhysics = { openAmount: 0, targetOpen: 0, velocity: 0, swayPhase: 0, waveEnergy: 0 };
+      let dustMotes = [];
+
+      function easeInOutCubic(x) { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
+
+      function resizeTheaterCanvases() {
+        if (!stageViewport || !curtainCanvas || !dustCanvas) return;
+        const rect = stageViewport.getBoundingClientRect();
+        const W = Math.max(rect.width, window.innerWidth);
+        const H = Math.max(rect.height, window.innerHeight - 110);
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        curtainCanvas.width = W * dpr; curtainCanvas.height = H * dpr;
+        if (cCtx) cCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        dustCanvas.width = W; dustCanvas.height = H;
+        dustMotes = [];
+        const count = Math.min(70, Math.floor(W / 18));
+        for (let i = 0; i < count; i++) dustMotes.push(createDustMote(false));
+      }
+
+      function createDustMote(isGolden) {
+        const W = dustCanvas ? dustCanvas.width : 1200;
+        const H = dustCanvas ? dustCanvas.height : 700;
+        return {
+          x: Math.random() * W, y: Math.random() * H * 0.86,
+          r: isGolden ? (Math.random() * 2.4 + 0.9) : (Math.random() * 1.6 + 0.4),
+          vx: (Math.random() - 0.5) * 0.28, vy: -Math.random() * 0.42 - 0.12,
+          alpha: Math.random() * 0.65 + 0.15, phase: Math.random() * Math.PI * 2
+        };
+      }
+
+      function boostFinaleDustParticles() {
+        if (!dustCanvas) return;
+        for (let i = 0; i < 30; i++) {
+          const m = createDustMote(true);
+          m.y = dustCanvas.height * (0.45 + Math.random() * 0.4);
+          dustMotes.push(m);
+        }
+        if (dustMotes.length > 120) dustMotes.splice(0, dustMotes.length - 120);
+      }
+
+      function setCurtainTarget(val) {
+        if (Math.abs(curtainPhysics.targetOpen - val) > 0.01) {
+          curtainPhysics.targetOpen = val;
+          curtainPhysics.waveEnergy = 1.0;
+          playTheatricalSound('curtainSweep');
+        }
+      }
+
+      function drawVelvetCurtainWing(W, H, side, open, kineticSway) {
+        const numPleats = 16, curtainTopY = 42;
+        const curtainBottomY = H - easeInOutCubic(open) * (H * 0.09);
+        const tieBackY = H * 0.56;
+        const closedSpan = W * 0.516, openTopSpan = W * 0.19, openWaistSpan = W * 0.08, openBottomSpan = W * 0.11;
+        const eOpen = easeInOutCubic(open);
+        const currentTopSpan = closedSpan + (openTopSpan - closedSpan) * eOpen;
+        const currentWaistSpan = closedSpan + (openWaistSpan - closedSpan) * eOpen;
+        const currentBottomSpan = closedSpan + (openBottomSpan - closedSpan) * eOpen;
+        const outerEdgeX = side === -1 ? -15 : W + 15;
+
+        for (let i = 0; i < numPleats; i++) {
+          const t0 = i / numPleats, t1 = (i + 1) / numPleats;
+          const idle0 = Math.sin(curtainPhysics.swayPhase + i * 0.55) * (2.5 + t0 * 4);
+          const idle1 = Math.sin(curtainPhysics.swayPhase + (i + 1) * 0.55) * (2.5 + t1 * 4);
+          const w0 = idle0 - side * kineticSway * Math.pow(t0, 1.35);
+          const w1 = idle1 - side * kineticSway * Math.pow(t1, 1.35);
+          const topX0 = outerEdgeX - side * (t0 * currentTopSpan), topX1 = outerEdgeX - side * (t1 * currentTopSpan);
+          const waistX0 = outerEdgeX - side * (t0 * currentWaistSpan) + w0, waistX1 = outerEdgeX - side * (t1 * currentWaistSpan) + w1;
+          const botX0 = outerEdgeX - side * (t0 * currentBottomSpan) + w0 * 1.25, botX1 = outerEdgeX - side * (t1 * currentBottomSpan) + w1 * 1.25;
+          const pleatSag = 10 + Math.sin(i * 1.3) * 4;
+
+          cCtx.beginPath();
+          cCtx.moveTo(topX0, curtainTopY);
+          cCtx.quadraticCurveTo((topX0 + waistX0) * 0.5, (curtainTopY + tieBackY) * 0.5, waistX0, tieBackY);
+          cCtx.quadraticCurveTo((waistX0 + botX0) * 0.5, (tieBackY + curtainBottomY) * 0.52, botX0, curtainBottomY);
+          cCtx.quadraticCurveTo((botX0 + botX1) * 0.5, curtainBottomY + pleatSag, botX1, curtainBottomY);
+          cCtx.quadraticCurveTo((waistX1 + botX1) * 0.5, (tieBackY + curtainBottomY) * 0.52, waistX1, tieBackY);
+          cCtx.quadraticCurveTo((topX1 + waistX1) * 0.5, (curtainTopY + tieBackY) * 0.5, topX1, curtainTopY);
+          cCtx.closePath();
+
+          const minX = Math.min(waistX0, waistX1), maxX = Math.max(waistX0, waistX1);
+          const grad = cCtx.createLinearGradient(minX, 0, maxX, 0);
+          const hi = 0.85 + 0.15 * Math.sin(i * 0.9);
+          grad.addColorStop(0.0, '#1e0206'); grad.addColorStop(0.22, '#4a0610');
+          grad.addColorStop(0.52, `rgb(${Math.round(168 * hi)}, ${Math.round(18 * hi)}, ${Math.round(38 * hi)})`);
+          grad.addColorStop(0.78, '#580814'); grad.addColorStop(1.0, '#1a0105');
+          cCtx.fillStyle = grad; cCtx.fill();
+
+          cCtx.beginPath(); cCtx.moveTo(botX0, curtainBottomY);
+          cCtx.quadraticCurveTo((botX0 + botX1) * 0.5, curtainBottomY + pleatSag, botX1, curtainBottomY);
+          cCtx.strokeStyle = '#d97706'; cCtx.lineWidth = 3.2; cCtx.stroke();
+        }
+      }
+
+      function drawTopGrandValence(W, swayPhase) {
+        const scallops = 9, sw = W / scallops, bh = 48;
+        cCtx.save(); cCtx.shadowColor = 'rgba(0,0,0,0.9)'; cCtx.shadowBlur = 20; cCtx.shadowOffsetY = 8;
+        for (let s = 0; s < scallops; s++) {
+          const x0 = s * sw, x1 = (s + 1) * sw, xm = (x0 + x1) * 0.5;
+          const sag = bh + 20 + Math.sin(swayPhase * 0.8 + s) * 1.8;
+          const grad = cCtx.createLinearGradient(x0, 0, x1, 0);
+          grad.addColorStop(0, '#220206'); grad.addColorStop(0.5, '#9e1125'); grad.addColorStop(1, '#220206');
+          cCtx.beginPath(); cCtx.moveTo(x0, 0); cCtx.lineTo(x1, 0); cCtx.lineTo(x1, bh - 6);
+          cCtx.quadraticCurveTo(xm, sag, x0, bh - 6); cCtx.closePath();
+          cCtx.fillStyle = grad; cCtx.fill();
+          cCtx.beginPath(); cCtx.moveTo(x0, bh - 6); cCtx.quadraticCurveTo(xm, sag, x1, bh - 6);
+          cCtx.strokeStyle = '#fbbf24'; cCtx.lineWidth = 2.5; cCtx.stroke();
+        }
+        cCtx.restore();
+      }
+
+      function theaterLoop() {
+        if (!theaterActive) return;
+        if (dCtx && dustCanvas) {
+          dCtx.clearRect(0, 0, dustCanvas.width, dustCanvas.height);
+          const vis = 0.3 + curtainPhysics.openAmount * 0.7;
+          for (const m of dustMotes) {
+            m.x += m.vx + Math.sin(m.phase) * 0.08; m.y += m.vy; m.phase += 0.02;
+            if (m.y < -10) m.y = dustCanvas.height * 0.86;
+            if (m.x < 0) m.x = dustCanvas.width;
+            if (m.x > dustCanvas.width) m.x = 0;
+            dCtx.beginPath(); dCtx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
+            dCtx.fillStyle = `rgba(253, 230, 138, ${(0.65 + 0.35 * Math.sin(m.phase)) * m.alpha * vis})`;
+            dCtx.fill();
+          }
+        }
+        if (cCtx && curtainCanvas && stageViewport) {
+          const rect = stageViewport.getBoundingClientRect();
+          const W = Math.max(rect.width, window.innerWidth);
+          const H = Math.max(rect.height, window.innerHeight - 110);
+          cCtx.clearRect(0, 0, W, H);
+          const diff = curtainPhysics.targetOpen - curtainPhysics.openAmount;
+          curtainPhysics.velocity += diff * 0.0042; curtainPhysics.velocity *= 0.89;
+          curtainPhysics.openAmount = Math.max(0, Math.min(1, curtainPhysics.openAmount + curtainPhysics.velocity));
+          curtainPhysics.swayPhase += 0.018; curtainPhysics.waveEnergy *= 0.965;
+          const open = curtainPhysics.openAmount;
+          const sway = curtainPhysics.velocity * 420 + Math.sin(curtainPhysics.swayPhase * 2.2) * curtainPhysics.waveEnergy * 16;
+          if (open < 0.98) {
+            const a = Math.max(0, 1 - easeInOutCubic(Math.min(1, open * 1.35)));
+            if (a > 0.01) { cCtx.fillStyle = `rgba(2,2,4,${a * 0.92})`; cCtx.fillRect(0, 0, W, H); }
+          }
+          drawVelvetCurtainWing(W, H, -1, open, sway);
+          drawVelvetCurtainWing(W, H, 1, open, sway);
+          drawTopGrandValence(W, curtainPhysics.swayPhase);
+        }
+        theaterRaf = requestAnimationFrame(theaterLoop);
+      }
+
+      function clearCharTimers() { currentCharTimers.forEach(id => clearTimeout(id)); currentCharTimers = []; }
+      function setSpeakerPose(pose) {
+        const sp = document.getElementById('speakerContainer');
+        if (!sp) return;
+        sp.classList.remove('pose-presenting', 'pose-bowing');
+        if (pose === 'presenting') sp.classList.add('pose-presenting');
+        else if (pose === 'bowing') sp.classList.add('pose-bowing');
+      }
+
+      function instantFinishCurrentText() {
+        clearCharTimers();
+        activeCharElements.forEach(sp => { sp.classList.add('visible'); sp.classList.remove('fresh-glow'); });
+        const sub = document.getElementById('slideSubHeading');
+        if (sub) sub.classList.add('visible');
+        isTypingText = false;
+        const cur = THEATER_SLIDES[theaterStep - 1];
+        setSpeakerPose(cur && cur.speakerPose === 'bowing' ? 'bowing' : 'idle');
+      }
+
+      function renderSlideOnBlackBoard(idx) {
+        clearCharTimers();
+        activeCharElements = [];
+        const slide = THEATER_SLIDES[idx];
+        if (!slide) return;
+        const badgeWrap = document.getElementById('slideTopBadge');
+        const badgeText = document.getElementById('slideBadgeText');
+        const mainHeading = document.getElementById('slideMainHeading');
+        const subHeading = document.getElementById('slideSubHeading');
+        const floorMirror = document.getElementById('floorMirrorText');
+        const ambilight = document.getElementById('screenAmbilight');
+        const audience = document.getElementById('audienceContainer');
+        const boardWrap = document.getElementById('boardContentWrap');
+        const boardStage = document.getElementById('boardMainStage');
+        const leftCol = document.getElementById('boardLeftCol');
+        const persistVis = document.getElementById('boardPersistentVisual');
+
+        if (boardWrap) boardWrap.classList.toggle('center-mode', !slide.keepVisual);
+        if (boardStage) boardStage.classList.toggle('with-visual', !!slide.keepVisual);
+        if (persistVis) persistVis.style.display = slide.keepVisual ? 'flex' : 'none';
+        if (leftCol) {
+          leftCol.classList.add('fading-out');
+          setTimeout(() => leftCol.classList.remove('fading-out'), 220);
+        }
+
+        document.documentElement.style.setProperty('--screen-power', '1');
+        if (stageViewport) stageViewport.classList.add('stage-lit');
+        if (slide.finaleMode) {
+          if (ambilight) ambilight.classList.add('finale-warmth');
+          if (audience) audience.classList.add('audience-applauding');
+          playTheatricalSound('finaleChord');
+          boostFinaleDustParticles();
+        } else {
+          if (ambilight) ambilight.classList.remove('finale-warmth');
+          if (audience) audience.classList.remove('audience-applauding');
+          playTheatricalSound('slideChime');
+        }
+        if (badgeText) badgeText.textContent = slide.badge;
+        if (badgeWrap) badgeWrap.classList.add('show');
+        if (subHeading) { subHeading.classList.remove('visible'); subHeading.innerHTML = slide.subHtml || ''; }
+        if (floorMirror) floorMirror.textContent = slide.mainText;
+
+        if (mainHeading) {
+          mainHeading.innerHTML = '';
+          const wrap = document.createElement('span');
+          wrap.style.display = 'inline-block';
+          const words = slide.mainText.split(' ');
+          words.forEach((word, wIdx) => {
+            const ws = document.createElement('span');
+            ws.style.display = 'inline-block'; ws.style.whiteSpace = 'nowrap';
+            Array.from(word).forEach(ch => {
+              const cs = document.createElement('span');
+              cs.className = 'char-unit'; cs.textContent = ch;
+              ws.appendChild(cs); activeCharElements.push(cs);
+            });
+            wrap.appendChild(ws);
+            if (wIdx < words.length - 1) {
+              const sp = document.createElement('span');
+              sp.style.display = 'inline-block'; sp.innerHTML = '&nbsp;';
+              wrap.appendChild(sp);
+            }
+          });
+          mainHeading.appendChild(wrap);
+        }
+
+        isTypingText = true;
+        setSpeakerPose('presenting');
+        activeCharElements.forEach((span, i) => {
+          const tId = setTimeout(() => {
+            span.classList.add('visible', 'fresh-glow');
+            setTimeout(() => span.classList.remove('fresh-glow'), 400);
+            if (i === activeCharElements.length - 1) {
+              const subTimer = setTimeout(() => {
+                if (subHeading) subHeading.classList.add('visible');
+                isTypingText = false;
+                setSpeakerPose(slide.speakerPose === 'bowing' ? 'bowing' : 'idle');
+              }, 220);
+              currentCharTimers.push(subTimer);
+            }
+          }, 140 + i * 28);
+          currentCharTimers.push(tId);
+        });
+      }
+
+      function powerDownBlackBoard() {
+        clearCharTimers();
+        isTypingText = false;
+        if (stageViewport) stageViewport.classList.remove('curtain-opened', 'stage-lit');
+        document.documentElement.style.setProperty('--screen-power', '0');
+        const badgeWrap = document.getElementById('slideTopBadge');
+        if (badgeWrap) badgeWrap.classList.remove('show');
+        const mh = document.getElementById('slideMainHeading'); if (mh) mh.innerHTML = '';
+        const sh = document.getElementById('slideSubHeading'); if (sh) { sh.classList.remove('visible'); sh.innerHTML = ''; }
+        const fm = document.getElementById('floorMirrorText'); if (fm) fm.textContent = '';
+        const aud = document.getElementById('audienceContainer'); if (aud) aud.classList.remove('audience-applauding');
+        const pv = document.getElementById('boardPersistentVisual'); if (pv) pv.style.display = 'none';
+        setSpeakerPose('idle');
+      }
+
+      function renderMicroStepDots() {
+        const c = document.getElementById('microDotsContainer');
+        if (!c) return;
+        c.innerHTML = '';
+        for (let i = 0; i < THEATER_TOTAL; i++) {
+          const d = document.createElement('div');
+          d.className = 'micro-dot' + (i === theaterStep ? ' active' : '');
+          c.appendChild(d);
+        }
+      }
+
+      window.theaterAdvance = function() {
+        if (isTypingText) { instantFinishCurrentText(); return; }
+        theaterStep = (theaterStep + 1) % THEATER_TOTAL;
+        renderMicroStepDots();
+        if (theaterStep === 0) {
+          setCurtainTarget(0);
+          powerDownBlackBoard();
+        } else if (theaterStep === 1) {
+          if (stageViewport) stageViewport.classList.add('curtain-opened');
+          setCurtainTarget(1);
+          const openDelay = setTimeout(() => { if (theaterStep === 1) renderSlideOnBlackBoard(0); }, 720);
+          currentCharTimers.push(openDelay);
+        } else {
+          if (stageViewport) stageViewport.classList.add('curtain-opened');
+          setCurtainTarget(1);
+          renderSlideOnBlackBoard(theaterStep - 1);
+        }
+      };
+
+      window.theaterBack = function() {
+        clearCharTimers();
+        isTypingText = false;
+        if (theaterStep <= 0) return false;
+        theaterStep--;
+        renderMicroStepDots();
+        if (theaterStep === 0) {
+          setCurtainTarget(0);
+          powerDownBlackBoard();
+        } else {
+          if (stageViewport) stageViewport.classList.add('curtain-opened');
+          setCurtainTarget(1);
+          renderSlideOnBlackBoard(theaterStep - 1);
+        }
+        return true;
+      };
+
+      window.enterTheaterSlide = function() {
+        theaterStep = 0;
+        curtainPhysics.openAmount = 0;
+        curtainPhysics.targetOpen = 0;
+        curtainPhysics.velocity = 0;
+        powerDownBlackBoard();
+        renderMicroStepDots();
+        resizeTheaterCanvases();
+        if (!theaterActive) {
+          theaterActive = true;
+          theaterRaf = requestAnimationFrame(theaterLoop);
+        }
+      };
+
+      window.leaveTheaterSlide = function() {
+        theaterActive = false;
+        if (theaterRaf) cancelAnimationFrame(theaterRaf);
+        powerDownBlackBoard();
+      };
+
+      window.addEventListener('resize', () => { if (theaterActive) resizeTheaterCanvases(); });
+    })();
+
     animateAllCanvases(0);
     showSlide(0);
   </script>
