@@ -477,12 +477,8 @@
 
             <!-- Khung trụ buồng lái (Cockpit Pillars) hai bên trái phải và trần tàu -->
             <div class="absolute inset-0 pointer-events-none z-10">
-                <!-- Viền trần buồng lái -->
-                <div class="w-full h-8 bg-gradient-to-b from-slate-900 via-sky-950 to-transparent border-b border-sky-400/30 flex items-center justify-center">
-                    <div class="px-6 py-0.5 rounded-b-xl bg-sky-950/90 border-x border-b border-sky-400/50 text-[11px] font-bold tracking-widest text-sky-300 uppercase">
-                        BUỒNG LÁI ĐOÀN TÀU ƯỚC MƠ • HÀNH TRÌNH TUỔI TRẺ
-                    </div>
-                </div>
+                <!-- Viền trần buồng lái tinh gọn, hoàn toàn sạch sẽ không chứa chữ -->
+                <div class="w-full h-4 bg-gradient-to-b from-slate-950 to-transparent border-b border-sky-400/20"></div>
                 <!-- Trụ chữ A bên trái -->
                 <div class="absolute top-0 bottom-0 left-0 w-6 sm:w-12 bg-gradient-to-r from-slate-950 via-sky-950 to-transparent border-r-2 border-sky-500/30 transform -skew-x-3 origin-bottom"></div>
                 <!-- Trụ chữ A bên phải -->
@@ -708,9 +704,10 @@
         };
 
         /* -------------------------------------------------------------------
-         * 2. BỘ TỔNG HỢP ÂM THANH WEB AUDIO API TỰ ĐỘNG
+         * 2. BỘ TỔNG HỢP ÂM THANH WEB AUDIO API TỰ ĐỘNG (CÓ TIẾNG RAY & ĐỘNG CƠ)
          * ------------------------------------------------------------------- */
         let audioCtx = null;
+        let railSoundTimer = null;
 
         function initAudio() {
             if (!audioCtx) {
@@ -724,27 +721,66 @@
             }
         }
 
+        // Tiếng ray nghiến và nhịp bánh sắt lướt nhanh
+        function playRailClickSound(speedRate = 1) {
+            if (!audioCtx) return;
+            const now = audioCtx.currentTime;
+            
+            // Nhịp lách-cách bánh sắt
+            [0, 0.08].forEach((offset) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(85 * speedRate, now + offset);
+                osc.frequency.exponentialRampToValueAtTime(32, now + offset + 0.05);
+
+                gain.gain.setValueAtTime(0.045, now + offset);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.06);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now + offset);
+                osc.stop(now + offset + 0.07);
+            });
+        }
+
+        function startRailAudioLoop() {
+            if (railSoundTimer) clearInterval(railSoundTimer);
+            railSoundTimer = setInterval(() => {
+                if (currentState === STATE.RUNNING || currentState === STATE.APPROACHING_DREAM) {
+                    playRailClickSound(motionFactor > 1.2 ? 1.4 : 1.0);
+                }
+            }, 190);
+        }
+
+        function stopRailAudioLoop() {
+            if (railSoundTimer) {
+                clearInterval(railSoundTimer);
+                railSoundTimer = null;
+            }
+        }
+
         // Tiếng còi tàu + loé sáng khi bấm BẮT ĐẦU
         function playTrainHornAndFlashSound() {
             initAudio();
             if (!audioCtx) return;
 
             const now = audioCtx.currentTime;
-            [330, 440, 554.37].forEach((freq) => {
+            [349.23, 440, 587.33].forEach((freq) => {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sawtooth';
                 osc.frequency.setValueAtTime(freq, now);
-                osc.frequency.exponentialRampToValueAtTime(freq * 1.03, now + 0.9);
+                osc.frequency.exponentialRampToValueAtTime(freq * 1.04, now + 1.1);
 
                 gain.gain.setValueAtTime(0.001, now);
-                gain.gain.linearRampToValueAtTime(0.1, now + 0.1);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 1.15);
+                gain.gain.linearRampToValueAtTime(0.12, now + 0.08);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 1.25);
 
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start(now);
-                osc.stop(now + 1.2);
+                osc.stop(now + 1.28);
             });
         }
 
@@ -757,28 +793,28 @@
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = 'triangle';
-            osc.frequency.setValueAtTime(140, now);
-            osc.frequency.exponentialRampToValueAtTime(28, now + 0.55);
+            osc.frequency.setValueAtTime(160, now);
+            osc.frequency.exponentialRampToValueAtTime(25, now + 0.6);
 
-            gain.gain.setValueAtTime(0.45, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+            gain.gain.setValueAtTime(0.55, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
 
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start(now);
-            osc.stop(now + 0.62);
+            osc.stop(now + 0.68);
 
-            const bufferSize = audioCtx.sampleRate * 0.45;
+            const bufferSize = audioCtx.sampleRate * 0.5;
             const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
             const data = buffer.getChannelData(0);
             for (let i = 0; i < bufferSize; i++) {
-                data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.12));
+                data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.15));
             }
             const noise = audioCtx.createBufferSource();
             const noiseGain = audioCtx.createGain();
             noise.buffer = buffer;
-            noiseGain.gain.setValueAtTime(0.3, now);
-            noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.45);
+            noiseGain.gain.setValueAtTime(0.35, now);
+            noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
             noise.connect(noiseGain);
             noiseGain.connect(audioCtx.destination);
             noise.start(now);
@@ -795,13 +831,13 @@
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'triangle';
-                osc.frequency.setValueAtTime(freq, now + idx * 0.07);
-                gain.gain.setValueAtTime(0.18, now + idx * 0.07);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.45);
+                osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+                gain.gain.setValueAtTime(0.2, now + idx * 0.06);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.45);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
-                osc.start(now + idx * 0.07);
-                osc.stop(now + idx * 0.07 + 0.46);
+                osc.start(now + idx * 0.06);
+                osc.stop(now + idx * 0.06 + 0.48);
             });
             playCrashSound();
         }
@@ -816,13 +852,13 @@
             const gain = audioCtx.createGain();
             osc.type = 'sawtooth';
             osc.frequency.setValueAtTime(190, now);
-            osc.frequency.linearRampToValueAtTime(130, now + 0.3);
-            gain.gain.setValueAtTime(0.18, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+            osc.frequency.linearRampToValueAtTime(120, now + 0.35);
+            gain.gain.setValueAtTime(0.2, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start(now);
-            osc.stop(now + 0.36);
+            osc.stop(now + 0.4);
         }
 
         // Tiếng pháo hoa chiến thắng cuối game
@@ -831,23 +867,23 @@
             if (!audioCtx) return;
 
             const now = audioCtx.currentTime;
-            const chord = [523.25, 659.25, 783.99, 987.77, 1046.5];
+            const chord = [523.25, 659.25, 783.99, 987.77, 1046.5, 1318.5];
             chord.forEach((freq, i) => {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(freq, now + i * 0.1);
-                gain.gain.setValueAtTime(0.16, now + i * 0.1);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 1.2);
+                gain.gain.setValueAtTime(0.18, now + i * 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 1.4);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start(now + i * 0.1);
-                osc.stop(now + i * 0.1 + 1.25);
+                osc.stop(now + i * 0.1 + 1.45);
             });
         }
 
         /* -------------------------------------------------------------------
-         * 3. BIẾN TRẠNG THÁI GAMEPLAY & ĐỒ HỌA 3D TRÊN CANVAS
+         * 3. BIẾN TRẠNG THÁI GAMEPLAY & ĐỒ HỌA 3D PHỐI CẢNH CAO TỐC
          * ------------------------------------------------------------------- */
         const STATE = {
             START_SCREEN: 'START_SCREEN',
@@ -861,24 +897,25 @@
         let currentState = STATE.START_SCREEN;
         let currentBarrierIndex = 0;
 
-        // Chuyển động nội bộ cho hiệu ứng đường ray 3D
+        // Vận tốc và quán tính chuyển động
         let motionFactor = 0;
         let targetMotionFactor = 0;
         let trackOffset = 0;
-        let wallZ = 1.0;             // 1.0 = đường chân trời, 0.14 = ngay sát mũi tàu
-        let wallCrackedLevel = 0;    // 0 = nguyên vẹn, 1 = nứt khi đâm
-        let wallRedFlash = 0;        // Hiệu ứng nháy đỏ khi trả lời sai
-        let dreamGlowProgress = 0;   // Chỉ tăng từ 0 đến 1 khi câu hỏi cuối hoàn thành
 
-        // Mảng hiệu ứng mảnh gạch vỡ, cột điện ven đường, mây, và pháo hoa
+        // Quãng đường đo bằng metric thực tế (bắt đầu từ 100 = tít tắp chân trời)
+        let wallDist = 100.0;
+        let wallCrackedLevel = 0;
+        let wallRedFlash = 0;
+        let dreamGlowProgress = 0;
+
+        // Mảng hiệu ứng hạt, cột điện, mây và tia tốc độ
         let debrisParticles = [];
-        let sidePoles = [0.15, 0.4, 0.65, 0.9];
+        let sidePoles = [0.08, 0.22, 0.38, 0.55, 0.72, 0.88];
         let clouds = [
-            { x: 0.18, y: 0.18, s: 1.1, speed: 0.0003 },
-            { x: 0.55, y: 0.12, s: 0.85, speed: 0.0002 },
-            { x: 0.82, y: 0.22, s: 1.25, speed: 0.00035 }
+            { x: 0.12, y: 0.14, s: 1.1, speed: 0.0003 },
+            { x: 0.48, y: 0.09, s: 0.85, speed: 0.0002 },
+            { x: 0.78, y: 0.18, s: 1.25, speed: 0.00035 }
         ];
-        let confettiParticles = [];
 
         const canvas = document.getElementById('track-canvas');
         const ctx = canvas.getContext('2d');
@@ -908,6 +945,7 @@
 
                 resizeCanvas();
                 initJourneyState();
+                startRailAudioLoop();
 
                 setTimeout(() => {
                     flashEl.classList.remove('flash-active');
@@ -918,13 +956,12 @@
         function initJourneyState() {
             currentBarrierIndex = 0;
             currentState = STATE.RUNNING;
-            motionFactor = 0.35;
-            targetMotionFactor = 0.9;
-            wallZ = 1.05;
+            motionFactor = 0.5;
+            targetMotionFactor = 1.35; // Tốc độ chạy rất nhanh và mạnh mẽ
+            wallDist = 100.0;          // Bắt đầu từ khoảng cách xa hun hút
             wallCrackedLevel = 0;
             dreamGlowProgress = 0;
             debrisParticles = [];
-            confettiParticles = [];
 
             document.getElementById('windshield-crack').classList.add('hidden');
             document.getElementById('question-overlay').classList.add('hidden');
@@ -936,9 +973,11 @@
         function restartFromCockpit() {
             playTrainHornAndFlashSound();
             initJourneyState();
+            startRailAudioLoop();
         }
 
         function backToStartScreen() {
+            stopRailAudioLoop();
             currentState = STATE.START_SCREEN;
             const badge = document.getElementById('intro-badge');
             if (badge) badge.classList.remove('hidden');
@@ -961,7 +1000,7 @@
 
             playCrashSound();
 
-            // Rung chấn toàn bộ buồng lái
+            // Rung chấn buồng lái mạnh khi va chạm
             const cockpit = document.getElementById('cockpit-screen');
             cockpit.classList.remove('shake-crash');
             void cockpit.offsetWidth;
@@ -971,7 +1010,7 @@
             document.getElementById('windshield-crack').classList.remove('hidden');
 
             updateDashboardHUD();
-            spawnBrickDebris(24, false);
+            spawnBrickDebris(30, false);
 
             setTimeout(() => {
                 if (currentState === STATE.CRASHED_QUESTION) {
@@ -1028,7 +1067,7 @@
 
                 smashThroughCurrentWall();
             } else {
-                // ĐÁP ÁN SAI -> Nháy đỏ bức tường và cho chọn lại
+                // ĐÁP ÁN SAI -> Nháy đỏ bức tường
                 playWrongSound();
                 wallRedFlash = 1.0;
                 btnElement.className = "w-full text-left p-3.5 sm:p-4 rounded-2xl bg-rose-500/30 border-2 border-rose-400 flex items-start gap-3 opacity-80";
@@ -1041,7 +1080,7 @@
             currentState = STATE.SMASHING;
             playSmashWallSound();
 
-            spawnBrickDebris(95, true);
+            spawnBrickDebris(110, true);
 
             setTimeout(() => {
                 document.getElementById('question-overlay').classList.add('hidden');
@@ -1055,8 +1094,8 @@
                     // HOÀN THÀNH CÂU HỎI CUỐI (CÂU 4):
                     // Bức tường cuối vỡ tan -> Bắt đầu bừng sáng "ƯỚC MƠ" ở chân trời và lao thẳng đến đích!
                     currentState = STATE.APPROACHING_DREAM;
-                    motionFactor = 0.8;
-                    targetMotionFactor = 1.6;
+                    motionFactor = 1.0;
+                    targetMotionFactor = 2.4; // Tăng tốc cực đại tiến vào ước mơ
                     dreamGlowProgress = 0;
                     playVictoryFanfare();
                     
@@ -1066,12 +1105,13 @@
                     // Sau khi tàu lao thẳng vào vầng sáng "ƯỚC MƠ", tự động loé sáng chuyển vào bài thuyết trình
                     setTimeout(() => {
                         enterPresentationSlide();
-                    }, 3000);
+                    }, 3200);
                 } else {
+                    // Tiếp tục chặng kế tiếp: bức tường bắt đầu lại từ xa tít tắp (100)
                     currentState = STATE.RUNNING;
-                    motionFactor = 0.55;
-                    targetMotionFactor = 0.9;
-                    wallZ = 1.05;
+                    motionFactor = 0.8;
+                    targetMotionFactor = 1.4;
+                    wallDist = 100.0;
                     wallCrackedLevel = 0;
                     updateDashboardHUD();
                 }
@@ -1079,22 +1119,20 @@
         }
 
         /* -------------------------------------------------------------------
-         * 5.1 CHUYỂN THẲNG VÀO SLIDE BÀI THUYẾT TRÌNH (KHÔNG POPUP, KHÔNG NÚT BẤM)
+         * 5.1 CHUYỂN THẲNG VÀO SLIDE BÀI THUYẾT TRÌNH
          * ------------------------------------------------------------------- */
         function enterPresentationSlide() {
+            stopRailAudioLoop();
             const flashEl = document.getElementById('flash-overlay');
             flashEl.classList.add('flash-active');
 
             setTimeout(() => {
-                // Thoát khỏi buồng lái
                 document.getElementById('cockpit-screen').classList.add('hidden');
                 document.getElementById('cockpit-screen').classList.remove('flex');
 
-                // Mở màn hình slide bài thuyết trình
                 const startScreen = document.getElementById('start-screen');
                 startScreen.classList.remove('hidden');
 
-                // Ẩn nút bắt đầu và nhãn trò chơi để giao diện sạch sẽ, chuyên nghiệp
                 const badge = document.getElementById('intro-badge');
                 if (badge) badge.classList.add('hidden');
                 const btnContainer = document.getElementById('start-btn-container');
@@ -1102,7 +1140,6 @@
 
                 currentState = STATE.PRESENTATION;
 
-                // Tắt dần loé sáng
                 setTimeout(() => {
                     flashEl.classList.remove('flash-active');
                 }, 400);
@@ -1116,7 +1153,6 @@
             const total = GAME_DATA.barriers.length;
             const passed = Math.min(currentBarrierIndex, total);
 
-            // Cập nhật 4 đèn báo năng lượng ở bảng điều khiển bên phải
             for (let i = 1; i <= 4; i++) {
                 const lamp = document.getElementById(`lamp-${i}`);
                 if (!lamp) continue;
@@ -1131,7 +1167,7 @@
             const handleEl = document.getElementById('throttle-handle');
 
             if (currentState === STATE.RUNNING) {
-                tipEl.textContent = "Cảnh báo: Phát hiện bức tường rào cản phía trước!";
+                tipEl.textContent = "Con tàu đang chạy tốc độ cao trên đường ray thẳng tắp...";
                 handleEl.style.transform = "translateY(0px)";
             } else if (currentState === STATE.CRASHED_QUESTION) {
                 tipEl.textContent = "Hãy trả lời câu hỏi trên màn hình để phá vỡ bức tường!";
@@ -1143,7 +1179,7 @@
         }
 
         /* -------------------------------------------------------------------
-         * 7. VẼ ĐỒ HỌA 3D PHỐI CẢNH ĐƯỜNG RAY, BỨC TƯỜNG & MẢNH VỠ (CANVAS)
+         * 7. VẼ ĐỒ HỌA 3D PHỐI CẢNH ĐƯỜNG RAY SÂU HUN HÚT & TỐC ĐỘ CAO (CANVAS)
          * ------------------------------------------------------------------- */
         function spawnBrickDebris(count, explosive) {
             const w = canvas.width;
@@ -1154,15 +1190,15 @@
             const colors = ['#0284c7', '#0369a1', '#38bdf8', '#7dd3fc', '#cbd5e1', '#1e293b'];
             for (let i = 0; i < count; i++) {
                 const angle = Math.random() * Math.PI * 2;
-                const speed = explosive ? (4 + Math.random() * 18) : (2 + Math.random() * 8);
+                const speed = explosive ? (5 + Math.random() * 22) : (2 + Math.random() * 9);
                 debrisParticles.push({
                     x: cx + (Math.random() - 0.5) * w * 0.35,
                     y: cy + (Math.random() - 0.5) * h * 0.35,
                     vx: Math.cos(angle) * speed,
-                    vy: Math.sin(angle) * speed - (explosive ? 4 : 1),
-                    size: 10 + Math.random() * 28,
+                    vy: Math.sin(angle) * speed - (explosive ? 5 : 1),
+                    size: 10 + Math.random() * 30,
                     rot: Math.random() * Math.PI,
-                    vRot: (Math.random() - 0.5) * 0.25,
+                    vRot: (Math.random() - 0.5) * 0.28,
                     color: colors[Math.floor(Math.random() * colors.length)],
                     alpha: 1
                 });
@@ -1177,12 +1213,24 @@
 
             const w = canvas.width;
             const h = canvas.height;
-            const horizonY = h * 0.44;
+            
+            // Điểm tụ chân trời sâu hơn và sắc nét hơn
+            const horizonY = h * 0.40;
             const vanishX = w * 0.5;
 
             motionFactor += (targetMotionFactor - motionFactor) * 0.08;
 
-            // 1. VẼ BẦU TRỜI XANH DA TRỜI (BÌNH THƯỜNG TRONG 4 CÂU HỎI ĐẦU)
+            ctx.save();
+
+            // Hiệu ứng micro-shake rung chấn nhẹ khi tàu chạy tốc độ cao
+            if (motionFactor > 0.4) {
+                const shakeIntensity = motionFactor * 1.5;
+                const shakeX = (Math.random() - 0.5) * shakeIntensity;
+                const shakeY = (Math.random() - 0.5) * shakeIntensity * 0.7;
+                ctx.translate(shakeX, shakeY);
+            }
+
+            // 1. VẼ BẦU TRỜI XANH DA TRỜI
             const skyGrad = ctx.createLinearGradient(0, 0, 0, horizonY);
             if (currentState === STATE.APPROACHING_DREAM) {
                 skyGrad.addColorStop(0, '#0284c7');
@@ -1197,19 +1245,19 @@
             ctx.fillStyle = skyGrad;
             ctx.fillRect(0, 0, w, horizonY);
 
-            // Vầng sáng bình thường ở chân trời (KHÔNG CÓ CHỮ HAY HÀO QUANG ĐẶC BIỆT KHI CHƯA XONG CÂU 4)
+            // Vầng sáng bình thường ở chân trời
             if (currentState !== STATE.APPROACHING_DREAM) {
-                const normalSunGrad = ctx.createRadialGradient(vanishX, horizonY, 10, vanishX, horizonY, w * 0.25);
-                normalSunGrad.addColorStop(0, 'rgba(224, 242, 254, 0.65)');
+                const normalSunGrad = ctx.createRadialGradient(vanishX, horizonY, 5, vanishX, horizonY, w * 0.22);
+                normalSunGrad.addColorStop(0, 'rgba(224, 242, 254, 0.7)');
                 normalSunGrad.addColorStop(1, 'rgba(56, 189, 248, 0)');
                 ctx.fillStyle = normalSunGrad;
-                ctx.fillRect(0, 0, w, horizonY + 30);
+                ctx.fillRect(0, 0, w, horizonY + 25);
             }
 
-            // Vẽ mây trôi
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.82)';
+            // Vẽ mây trôi xa
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
             clouds.forEach(c => {
-                c.x -= c.speed * (1 + motionFactor * 1.5);
+                c.x -= c.speed * (1 + motionFactor * 2.2);
                 if (c.x < -0.2) c.x = 1.2;
                 const cx = c.x * w;
                 const cy = c.y * horizonY;
@@ -1220,75 +1268,125 @@
                 ctx.fill();
             });
 
-            // 2. VẼ MẶT ĐẤT & ĐƯỜNG RAY PHỐI CẢNH 3D
+            // 2. MẶT ĐẤT & ĐƯỜNG RAY PHỐI CẢNH SIÊU SÂU
             const groundGrad = ctx.createLinearGradient(0, horizonY, 0, h);
             groundGrad.addColorStop(0, '#075985');
-            groundGrad.addColorStop(0.5, '#0369a1');
+            groundGrad.addColorStop(0.4, '#0369a1');
             groundGrad.addColorStop(1, '#082f49');
             ctx.fillStyle = groundGrad;
             ctx.fillRect(0, horizonY, w, h - horizonY);
 
-            const trackTopWidth = w * 0.04;
-            const trackBottomWidth = w * 0.68;
+            // Đường ray ở xa thu nhỏ tít tắp thành 1 điểm, ở gần trải rộng tới mép kính lái
+            const trackTopWidth = Math.max(2, w * 0.005);
+            const trackBottomWidth = w * 0.96;
 
+            // Nền đá ballast
             ctx.fillStyle = '#0f172a';
             ctx.beginPath();
-            ctx.moveTo(vanishX - trackTopWidth, horizonY);
-            ctx.lineTo(vanishX + trackTopWidth, horizonY);
-            ctx.lineTo(vanishX + trackBottomWidth, h);
-            ctx.lineTo(vanishX - trackBottomWidth, h);
+            ctx.moveTo(vanishX - trackTopWidth * 2.5, horizonY);
+            ctx.lineTo(vanishX + trackTopWidth * 2.5, horizonY);
+            ctx.lineTo(vanishX + trackBottomWidth * 1.05, h);
+            ctx.lineTo(vanishX - trackBottomWidth * 1.05, h);
             ctx.closePath();
             ctx.fill();
 
-            const moveDelta = motionFactor * 0.028;
+            // Tốc độ cuộn của đường ray và tà-vẹt tăng mạnh
+            const moveDelta = motionFactor * 0.052;
             trackOffset = (trackOffset + moveDelta) % 1;
 
-            // Vẽ các thanh tà-vẹt ngang (Sleepers)
-            const numSleepers = 16;
+            // Vẽ 30 thanh tà-vẹt với luật phối cảnh lũy thừa cao (Math.pow 3.3) tạo chiều sâu hun hút
+            const numSleepers = 30;
             for (let i = 0; i < numSleepers; i++) {
                 let t = ((i / numSleepers) + trackOffset) % 1;
-                let p = Math.pow(t, 2.2);
+                let p = Math.pow(t, 3.3);
                 let y = horizonY + p * (h - horizonY);
-                let halfW = (trackTopWidth + p * (trackBottomWidth - trackTopWidth)) * 0.92;
-                let thickness = Math.max(2, p * 16);
+                let halfW = (trackTopWidth + p * (trackBottomWidth - trackTopWidth)) * 0.94;
+                let thickness = Math.max(1.5, p * 20);
 
-                ctx.fillStyle = `rgba(56, 189, 248, ${0.18 + p * 0.55})`;
+                ctx.fillStyle = `rgba(56, 189, 248, ${0.12 + p * 0.65})`;
                 ctx.fillRect(vanishX - halfW, y, halfW * 2, thickness);
             }
 
-            // Hai thanh ray thép phát sáng xanh cyan
+            // Hệ thống 4 thanh ray thép cao tốc (2 thanh ngoài + 2 thanh dẫn hướng)
             ctx.strokeStyle = '#7dd3fc';
-            ctx.lineWidth = 5;
+            ctx.lineWidth = 6;
             ctx.beginPath();
-            ctx.moveTo(vanishX - trackTopWidth * 0.65, horizonY);
-            ctx.lineTo(vanishX - trackBottomWidth * 0.65, h);
-            ctx.moveTo(vanishX + trackTopWidth * 0.65, horizonY);
-            ctx.lineTo(vanishX + trackBottomWidth * 0.65, h);
+            // Ray chính trái & phải
+            ctx.moveTo(vanishX - trackTopWidth * 0.75, horizonY);
+            ctx.lineTo(vanishX - trackBottomWidth * 0.72, h);
+            ctx.moveTo(vanishX + trackTopWidth * 0.75, horizonY);
+            ctx.lineTo(vanishX + trackBottomWidth * 0.72, h);
             ctx.stroke();
 
-            // Vẽ các cột điện cao tốc hai bên đường ray
+            // Ray dẫn hướng bên trong
+            ctx.strokeStyle = 'rgba(224, 242, 254, 0.6)';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(vanishX - trackTopWidth * 0.4, horizonY);
+            ctx.lineTo(vanishX - trackBottomWidth * 0.42, h);
+            ctx.moveTo(vanishX + trackTopWidth * 0.4, horizonY);
+            ctx.lineTo(vanishX + trackBottomWidth * 0.42, h);
+            ctx.stroke();
+
+            // Cột điện cao tốc hai bên đường ray lao vụt về sau từ tít chân trời
             sidePoles.forEach((poleT, idx) => {
-                sidePoles[idx] = (poleT + moveDelta * 0.85) % 1;
-                let p = Math.pow(sidePoles[idx], 2.1);
+                sidePoles[idx] = (poleT + moveDelta * 1.1) % 1;
+                let p = Math.pow(sidePoles[idx], 3.1);
                 let yBase = horizonY + p * (h - horizonY);
                 let offsetX = (trackTopWidth + p * (trackBottomWidth - trackTopWidth)) * 1.25;
-                let poleH = 25 + p * 260;
-                let poleW = Math.max(2, p * 10);
+                let poleH = Math.max(4, p * 320);
+                let poleW = Math.max(1.5, p * 12);
 
-                ctx.fillStyle = `rgba(186, 230, 253, ${0.25 + p * 0.65})`;
+                ctx.fillStyle = `rgba(186, 230, 253, ${0.15 + p * 0.75})`;
+                // Cột trái
                 ctx.fillRect(vanishX - offsetX - poleW, yBase - poleH, poleW, poleH);
+                // Xà ngang cột trái
+                ctx.fillRect(vanishX - offsetX - poleW, yBase - poleH, poleW * 3.5, Math.max(1, p * 4));
+
+                // Cột phải
                 ctx.fillRect(vanishX + offsetX, yBase - poleH, poleW, poleH);
+                // Xà ngang cột phải
+                ctx.fillRect(vanishX + offsetX - poleW * 2.5, yBase - poleH, poleW * 3.5, Math.max(1, p * 4));
             });
 
-            // 3. CẬP NHẬT & VẼ BỨC TƯỜNG RÀO CẢN PHÍA TRƯỚC
-            if (currentState === STATE.RUNNING) {
-                wallZ -= 0.0046;
-                const progressPercent = Math.min(100, Math.max(0, Math.round((1.05 - wallZ) / 0.91 * 100)));
-                document.getElementById('wall-approach-bar').style.width = `${progressPercent}%`;
-                document.getElementById('radar-status').textContent = `Sắp chạm Rào cản`;
+            // 3. HIỆU ỨNG VỆT GIÓ TỐC ĐỘ XUYÊN TÂM (RADIAL SPEED LINES)
+            if (motionFactor > 0.4) {
+                const numLines = Math.floor(18 + motionFactor * 14);
+                ctx.save();
+                for (let i = 0; i < numLines; i++) {
+                    const angle = (i / numLines) * Math.PI * 2 + Math.sin(Date.now() * 0.008 + i) * 0.2;
+                    const minR = w * 0.12;
+                    const maxR = minR + (w * 0.5 * (motionFactor / 1.4));
+                    
+                    ctx.strokeStyle = '#bae6fd';
+                    ctx.globalAlpha = (0.08 + Math.random() * 0.22) * Math.min(1, motionFactor);
+                    ctx.lineWidth = 1 + Math.random() * 2.5;
 
-                if (wallZ <= 0.14) {
-                    wallZ = 0.14;
+                    ctx.beginPath();
+                    ctx.moveTo(vanishX + Math.cos(angle) * minR, horizonY + Math.sin(angle) * minR * 0.65);
+                    ctx.lineTo(vanishX + Math.cos(angle) * maxR, horizonY + Math.sin(angle) * maxR * 0.65);
+                    ctx.stroke();
+                }
+                ctx.restore();
+            }
+
+            // 4. TIẾP CẬN BỨC TƯỜNG TỪ XA TÍT TẮP
+            if (currentState === STATE.RUNNING) {
+                // Giảm khoảng cách dựa trên vận tốc
+                wallDist -= motionFactor * 0.36;
+                const progressPercent = Math.min(100, Math.max(0, Math.round((100 - wallDist) / 98.8 * 100)));
+                document.getElementById('wall-approach-bar').style.width = `${progressPercent}%`;
+
+                if (wallDist > 60) {
+                    document.getElementById('radar-status').textContent = `Tít xa: Phát hiện rào cản...`;
+                } else if (wallDist > 20) {
+                    document.getElementById('radar-status').textContent = `Đang lao nhanh đến bức tường!`;
+                } else {
+                    document.getElementById('radar-status').textContent = `⚠️ VA CHẠM TRONG GANG TẤC!`;
+                }
+
+                if (wallDist <= 1.2) {
+                    wallDist = 1.2;
                     triggerWallCrash();
                 }
             } else if (currentState === STATE.CRASHED_QUESTION) {
@@ -1303,7 +1401,7 @@
             }
 
             if ((currentState === STATE.RUNNING || currentState === STATE.CRASHED_QUESTION) && currentBarrierIndex < GAME_DATA.barriers.length) {
-                drawBarrierWall3D(vanishX, horizonY, w, h, wallZ);
+                drawBarrierWallByDistance(vanishX, horizonY, w, h, wallDist);
             }
 
             // CHỈ KHI hoàn thành câu hỏi thứ 4 thì vầng sáng rực rỡ và chữ "ƯỚC MƠ" mới xuất hiện
@@ -1312,14 +1410,14 @@
                 drawDreamHorizonRays(vanishX, horizonY, w, h, dreamGlowProgress);
             }
 
-            // 4. VẼ MẢNH VỠ BỨC TƯỜNG (DEBRIS PARTICLES)
+            // 5. MẢNH VỠ BỨC TƯỜNG (DEBRIS PARTICLES)
             for (let i = debrisParticles.length - 1; i >= 0; i--) {
                 const p = debrisParticles[i];
                 p.x += p.vx;
                 p.y += p.vy;
-                p.vy += 0.38;
+                p.vy += 0.42;
                 p.rot += p.vRot;
-                p.alpha -= 0.014;
+                p.alpha -= 0.016;
 
                 if (p.alpha <= 0) {
                     debrisParticles.splice(i, 1);
@@ -1338,22 +1436,27 @@
                 ctx.restore();
             }
 
+            ctx.restore();
             requestAnimationFrame(renderCockpitScene);
         }
 
-        // Hàm vẽ Bức tường Rào cản 3D chắn ngang đường ray
-        function drawBarrierWall3D(vanishX, horizonY, w, h, z) {
-            const scale = Math.pow(1.12 - z, 2.35);
-            const wallW = Math.max(60, w * 0.78 * scale);
-            const wallH = Math.max(40, h * 0.68 * scale);
-            const baseY = horizonY + scale * (h - horizonY) * 0.82;
+        // Vẽ bức tường với tỉ lệ chuyển đổi từ khoảng cách xa (bắt đầu từ 1 chấm nhỏ)
+        function drawBarrierWallByDistance(vanishX, horizonY, w, h, distance) {
+            // Biến đổi khoảng cách 100 -> 1.2 thành tỉ lệ phóng đại phối cảnh mượt mà
+            const norm = Math.max(0, (100 - distance) / 98.8);
+            const scale = Math.pow(norm, 3.6); // Khởi đầu nhỏ tít tắp, sau đó gia tốc phóng to nhanh khi đến gần
+
+            const wallW = Math.max(12, w * 0.88 * scale);
+            const wallH = Math.max(8, h * 0.72 * scale);
+            const baseY = horizonY + scale * (h - horizonY) * 0.84;
             const leftX = vanishX - wallW / 2;
             const topY = baseY - wallH;
 
             ctx.save();
 
+            // Bóng đổ
             ctx.fillStyle = 'rgba(2, 6, 23, 0.55)';
-            ctx.fillRect(leftX - 10, baseY - 8, wallW + 20, 22 * scale);
+            ctx.fillRect(leftX - 8, baseY - 6, wallW + 16, Math.max(4, 20 * scale));
 
             const wallGrad = ctx.createLinearGradient(leftX, topY, leftX, baseY);
             if (wallRedFlash > 0) {
@@ -1367,42 +1470,44 @@
             }
             ctx.fillStyle = wallGrad;
             ctx.strokeStyle = '#38bdf8';
-            ctx.lineWidth = Math.max(2, 5 * scale);
+            ctx.lineWidth = Math.max(1.5, 5 * scale);
             ctx.fillRect(leftX, topY, wallW, wallH);
             ctx.strokeRect(leftX, topY, wallW, wallH);
 
-            // Vẽ mạch gạch trên bức tường
-            const rows = 5;
-            const cols = 4;
-            const rowH = wallH / rows;
-            const colW = wallW / cols;
-            ctx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
-            ctx.lineWidth = Math.max(1, 2 * scale);
+            // Mạch gạch
+            if (scale > 0.08) {
+                const rows = 5;
+                const cols = 4;
+                const rowH = wallH / rows;
+                const colW = wallW / cols;
+                ctx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
+                ctx.lineWidth = Math.max(1, 2 * scale);
 
-            for (let r = 1; r < rows; r++) {
-                const ry = topY + r * rowH;
-                ctx.beginPath();
-                ctx.moveTo(leftX, ry);
-                ctx.lineTo(leftX + wallW, ry);
-                ctx.stroke();
-            }
-            for (let r = 0; r < rows; r++) {
-                const shift = (r % 2) * (colW * 0.5);
-                for (let c = 1; c < cols; c++) {
-                    const cx = leftX + c * colW - shift;
-                    if (cx > leftX && cx < leftX + wallW) {
-                        ctx.beginPath();
-                        ctx.moveTo(cx, topY + r * rowH);
-                        ctx.lineTo(cx, topY + (r + 1) * rowH);
-                        ctx.stroke();
+                for (let r = 1; r < rows; r++) {
+                    const ry = topY + r * rowH;
+                    ctx.beginPath();
+                    ctx.moveTo(leftX, ry);
+                    ctx.lineTo(leftX + wallW, ry);
+                    ctx.stroke();
+                }
+                for (let r = 0; r < rows; r++) {
+                    const shift = (r % 2) * (colW * 0.5);
+                    for (let c = 1; c < cols; c++) {
+                        const cx = leftX + c * colW - shift;
+                        if (cx > leftX && cx < leftX + wallW) {
+                            ctx.beginPath();
+                            ctx.moveTo(cx, topY + r * rowH);
+                            ctx.lineTo(cx, topY + (r + 1) * rowH);
+                            ctx.stroke();
+                        }
                     }
                 }
-            }
 
-            const stripeH = Math.max(4, wallH * 0.08);
-            ctx.fillStyle = '#f59e0b';
-            ctx.fillRect(leftX, topY, wallW, stripeH);
-            ctx.fillRect(leftX, baseY - stripeH, wallW, stripeH);
+                const stripeH = Math.max(3, wallH * 0.08);
+                ctx.fillStyle = '#f59e0b';
+                ctx.fillRect(leftX, topY, wallW, stripeH);
+                ctx.fillRect(leftX, baseY - stripeH, wallW, stripeH);
+            }
 
             if (wallCrackedLevel >= 1) {
                 ctx.strokeStyle = '#38bdf8';
@@ -1420,8 +1525,8 @@
             }
 
             const barrier = GAME_DATA.barriers[currentBarrierIndex];
-            if (barrier && scale > 0.12) {
-                ctx.fillStyle = 'rgba(2, 132, 199, 0.92)';
+            if (barrier && scale > 0.18) {
+                ctx.fillStyle = 'rgba(2, 132, 199, 0.94)';
                 const bannerW = wallW * 0.86;
                 const bannerH = wallH * 0.34;
                 const bx = vanishX - bannerW / 2;
@@ -1449,53 +1554,47 @@
         function drawDreamHorizonRays(vanishX, horizonY, w, h, progress) {
             ctx.save();
 
-            // Các tia sáng mặt trời (God-Rays) quay nhẹ quanh tâm chân trời
-            const numRays = 18;
-            const rayAngle = (Date.now() * 0.001) % (Math.PI * 2);
+            const numRays = 20;
+            const rayAngle = (Date.now() * 0.0014) % (Math.PI * 2);
             for (let i = 0; i < numRays; i++) {
                 const angle = rayAngle + (i * Math.PI * 2) / numRays;
-                ctx.fillStyle = `rgba(254, 240, 138, ${0.12 * progress})`;
+                ctx.fillStyle = `rgba(254, 240, 138, ${0.14 * progress})`;
                 ctx.beginPath();
                 ctx.moveTo(vanishX, horizonY);
-                ctx.arc(vanishX, horizonY, w * 0.9, angle, angle + Math.PI / numRays * 0.7);
+                ctx.arc(vanishX, horizonY, w * 0.95, angle, angle + Math.PI / numRays * 0.75);
                 ctx.closePath();
                 ctx.fill();
             }
 
-            // Quầng sáng cực mạnh tại đường chân trời
-            const sunGlow = ctx.createRadialGradient(vanishX, horizonY, 5, vanishX, horizonY, w * 0.45 * progress);
+            const sunGlow = ctx.createRadialGradient(vanishX, horizonY, 5, vanishX, horizonY, w * 0.48 * progress);
             sunGlow.addColorStop(0, `rgba(255, 255, 255, ${0.98 * progress})`);
-            sunGlow.addColorStop(0.3, `rgba(254, 240, 138, ${0.85 * progress})`);
-            sunGlow.addColorStop(0.7, `rgba(56, 189, 248, ${0.5 * progress})`);
+            sunGlow.addColorStop(0.3, `rgba(254, 240, 138, ${0.88 * progress})`);
+            sunGlow.addColorStop(0.7, `rgba(56, 189, 248, ${0.55 * progress})`);
             sunGlow.addColorStop(1, 'rgba(56, 189, 248, 0)');
             ctx.fillStyle = sunGlow;
             ctx.fillRect(0, 0, w, h);
 
-            // Dòng chữ "ƯỚC MƠ" lung linh to dần khi tàu tăng tốc lao đến
-            const textScale = 1 + progress * 1.6;
-            const fontSize = Math.floor(Math.max(26, 36 * textScale));
+            const textScale = 1 + progress * 1.8;
+            const fontSize = Math.floor(Math.max(26, 38 * textScale));
             
             ctx.textAlign = 'center';
             ctx.textBaseline = 'bottom';
             ctx.font = `900 ${fontSize}px "Baloo 2", cursive`;
 
-            // Ánh hào quang bao phủ chữ
             ctx.shadowColor = '#fef08a';
-            ctx.shadowBlur = 35 * progress;
+            ctx.shadowBlur = 40 * progress;
 
-            // Viền xanh đậm và ruột chữ vàng trắng rực rỡ
             ctx.strokeStyle = '#0284c7';
-            ctx.lineWidth = Math.max(3, 6 * textScale * 0.5);
+            ctx.lineWidth = Math.max(3, 7 * textScale * 0.5);
             ctx.strokeText('✨ ƯỚC MƠ ✨', vanishX, horizonY - 12);
 
             ctx.fillStyle = '#ffffff';
             ctx.fillText('✨ ƯỚC MƠ ✨', vanishX, horizonY - 12);
 
-            // Phụ đề nhỏ dẫn lối bên dưới
             ctx.shadowBlur = 15;
             ctx.font = `800 ${Math.floor(fontSize * 0.38)}px "Plus Jakarta Sans", sans-serif`;
             ctx.fillStyle = '#fef08a';
-            ctx.fillText('ĐÍCH ĐẾN ĐÃ MỞ RA!', vanishX, horizonY + 22);
+            ctx.fillText('ĐÍCH ĐẾN ĐÃ MỞ RA!', vanishX, horizonY + 24);
 
             ctx.restore();
         }
@@ -1533,7 +1632,6 @@
                 return;
             }
 
-            // Phím 1, 2, 3, 4 hoặc A, B, C, D để chọn nhanh đáp án khi đang hiện câu hỏi
             if (currentState === STATE.CRASHED_QUESTION) {
                 const keyMap = {
                     '1': 0, '2': 1, '3': 2, '4': 3,
