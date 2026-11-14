@@ -508,13 +508,17 @@
       will-change: transform, opacity; transition: transform 1.15s cubic-bezier(0.55, 0.05, 0.85, 0.35), opacity 1.1s ease;
     }
 
-    /* Cây tre mọc tuần tự (Slide 14) */
+    /* Cây tre mọc từ măng -> mọc rễ -> lớn lên thành cây tre (Slide 14) */
+    .bam-seq .b-shoot { transform-box: fill-box; transform-origin: 50% 100%; transform: scale(0); opacity: 0; }
     .bam-seq .bamboo-root-line { stroke-dasharray: 100; stroke-dashoffset: 100; }
     .bam-seq .b-seg { transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(0); }
     .bam-seq .b-leaf { transform-box: fill-box; transform-origin: 0% 100%; transform: scale(0); }
-    .bam-seq.go .bamboo-root-line { animation: rootGrowSeq 2.1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-    .bam-seq.go .b-seg { animation: segShootUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards; animation-delay: calc(2.15s + var(--k) * 0.25s); }
-    .bam-seq.go .b-leaf { animation: leafPopOut 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; animation-delay: calc(3.05s + var(--k) * 0.18s); }
+    .bam-seq.go .b-shoot { animation: shootEmerge 0.75s cubic-bezier(0.34, 1.45, 0.64, 1) forwards, shootSheathFade 0.9s ease 2.3s forwards; }
+    .bam-seq.go .bamboo-root-line { animation: rootGrowSeq 1.85s cubic-bezier(0.22, 1, 0.36, 1) 0.65s forwards; }
+    .bam-seq.go .b-seg { animation: segShootUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards; animation-delay: calc(2.35s + var(--k) * 0.24s); }
+    .bam-seq.go .b-leaf { animation: leafPopOut 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; animation-delay: calc(3.25s + var(--k) * 0.16s); }
+    @keyframes shootEmerge { to { transform: scale(1); opacity: 1; } }
+    @keyframes shootSheathFade { to { opacity: 0.35; transform: scale(0.88, 0.7); } }
     @keyframes rootGrowSeq { to { stroke-dashoffset: 0; } }
     @keyframes segShootUp { to { transform: scaleY(1); } }
     @keyframes leafPopOut { to { transform: scale(1); } }
@@ -1166,7 +1170,7 @@
     }
     .s12-card-slot {
       position: relative;
-      min-height: 410px;
+      min-height: 475px;
       height: 100%;
       cursor: pointer;
       perspective: 1200px;
@@ -1223,10 +1227,27 @@
       position: relative;
       width: 100%;
       height: 100%;
-      min-height: 410px;
+      min-height: 475px;
       transform-style: preserve-3d;
       transition: transform 0.85s cubic-bezier(0.34, 1.35, 0.64, 1), opacity 0.45s ease;
       opacity: 0;
+    }
+    .s12-face .cinema-photo-wrap {
+      height: 195px;
+      min-height: 195px;
+      flex-shrink: 0;
+    }
+    .s12-face .cinema-card-body {
+      padding: 0.9rem 1.1rem;
+      overflow-y: auto;
+    }
+    .s12-face .card-title-lg {
+      font-size: 1.22rem;
+      margin-bottom: 0.35rem;
+    }
+    .s12-face .card-content-p {
+      font-size: 0.96rem;
+      line-height: 1.5;
     }
     .s12-card-slot.revealed-card .s12-flip-inner {
       opacity: 1;
@@ -1258,7 +1279,8 @@
     }
     .s12-photo-hero {
       width: 100%;
-      height: 295px;
+      height: 365px;
+      flex-shrink: 0;
       border-radius: 12px;
       overflow: hidden;
       background: #061226;
@@ -1291,6 +1313,27 @@
       .s12-game-grid { grid-template-columns: 1fr; }
       .s12-card-slot, .s12-flip-inner { min-height: 360px; }
     }
+
+  
+    /* SLIDE 13: HAI CHIẾC VÍ HOẠT ẢNH SVG */
+    .wl-stage{position:relative;width:100%;height:100%;min-height:280px;max-height:320px;margin:0 auto;aspect-ratio:420/270;display:flex;align-items:center;justify-content:center;border-radius:22px;background:radial-gradient(circle at 50% 50%,rgba(14,38,76,.72) 0%,rgba(8,22,48,.35) 68%,transparent 100%);border:1px solid rgba(125,211,252,.28);box-shadow:inset 0 0 40px rgba(56,189,248,.08);overflow:hidden;cursor:pointer}
+    .wl-stage svg{width:100%;height:100%}
+    .wl-flap{transform-box:fill-box;transform-origin:50% 0}
+    .wl-on .wl-flap{animation:wlFlap 1.1s cubic-bezier(.34,1.3,.64,1) .7s forwards}
+    @keyframes wlFlap{to{transform:scaleY(-.5)}}
+    .wl-item{opacity:0;transform:translateY(46px)}
+    .wl-on .wl-item{animation:wlRise .9s cubic-bezier(.22,1,.36,1) forwards;animation-delay:calc(1.1s + var(--k)*.15s)}
+    @keyframes wlRise{to{opacity:1;transform:none}}
+    .wl-fall{opacity:0}
+    .wl-on .wl-fall{animation:wlFall 10s ease-in infinite;animation-delay:calc(1.8s + var(--k)*.9s)}
+    @keyframes wlFall{0%{opacity:0;transform:translateY(-100px) rotate(var(--r))}6%{opacity:1}19%{transform:translateY(7px) rotate(0)}23%{transform:translateY(0)}80%{opacity:1;transform:translateY(0)}92%,100%{opacity:0;transform:translateY(8px)}}
+    .wl-glow{transform-box:fill-box;transform-origin:center;animation:wlGlow 2.6s ease-in-out infinite alternate}
+    @keyframes wlGlow{to{opacity:.5;transform:scale(1.12)}}
+    .wl-sp{transform-box:fill-box;transform-origin:center;animation:wlTw 1.8s ease-in-out infinite;animation-delay:calc(var(--k)*.4s)}
+    @keyframes wlTw{50%{opacity:.1;transform:scale(.3)}}
+    .wl-coin{opacity:0}
+    .wl-on .wl-coin{animation:wlCoin 3s ease-in infinite;animation-delay:calc(var(--k)*.9s + 1.6s)}
+    @keyframes wlCoin{0%{transform:translateY(-34px);opacity:0}20%{opacity:1}70%{transform:translateY(8px);opacity:1}100%{transform:translateY(12px);opacity:0}}
 
   </style>
   <script>
@@ -1890,7 +1933,7 @@
               <div class="s12-clue-box">
                 <div class="badge-sub">GỢI Ý · VƯỢT LÊN ĐỊNH KIẾN XÃ HỘI</div>
                 <div class="card-title-lg" style="color: var(--accent-gold);">Nhân vật bí ẩn 01</div>
-                <div class="card-content-p">Lớn lên ở buôn làng nghèo, nơi hủ tục tảo hôn từng vây bủa số phận bao cô gái. Dám bước ra khỏi khuôn mẫu định sẵn, cô kiên định học tập, tự viết lại đời mình để trở thành Hoa hậu Hoàn vũ Việt Nam và ghi tên vào <span class="hl-underline now">Top <span class="count-num" data-count="5">0</span> Miss Universe</span>.</div>
+                <div class="card-content-p">• Người dân tộc Ê Đê, lớn lên ở buôn làng tại Đắk Lắk.<br>• Người dân tộc thiểu số đầu tiên đăng quang <strong>Hoa hậu Hoàn vũ Việt Nam 2017</strong> với mái tóc ngắn cá tính.<br>• Lọt <span class="hl-underline now">Top <span class="count-num" data-count="5">0</span> Miss Universe 2018</span> cùng trang phục <em>“Bánh mì”</em> và nhận giải <em>“Thanh niên sống đẹp 2021”</em>.</div>
               </div>
             </div>
             <div class="s12-face s12-face-back">
@@ -1914,7 +1957,7 @@
               <div class="s12-clue-box">
                 <div class="badge-sub">GỢI Ý · BỀN BỈ TRƯỚC NGHỊCH CẢNH</div>
                 <div class="card-title-lg" style="color: var(--accent-gold);">Nhân vật bí ẩn 02</div>
-                <div class="card-content-p">Từng là bà mẹ đơn thân chật vật bên bờ vực suy sụp; bản thảo <em>Harry Potter</em> bị <span class="hl-rose"><span class="count-num" data-count="12">0</span> nhà xuất bản từ chối liên tiếp</span>. Bà không có tấm vé đảm bảo thành công, nhưng dứt khoát không để <span class="count-num" data-count="12">0</span> lần khước từ ấy thành dấu chấm hết cho ngòi bút.</div>
+                <div class="card-content-p">• Nữ nhà văn người Anh (sinh năm 1965), từng là bà mẹ đơn thân viết bản thảo tại quán cà phê.<br>• Tác phẩm đầu tay từng bị <span class="hl-rose"><span class="count-num" data-count="12">0</span> nhà xuất bản từ chối</span> trước khi được in.<br>• Tác giả bộ truyện giả tưởng <span class="hl-underline now">Harry Potter</span> (7 tập), dịch ra hơn 65 ngôn ngữ.</div>
               </div>
             </div>
             <div class="s12-face s12-face-back">
@@ -1936,12 +1979,12 @@
           <div class="s12-flip-inner">
             <div class="s12-face s12-face-front" style="border-color: var(--accent-gold);">
               <div class="cinema-photo-wrap">
-                <img src="doi-thuong.jpg" data-base="doi-thuong" data-fallback-url="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="Người trẻ quanh ta">
+                <img style="object-position: center center;" src="doi-thuong.jpg" data-base="doi-thuong" data-fallback-url="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="Người trẻ quanh ta">
               </div>
               <div class="cinema-card-body">
                 <div class="badge-sub" style="background: var(--accent-gold); color: #0b1f3f;">QUANH TA</div>
                 <div class="card-title-lg">Những bước chân thầm lặng</div>
-                <div class="card-content-p" style="font-size: 1.05rem;">Ta không cần ngước nhìn những tượng đài xa vời. Hãy nhìn người trẻ bên cạnh: học sinh từng run rẩy nay tự tin bảo vệ đề tài trước hội đồng; bạn trẻ dám tắt màn hình giải trí để thức khuya học ngoại ngữ. <span class="hl-marker">“Dám bước ra”</span> bắt đầu từ chính những khoảnh khắc đời thường ấy: dám chọn sự khó chịu hôm nay để đổi lấy vững vàng ngày mai.</div>
+                <div class="card-content-p">Ta không cần ngước nhìn những tượng đài xa vời. Hãy nhìn người trẻ bên cạnh: học sinh từng run rẩy nay tự tin bảo vệ đề tài trước hội đồng; bạn trẻ dám tắt màn hình giải trí để thức khuya học ngoại ngữ. <span class="hl-marker">“Dám bước ra”</span> bắt đầu từ chính những khoảnh khắc đời thường ấy: dám chọn sự khó chịu hôm nay để đổi lấy vững vàng ngày mai.</div>
               </div>
             </div>
           </div>
@@ -1953,7 +1996,7 @@
     <div class="slide" data-fx="fx-13" data-section="PHẦN VI" data-title="Rào cản 1: Áp lực sinh kế">
       <div class="part-capsule step-item">VI. ĐỐI DIỆN VÀ PHẢN BIỆN THỰC TẾ</div>
       <h2 class="slide-title">Rào cản 1: Áp lực sinh kế và gánh nặng cơm áo gạo tiền</h2>
-      <div class="slide-13-grid" style="display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr) minmax(0, 1fr); gap: 1rem; align-items: stretch; margin-top: 0.4rem;">
+      <div class="slide-13-grid" style="display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.26fr) minmax(0, 0.92fr); gap: 1rem; align-items: stretch; margin-top: 0.4rem;">
         <div class="flip-qa-stage step-item" id="flipCardRaoCan1" onclick="event.stopPropagation(); this.classList.toggle('flipped');">
           <div class="flip-qa-inner">
             <div class="flip-qa-face flip-qa-front">
@@ -1977,25 +2020,51 @@
           </div>
         </div>
 
-        <div class="visual-stage" style="height: auto; min-height: 300px;">
-          <div class="dual-wallet-3d">
-            <div class="w-card w-survival">
-              <div style="display:flex;justify-content:space-between;align-items:center;gap:0.4rem;flex-wrap:wrap;">
-                <span style="font-size: 0.74rem; font-weight: 800; color: #7dd3fc; letter-spacing: 0.06em;">VÍ 01 · SINH TỒN</span>
-                <span style="font-size: 0.76rem; color: #38bdf8; font-weight: 800; white-space: nowrap;">● ỔN ĐỊNH</span>
-              </div>
-              <div style="font-size: 1.08rem; font-weight: 800; color: #fff; line-height: 1.3;">Công việc ổn định trước mắt</div>
-              <div style="font-size: 0.86rem; color: #cbd5e1; line-height: 1.38;">Đảm bảo hóa đơn và trách nhiệm sinh nhai</div>
-            </div>
-            <div class="w-card w-dream">
-              <div style="display:flex;justify-content:space-between;align-items:center;gap:0.4rem;flex-wrap:wrap;">
-                <span style="font-size: 0.74rem; font-weight: 800; color: #091933; letter-spacing: 0.06em;">VÍ 02 · KHÁT VỌNG</span>
-                <span style="font-size: 0.76rem; color: #78350f; font-weight: 900; white-space: nowrap;">★ BỨT PHÁ</span>
-              </div>
-              <div style="font-size: 1.08rem; font-weight: 800; color: #091933; line-height: 1.3;">Dự án tương lai dài hạn</div>
-              <div style="font-size: 0.86rem; color: #1e293b; font-weight: 600; line-height: 1.38;">Tích lũy từng giờ và nguồn lực sau tan làm</div>
-            </div>
-          </div>
+        <div class="wl-root wl-stage" id="wlRoot" onclick="event.stopPropagation(); if (typeof window.walletsReplay === 'function') window.walletsReplay();" title="Nhấp để phát lại hiệu ứng hai chiếc ví">
+          <svg viewBox="0 0 420 270" style="width:100%;height:100%">
+            <defs>
+              <linearGradient id="wlB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a4fa8"/><stop offset=".55" stop-color="#16306e"/><stop offset="1" stop-color="#0a1633"/></linearGradient>
+              <linearGradient id="wlB2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a62c4"/><stop offset="1" stop-color="#14295e"/></linearGradient>
+              <linearGradient id="wlG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset=".55" stop-color="#d97706"/><stop offset="1" stop-color="#7c3a0a"/></linearGradient>
+              <linearGradient id="wlG2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fde68a"/><stop offset="1" stop-color="#c2710c"/></linearGradient>
+              <linearGradient id="wlBill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#86efac"/><stop offset="1" stop-color="#15803d"/></linearGradient>
+              <radialGradient id="wlRay"><stop offset="0" stop-color="#fef08a" stop-opacity=".8"/><stop offset="1" stop-color="#fbbf24" stop-opacity="0"/></radialGradient>
+              <radialGradient id="wlSh"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+            </defs>
+            <!-- VÍ 1 -->
+            <g>
+              <ellipse cx="107" cy="236" rx="92" ry="9" fill="url(#wlSh)"/>
+              <rect x="20" y="120" width="175" height="112" rx="14" fill="#08122b"/>
+              <g class="wl-item" style="--k:0"><g transform="rotate(-7 105 110)"><rect x="46" y="84" width="118" height="62" rx="5" fill="url(#wlBill)" stroke="#bbf7d0" stroke-width="1.2"/><rect x="53" y="91" width="104" height="48" rx="3" fill="none" stroke="rgba(255,255,255,.5)" stroke-dasharray="3 2"/><circle cx="105" cy="115" r="14" fill="rgba(255,255,255,.28)"/><text x="105" y="119" font-size="11" font-weight="800" fill="#14532d" text-anchor="middle">500K</text></g></g>
+              <g class="wl-item" style="--k:1"><g transform="rotate(5 112 100)"><rect x="54" y="72" width="118" height="62" rx="5" fill="url(#wlBill)" stroke="#bbf7d0" stroke-width="1.2"/><rect x="61" y="79" width="104" height="48" rx="3" fill="none" stroke="rgba(255,255,255,.5)" stroke-dasharray="3 2"/><circle cx="113" cy="103" r="14" fill="rgba(255,255,255,.28)"/><text x="113" y="107" font-size="11" font-weight="800" fill="#14532d" text-anchor="middle">200K</text></g></g>
+              <rect x="20" y="140" width="175" height="92" rx="14" fill="url(#wlB)" stroke="#6f8fe0" stroke-width="1.2"/>
+              <path d="M30 142H185" stroke="rgba(255,255,255,.35)" stroke-width="1.4"/>
+              <rect x="29" y="150" width="157" height="74" rx="9" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.2" stroke-dasharray="4 3"/>
+              <rect x="38" y="190" width="54" height="24" rx="4" fill="#0b1a42" stroke="#6f8fe0" stroke-width=".8"/><rect x="44" y="196" width="18" height="3" fill="#fde047"/><rect x="44" y="203" width="30" height="2.4" fill="rgba(255,255,255,.4)"/>
+              <g class="wl-flap"><path d="M20 140H195V172Q107 206 20 172Z" fill="url(#wlB2)" stroke="#8aa8ee" stroke-width="1.2"/><path d="M30 148H185V167Q107 194 30 167Z" fill="none" stroke="rgba(255,255,255,.45)" stroke-dasharray="4 3"/><circle cx="107" cy="184" r="8" fill="url(#wlG2)" stroke="#7c3a0a"/><circle cx="107" cy="184" r="3" fill="#7c3a0a"/></g>
+              <g fill="#fcd34d" stroke="#b45309"><g class="wl-coin" style="--k:0"><circle cx="70" cy="56" r="8"/><circle cx="70" cy="56" r="4.5" fill="none"/></g><g class="wl-coin" style="--k:1"><circle cx="140" cy="46" r="8"/><circle cx="140" cy="46" r="4.5" fill="none"/></g></g>
+            </g>
+            <text x="202" y="188" font-size="26" font-weight="800" fill="#fde047" text-anchor="middle" opacity=".9">+</text>
+            <!-- VÍ 2: ƯỚC MƠ -->
+            <g transform="translate(205 0)">
+              <ellipse cx="107" cy="236" rx="92" ry="9" fill="url(#wlSh)"/>
+              <circle class="wl-glow" cx="107" cy="92" r="88" fill="url(#wlRay)"/>
+              <rect x="20" y="120" width="175" height="112" rx="14" fill="#2a1503"/>
+              <g class="wl-fall" style="--k:0;--r:-25deg"><g transform="translate(44 100)"><path d="M-12 2V13L0 18L12 13V2L0 7Z" fill="#1e293b" stroke="#94a3b8" stroke-width=".8"/><path d="M-22-4L0-15L22-4L0 7Z" fill="#0f172a" stroke="#cbd5e1" stroke-width="1"/><path d="M20-4V10" stroke="#fcd34d" stroke-width="1.6"/><circle cx="20" cy="12" r="2.4" fill="#fcd34d"/></g></g>
+              <g class="wl-fall" style="--k:1;--r:30deg"><g transform="translate(76 100)" fill="none" stroke-linecap="round"><path d="M-10-14V-2A10 10 0 0 0 10-2V-14" stroke="#e2e8f0" stroke-width="3"/><circle cx="-10" cy="-15" r="2.4" fill="#94a3b8" stroke="none"/><circle cx="10" cy="-15" r="2.4" fill="#94a3b8" stroke="none"/><path d="M0 8V14A7 7 0 1 0 14 14" stroke="#e2e8f0" stroke-width="3"/><circle cx="14" cy="9" r="5.5" fill="#cbd5e1" stroke="#64748b" stroke-width="1.4"/></g></g>
+              <g class="wl-fall" style="--k:2;--r:-18deg"><g transform="translate(108 100)"><circle cx="-9" cy="-6" r="9" fill="#fff"/><circle cx="0" cy="-12" r="10" fill="#fff"/><circle cx="9" cy="-6" r="9" fill="#fff"/><rect x="-12" y="0" width="24" height="12" rx="2" fill="#f8fafc" stroke="#cbd5e1"/><path d="M-5-2V10M0-2V10M5-2V10" stroke="#e2e8f0"/></g></g>
+              <g class="wl-fall" style="--k:3;--r:22deg"><g transform="translate(140 100)"><path d="M-17 8A17 17 0 0 1 17 8Z" fill="#fbbf24" stroke="#b45309"/><rect x="-21" y="8" width="42" height="4.5" rx="2" fill="#f59e0b" stroke="#b45309" stroke-width=".8"/><rect x="-3" y="-11" width="6" height="19" fill="#f59e0b"/><path d="M-12 0Q-8-8 -3-9" stroke="rgba(255,255,255,.7)" stroke-width="1.6" fill="none"/></g></g>
+              <g class="wl-fall" style="--k:4;--r:-30deg"><g transform="translate(172 100)"><path d="M-17 0C-17-14 8-18 17-6C23 4 10 8 6 6C0 4-2 12-8 12C-15 12-17 6-17 0Z" fill="#d6a35c" stroke="#8a5a1c"/><circle cx="-8" cy="-5" r="3" fill="#ef4444"/><circle cx="0" cy="-8" r="3" fill="#3b82f6"/><circle cx="8" cy="-4" r="3" fill="#22c55e"/><circle cx="-9" cy="4" r="2.6" fill="#fde047"/><path d="M10 12L22-12" stroke="#7c3a0a" stroke-width="2.4" stroke-linecap="round"/><path d="M21-11L24-17" stroke="#ef4444" stroke-width="3.2" stroke-linecap="round"/></g></g>
+              <g class="wl-fall" style="--k:5;--r:15deg"><g transform="translate(108 96) rotate(-8)"><rect x="-27" y="-14" width="54" height="28" rx="4" fill="#fff7ed" stroke="#f59e0b"/><circle cx="-27" cy="0" r="4" fill="#2a1503"/><circle cx="27" cy="0" r="4" fill="#2a1503"/><path d="M8-14V14" stroke="#f59e0b" stroke-dasharray="3 2"/><text x="-16" y="-3" font-size="6" font-weight="800" fill="#c2410c">BOARDING</text><rect x="-16" y="3" width="18" height="2.6" fill="#9ca3af"/><text x="17" y="4" font-size="12" text-anchor="middle" fill="#c2410c">✈</text></g></g>
+              <rect x="20" y="140" width="175" height="92" rx="14" fill="url(#wlG)" stroke="#fde68a" stroke-width="1.2"/>
+              <path d="M30 142H185" stroke="rgba(255,255,255,.5)" stroke-width="1.4"/>
+              <rect x="29" y="150" width="157" height="74" rx="9" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.2" stroke-dasharray="4 3"/>
+              <text x="107" y="214" font-size="10" font-weight="800" fill="rgba(80,36,4,.85)" text-anchor="middle" letter-spacing="3">DÁM ƯỚC MƠ</text>
+              <g class="wl-flap"><path d="M20 140H195V172Q107 206 20 172Z" fill="url(#wlG2)" stroke="#fff3b0" stroke-width="1.2"/><path d="M30 148H185V167Q107 194 30 167Z" fill="none" stroke="rgba(120,53,15,.5)" stroke-dasharray="4 3"/><circle cx="107" cy="184" r="8" fill="#14295e" stroke="#fde68a"/><circle cx="107" cy="184" r="3" fill="#fde047"/></g>
+              <g fill="#fff"><path class="wl-sp" style="--k:0" d="M30 40l3 8 8 3-8 3-3 8-3-8-8-3 8-3Z"/><path class="wl-sp" style="--k:1" d="M184 36l3 8 8 3-8 3-3 8-3-8-8-3 8-3Z"/><path class="wl-sp" style="--k:2" d="M108 8l2 6 6 2-6 2-2 6-2-6-6-2 6-2Z"/></g>
+            </g>
+            <g font-size="10" font-weight="800" text-anchor="middle" letter-spacing="1.5"><text x="107" y="262" fill="#7dd3fc">VÍ 01 · SINH NHAI</text><text x="312" y="262" fill="#fde047">VÍ 02 · ƯỚC MƠ</text></g>
+          </svg>
         </div>
 
         <div class="neo-card conic-glow-card step-item">
@@ -2029,17 +2098,28 @@
             <rect x="10" y="106" width="300" height="72" rx="8" fill="#0d1b33" stroke="rgba(52,211,153,0.3)"/>
             <line x1="10" y1="106" x2="310" y2="106" stroke="#34d399" stroke-width="2.2"/>
             <text x="20" y="124" fill="#94a3b8" font-size="9.5" font-weight="800">4 NĂM CẮM RỄ DƯỚI ĐẤT</text>
-            <g stroke="#34d399" stroke-width="2.4" fill="none" stroke-linecap="round">
+            <!-- Rễ măng mọc sâu xuống đất -->
+            <g stroke="#34d399" stroke-width="2.3" fill="none" stroke-linecap="round">
               <path class="bamboo-root-line" pathLength="100" d="M160 106 Q 134 138, 96 172"/>
+              <path class="bamboo-root-line" pathLength="100" d="M142 132 Q 124 146, 114 168"/>
               <path class="bamboo-root-line" pathLength="100" d="M160 106 Q 158 144, 160 176"/>
               <path class="bamboo-root-line" pathLength="100" d="M160 106 Q 188 138, 224 172"/>
+              <path class="bamboo-root-line" pathLength="100" d="M178 132 Q 196 146, 206 168"/>
             </g>
+            <!-- Mầm măng nhú lên trước khi vươn thành cây tre -->
+            <g class="b-shoot">
+              <path d="M146 106 Q152 80 160 66 Q168 80 174 106 Z" fill="#a3e635" stroke="#fde047" stroke-width="1.5"/>
+              <path d="M149 106 Q156 88 160 78 Q164 88 171 106 Z" fill="#65a30d" opacity="0.85"/>
+              <path d="M153 95 Q160 88 167 95" fill="none" stroke="#fef08a" stroke-width="1.2"/>
+            </g>
+            <!-- Thân tre lớn dần từ măng lên -->
             <g fill="#10b981">
               <rect class="b-seg" style="--k:0" x="150" y="76" width="20" height="29" rx="3"/>
               <rect class="b-seg" style="--k:1" x="151" y="47" width="18" height="28" rx="3"/>
               <rect class="b-seg" style="--k:2" x="152" y="19" width="16" height="27" rx="3"/>
               <rect class="b-seg" style="--k:3" x="153" y="-4" width="14" height="22" rx="3"/>
             </g>
+            <!-- Lá tre bung nở -->
             <g stroke="#6ee7b7" stroke-width="2.2" fill="none" stroke-linecap="round">
               <path class="b-leaf" style="--k:0" d="M150 64 Q 112 52, 92 64"/>
               <path class="b-leaf" style="--k:1" d="M168 38 Q 208 26, 230 38"/>
@@ -2104,6 +2184,7 @@
     <!-- SLIDE 15 (fx-15): SÂN KHẤU CÓ BẢNG CHỮ — KẾT HỢP NỘI DUNG SLIDE 15 & 16 -->
     <div class="slide" id="finaleTheaterSlide" data-fx="fx-15" data-section="PHẦN VII" data-title="Lời kết: Bước lên sân khấu cuộc đời">
       <div id="stageViewport" class="theater-stage">
+        <audio id="applauseAudio" src="vo%20tay.mp3" preload="auto"></audio>
         <div class="backwall-architecture"></div>
         <div id="screenAmbilight" class="screen-ambilight"></div>
 
@@ -2648,7 +2729,7 @@
     }
 
     slidesClickTrigger.addEventListener('click', (e) => {
-      if (e.target.closest('button, a, .flip-qa-stage, .ironing-banner-stage, .choice-flip-stage, .s12-card-slot')) return;
+      if (e.target.closest('button, a, .flip-qa-stage, .ironing-banner-stage, .choice-flip-stage, .s12-card-slot, .wl-stage')) return;
       const card = e.target.closest('.neo-card, .cinema-photo-card, .art-frame-bamboo, .art-frame-flower, .panorama-dark-board, .custom-image-frame');
       if (card && card.classList.contains('panorama-dark-board') && !isBoardLit) {
         advanceStepOrSlide();
@@ -2824,7 +2905,7 @@
           <div class="cinema-card-body">
             <div class="badge-sub">VƯỢT LÊN ĐỊNH KIẾN XÃ HỘI</div>
             <div class="card-title-lg">H’Hen Niê</div>
-            <div class="card-content-p" style="font-size: 1.05rem;">Lớn lên ở buôn làng nghèo, nơi hủ tục tảo hôn từng vây bủa số phận bao cô gái. Dám bước ra khỏi khuôn mẫu định sẵn, cô kiên định học tập, tự viết lại đời mình để trở thành Hoa hậu Hoàn vũ Việt Nam và ghi tên vào <span class="hl-underline now">Top <span class="count-num" data-count="5">5</span> Miss Universe</span>.</div>
+            <div class="card-content-p">Lớn lên ở buôn làng nghèo, nơi hủ tục tảo hôn từng vây bủa số phận bao cô gái. Dám bước ra khỏi khuôn mẫu định sẵn, cô kiên định học tập, tự viết lại đời mình để trở thành Hoa hậu Hoàn vũ Việt Nam và ghi tên vào <span class="hl-underline now">Top <span class="count-num" data-count="5">5</span> Miss Universe</span>.</div>
           </div>`,
         rowling: `
           <div class="cinema-photo-wrap">
@@ -2833,7 +2914,7 @@
           <div class="cinema-card-body">
             <div class="badge-sub">BỀN BỈ TRƯỚC NGHỊCH CẢNH</div>
             <div class="card-title-lg">J.K. Rowling</div>
-            <div class="card-content-p" style="font-size: 1.05rem;">Từng là bà mẹ đơn thân chật vật bên bờ vực suy sụp; bản thảo <em>Harry Potter</em> bị <span class="hl-rose"><span class="count-num" data-count="12">12</span> nhà xuất bản từ chối liên tiếp</span>. Bà không có tấm vé đảm bảo thành công, nhưng dứt khoát không để <span class="count-num" data-count="12">12</span> lần khước từ ấy thành dấu chấm hết cho ngòi bút.</div>
+            <div class="card-content-p">Từng là bà mẹ đơn thân chật vật bên bờ vực suy sụp; bản thảo <em>Harry Potter</em> bị <span class="hl-rose"><span class="count-num" data-count="12">12</span> nhà xuất bản từ chối liên tiếp</span>. Bà không có tấm vé đảm bảo thành công, nhưng dứt khoát không để <span class="count-num" data-count="12">12</span> lần khước từ ấy thành dấu chấm hết cho ngòi bút.</div>
           </div>`
       };
       const CLUE_CARDS = {
@@ -2841,13 +2922,13 @@
           <div class="s12-clue-box">
             <div class="badge-sub">GỢI Ý · VƯỢT LÊN ĐỊNH KIẾN XÃ HỘI</div>
             <div class="card-title-lg" style="color: var(--accent-gold);">Nhân vật bí ẩn 01</div>
-            <div class="card-content-p">Lớn lên ở buôn làng nghèo, nơi hủ tục tảo hôn từng vây bủa số phận bao cô gái. Dám bước ra khỏi khuôn mẫu định sẵn, cô kiên định học tập, tự viết lại đời mình để trở thành Hoa hậu Hoàn vũ Việt Nam và ghi tên vào <span class="hl-underline now">Top <span class="count-num" data-count="5">0</span> Miss Universe</span>.</div>
+            <div class="card-content-p">• Người dân tộc Ê Đê, lớn lên ở buôn làng tại Đắk Lắk.<br>• Người dân tộc thiểu số đầu tiên đăng quang <strong>Hoa hậu Hoàn vũ Việt Nam 2017</strong> với mái tóc ngắn cá tính.<br>• Lọt <span class="hl-underline now">Top <span class="count-num" data-count="5">0</span> Miss Universe 2018</span> cùng trang phục <em>“Bánh mì”</em> và nhận giải <em>“Thanh niên sống đẹp 2021”</em>.</div>
           </div>`,
         rowling: `
           <div class="s12-clue-box">
             <div class="badge-sub">GỢI Ý · BỀN BỈ TRƯỚC NGHỊCH CẢNH</div>
             <div class="card-title-lg" style="color: var(--accent-gold);">Nhân vật bí ẩn 02</div>
-            <div class="card-content-p">Từng là bà mẹ đơn thân chật vật bên bờ vực suy sụp; bản thảo <em>Harry Potter</em> bị <span class="hl-rose"><span class="count-num" data-count="12">0</span> nhà xuất bản từ chối liên tiếp</span>. Bà không có tấm vé đảm bảo thành công, nhưng dứt khoát không để <span class="count-num" data-count="12">0</span> lần khước từ ấy thành dấu chấm hết cho ngòi bút.</div>
+            <div class="card-content-p">• Nữ nhà văn người Anh (sinh năm 1965), từng là bà mẹ đơn thân viết bản thảo tại quán cà phê.<br>• Tác phẩm đầu tay từng bị <span class="hl-rose"><span class="count-num" data-count="12">0</span> nhà xuất bản từ chối</span> trước khi được in.<br>• Tác giả bộ truyện giả tưởng <span class="hl-underline now">Harry Potter</span> (7 tập), dịch ra hơn 65 ngôn ngữ.</div>
           </div>`
       };
 
@@ -3066,35 +3147,104 @@
         return audioCtx;
       }
 
-      function playTheatricalSound(effect) {
-        return; // Đã tắt âm thanh sân khấu theo yêu cầu
+      let applauseGainNode = null;
+      let applauseSourceNode = null;
+      let applauseStopTimer = null;
+      let applauseFadeInterval = null;
+
+      function stopApplauseSound() {
+        if (applauseStopTimer) { clearTimeout(applauseStopTimer); applauseStopTimer = null; }
+        if (applauseFadeInterval) { clearInterval(applauseFadeInterval); applauseFadeInterval = null; }
+        const audioEl = document.getElementById('applauseAudio');
+        if (audioEl) {
+          try {
+            audioEl.pause();
+            audioEl.currentTime = 0;
+            audioEl.volume = 1;
+          } catch (e) {}
+        }
+        try {
+          if (applauseGainNode && audioCtx) {
+            applauseGainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+            applauseGainNode.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + 0.25);
+          }
+          if (applauseSourceNode) {
+            const src = applauseSourceNode;
+            setTimeout(() => { try { src.stop(); } catch (e) {} }, 280);
+            applauseSourceNode = null;
+          }
+        } catch (e) {}
+      }
+
+      function playSynthApplauseFallback() {
         try {
           const c = ensureAudio();
           if (!c) return;
           const now = c.currentTime;
-          if (effect === 'curtainSweep') {
-            const dur = 1.6, bufSize = Math.floor(c.sampleRate * dur);
-            const buf = c.createBuffer(1, bufSize, c.sampleRate), data = buf.getChannelData(0);
-            for (let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1) * Math.sin((i / bufSize) * Math.PI);
-            const src = c.createBufferSource(); src.buffer = buf;
-            const flt = c.createBiquadFilter(); flt.type = 'bandpass';
-            flt.frequency.setValueAtTime(190, now); flt.frequency.exponentialRampToValueAtTime(480, now + 1.3); flt.Q.value = 1.4;
-            const g = c.createGain(); g.gain.setValueAtTime(0.005, now); g.gain.linearRampToValueAtTime(0.065, now + 0.55); g.gain.exponentialRampToValueAtTime(0.001, now + dur);
-            src.connect(flt); flt.connect(g); g.connect(c.destination); src.start(now);
-          } else if (effect === 'slideChime') {
-            const osc = c.createOscillator(), g = c.createGain();
-            osc.type = 'sine'; osc.frequency.setValueAtTime(330, now); osc.frequency.exponentialRampToValueAtTime(440, now + 0.45);
-            g.gain.setValueAtTime(0.001, now); g.gain.linearRampToValueAtTime(0.055, now + 0.06); g.gain.exponentialRampToValueAtTime(0.0008, now + 0.65);
-            osc.connect(g); g.connect(c.destination); osc.start(now); osc.stop(now + 0.7);
-          } else if (effect === 'finaleChord') {
-            [261.63, 329.63, 392.00, 523.25].forEach((f, idx) => {
-              const osc = c.createOscillator(), g = c.createGain();
-              osc.type = 'triangle'; osc.frequency.setValueAtTime(f, now + idx * 0.06);
-              g.gain.setValueAtTime(0.001, now + idx * 0.06); g.gain.linearRampToValueAtTime(0.035, now + idx * 0.06 + 0.15); g.gain.exponentialRampToValueAtTime(0.0008, now + 2.2);
-              osc.connect(g); g.connect(c.destination); osc.start(now + idx * 0.06); osc.stop(now + 2.3);
-            });
+          const dur = 3.8;
+          const sr = c.sampleRate;
+          const len = Math.floor(sr * dur);
+          const buf = c.createBuffer(2, len, sr);
+          for (let ch = 0; ch < 2; ch++) {
+            const data = buf.getChannelData(ch);
+            for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * 0.16;
+            for (let k = 0; k < 220; k++) {
+              const st = Math.floor((0.05 + Math.random() * (dur - 0.8)) * sr);
+              const cl = Math.floor((0.032 + Math.random() * 0.045) * sr);
+              const amp = 0.28 + Math.random() * 0.45;
+              for (let j = 0; j < cl && st + j < len; j++) {
+                data[st + j] += (Math.random() * 2 - 1) * Math.exp(-j / (sr * 0.01)) * amp;
+              }
+            }
           }
+          const src = c.createBufferSource(); src.buffer = buf;
+          const hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 420;
+          const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 3400;
+          const g = c.createGain();
+          g.gain.setValueAtTime(0.001, now);
+          g.gain.linearRampToValueAtTime(0.42, now + 0.35);
+          g.gain.setValueAtTime(0.42, now + 3.0);
+          g.gain.exponentialRampToValueAtTime(0.001, now + dur);
+          src.connect(hp); hp.connect(lp); lp.connect(g); g.connect(c.destination);
+          src.start(now);
+          applauseGainNode = g; applauseSourceNode = src;
         } catch (e) {}
+      }
+
+      function playAudienceApplause() {
+        stopApplauseSound();
+        const audioEl = document.getElementById('applauseAudio');
+        if (audioEl) {
+          try {
+            audioEl.currentTime = 0;
+            audioEl.volume = 1;
+            const playPromise = audioEl.play();
+            // Tự động giảm âm lượng từ 3.2s và dừng hẳn ở 3.8s
+            applauseStopTimer = setTimeout(() => {
+              applauseFadeInterval = setInterval(() => {
+                if (audioEl.volume > 0.12) {
+                  audioEl.volume = Math.max(0, audioEl.volume - 0.12);
+                } else {
+                  stopApplauseSound();
+                }
+              }, 60);
+            }, 3200);
+            if (playPromise && typeof playPromise.catch === 'function') {
+              playPromise.catch(() => {
+                if (applauseStopTimer) { clearTimeout(applauseStopTimer); applauseStopTimer = null; }
+                playSynthApplauseFallback();
+              });
+            }
+            return;
+          } catch (e) {}
+        }
+        playSynthApplauseFallback();
+      }
+
+      function playTheatricalSound(effect) {
+        if (effect === 'finaleChord') {
+          playAudienceApplause();
+        }
       }
 
       const curtainCanvas = document.getElementById('velvetCurtainCanvas');
@@ -3353,6 +3503,7 @@
       }
 
       function powerDownBlackBoard() {
+        stopApplauseSound();
         clearCharTimers();
         isTypingText = false;
         if (stageViewport) stageViewport.classList.remove('curtain-opened', 'stage-lit');
@@ -3435,6 +3586,27 @@
       };
 
       window.addEventListener('resize', () => { if (theaterActive) resizeTheaterCanvases(); });
+    })();
+
+
+    // Hiệu ứng 2 chiếc ví ở Slide 13 (chạy mỗi khi Slide 13 active, không xung đột)
+    (function(){
+      var r = document.getElementById('wlRoot');
+      if (!r) return;
+      var sl = r.closest('.slide');
+      function go(){ r.classList.remove('wl-on'); void r.offsetWidth; r.classList.add('wl-on'); }
+      if (!sl) { go(); }
+      else {
+        var was = sl.classList.contains('active');
+        if (was) go();
+        new MutationObserver(function(){
+          var a = sl.classList.contains('active');
+          if (a && !was) go();
+          if (!a) r.classList.remove('wl-on');
+          was = a;
+        }).observe(sl, { attributes: true, attributeFilter: ['class'] });
+      }
+      window.walletsReplay = go;
     })();
 
     animateAllCanvases(0);
