@@ -1335,6 +1335,62 @@
     .wl-on .wl-coin{animation:wlCoin 3s ease-in infinite;animation-delay:calc(var(--k)*.9s + 1.6s)}
     @keyframes wlCoin{0%{transform:translateY(-34px);opacity:0}20%{opacity:1}70%{transform:translateY(8px);opacity:1}100%{transform:translateY(12px);opacity:0}}
 
+  
+    /* SLIDE 9: HOẠT ẢNH ÁP LỰC & BÌNH PHONG CẦU TOÀN */
+    @keyframes s9EyePulse { 0%, 100% { opacity: 0.48; transform: scale(0.96); } 50% { opacity: 1; transform: scale(1.06); } }
+    @keyframes s9DoorGlow { 0%, 100% { opacity: 0.72; } 50% { opacity: 1; } }
+    @keyframes s9PhoneFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+    .s9-eye { transform-box: fill-box; transform-origin: center; animation: s9EyePulse 3.2s ease-in-out infinite; animation-delay: calc(var(--k) * 0.45s); }
+    .s9-door-glow { animation: s9DoorGlow 2.8s ease-in-out infinite; }
+    .s9-phone-item { animation: s9PhoneFloat 3.4s ease-in-out infinite; animation-delay: calc(var(--k) * 0.4s); }
+
+  
+    /* SLIDE 9: KHUNG ÔM SÁT ẢNH + HIỆU ỨNG HẠT TỤ LẠI TẠO THÀNH ẢNH */
+    .s9-visual-wrap {
+      width: fit-content !important;
+      max-width: 100%;
+      height: auto !important;
+      min-height: 0 !important;
+      margin: 0 auto;
+      padding: 0 !important;
+      border-radius: 18px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .s9-photo-frame {
+      position: relative;
+      display: inline-block;
+      line-height: 0;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1.5px solid rgba(125, 211, 252, 0.42);
+      box-shadow: 0 18px 45px rgba(4, 12, 28, 0.65), 0 0 28px rgba(56, 189, 248, 0.18);
+    }
+    .s9-photo-frame img {
+      display: block;
+      width: auto;
+      max-width: 100%;
+      height: auto;
+      max-height: 390px;
+      opacity: 0;
+      filter: blur(8px);
+      transform: scale(1.03);
+      transition: opacity 0.85s ease, filter 0.85s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .s9-photo-frame.img-assembled img {
+      opacity: 1;
+      filter: blur(0px);
+      transform: scale(1);
+    }
+    .s9-particle-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+
   </style>
   <script>
     window.openCurtain = function() {
@@ -1803,27 +1859,12 @@
             </div>
           </div>
         </div>
-        <div class="visual-stage" style="padding: 0.8rem;">
-          <div class="reel-compare">
-            <div class="reel-glass reel-raw">
-              <div style="font-size: 0.84rem; font-weight: 800; color: #94a3b8; letter-spacing: 0.08em;">● HẬU TRƯỜNG THẬT</div>
-              <svg viewBox="0 0 120 60" style="width: 100%; height: 58px;">
-                <polyline points="4,48 24,22 42,50 64,14 86,44 114,26" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
-              </svg>
-              <div style="font-size: 0.96rem; color: #e2e8f0; font-weight: 500;">Mồ hôi, trăn trở và những lần thử sai</div>
-            </div>
-            <div class="reel-glass reel-glam">
-              <div style="font-size: 0.84rem; font-weight: 800; color: var(--accent-gold); letter-spacing: 0.08em;">★ ĐOẠN PHIM NỔI BẬT</div>
-              <svg viewBox="0 0 64 64" style="width: 54px; height: 54px; margin: 0 auto; filter: drop-shadow(0 0 12px rgba(253,224,71,0.65));">
-                <path d="M18 10 H46 V26 C46 34 39 40 32 40 C25 40 18 34 18 26 Z" fill="#fde047"/>
-                <path d="M18 14 H10 V22 C10 28 14 30 18 30 M46 14 H54 V22 C54 28 50 30 46 30" fill="none" stroke="#fde047" stroke-width="3.5"/>
-                <rect x="28" y="40" width="8" height="12" fill="#f59e0b"/>
-                <rect x="20" y="52" width="24" height="5" rx="2" fill="#fde047"/>
-              </svg>
-              <div style="font-size: 0.96rem; color: #ffffff; font-weight: 700;">Khoảnh khắc hào nhoáng đã cắt gọt</div>
-            </div>
+        <div class="visual-stage step-item s9-visual-wrap" id="s9VisualStage" onclick="event.stopPropagation(); if (typeof window.replayS9Particles === 'function') window.replayS9Particles();" title="Nhấp để xem lại hiệu ứng hạt tụ lại">
+          <div class="s9-photo-frame" id="s9PhotoFrame">
+            <img src="slide%209.png.png" data-base="slide 9" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="Áp lực đồng trang lứa và bình phong cầu toàn">
+            <canvas class="s9-particle-canvas" id="s9ParticleCanvas"></canvas>
           </div>
-        </div>
+        </div></div>
       </div>
     </div>
 
@@ -2729,7 +2770,7 @@
     }
 
     slidesClickTrigger.addEventListener('click', (e) => {
-      if (e.target.closest('button, a, .flip-qa-stage, .ironing-banner-stage, .choice-flip-stage, .s12-card-slot, .wl-stage')) return;
+      if (e.target.closest('button, a, .flip-qa-stage, .ironing-banner-stage, .choice-flip-stage, .s12-card-slot, .wl-stage, .s9-visual-wrap')) return;
       const card = e.target.closest('.neo-card, .cinema-photo-card, .art-frame-bamboo, .art-frame-flower, .panorama-dark-board, .custom-image-frame');
       if (card && card.classList.contains('panorama-dark-board') && !isBoardLit) {
         advanceStepOrSlide();
@@ -3607,6 +3648,88 @@
         }).observe(sl, { attributes: true, attributeFilter: ['class'] });
       }
       window.walletsReplay = go;
+    })();
+
+
+    // Hiệu ứng hạt tụ lại tạo thành ảnh ở Slide 9
+    (function() {
+      const stage = document.getElementById('s9VisualStage');
+      const frame = document.getElementById('s9PhotoFrame');
+      const cvs = document.getElementById('s9ParticleCanvas');
+      if (!stage || !frame || !cvs) return;
+      let animId = null;
+
+      function runS9Assembly() {
+        if (animId) cancelAnimationFrame(animId);
+        frame.classList.remove('img-assembled');
+        const ctx = cvs.getContext('2d');
+        const w = cvs.width = frame.offsetWidth || 440;
+        const h = cvs.height = frame.offsetHeight || 330;
+        const colors = ['#38bdf8', '#fde047', '#fb7185', '#7dd3fc', '#ffffff'];
+        const particles = [];
+        const cols = 16, rows = 12;
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const tx = ((c + 0.5) / cols) * w;
+            const ty = ((r + 0.5) / rows) * h;
+            const angle = Math.random() * Math.PI * 2;
+            const dist = 120 + Math.random() * 220;
+            particles.push({
+              sx: tx + Math.cos(angle) * dist,
+              sy: ty + Math.sin(angle) * dist,
+              tx, ty,
+              r: 1.8 + Math.random() * 2.4,
+              color: colors[(r * cols + c) % colors.length],
+              delay: Math.random() * 0.25
+            });
+          }
+        }
+        const start = performance.now();
+        const totalMs = 1350;
+        let revealedImg = false;
+
+        function tick(now) {
+          const elapsed = now - start;
+          ctx.clearRect(0, 0, w, h);
+          let stillMoving = false;
+          for (const pt of particles) {
+            const localT = Math.max(0, Math.min(1, (elapsed - pt.delay * 500) / (totalMs * 0.78)));
+            // Ease out cubic
+            const ease = 1 - Math.pow(1 - localT, 3);
+            const x = pt.sx + (pt.tx - pt.sx) * ease;
+            const y = pt.sy + (pt.ty - pt.sy) * ease;
+            const fadeOut = elapsed > totalMs * 0.65 ? Math.max(0, 1 - (elapsed - totalMs * 0.65) / (totalMs * 0.45)) : 1;
+            if (fadeOut > 0.02) {
+              stillMoving = true;
+              ctx.globalAlpha = Math.min(1, localT * 1.8) * fadeOut;
+              ctx.fillStyle = pt.color;
+              ctx.beginPath();
+              ctx.arc(x, y, pt.r, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+          ctx.globalAlpha = 1;
+          if (!revealedImg && elapsed >= totalMs * 0.58) {
+            revealedImg = true;
+            frame.classList.add('img-assembled');
+          }
+          if (stillMoving || elapsed < totalMs + 150) {
+            animId = requestAnimationFrame(tick);
+          } else {
+            ctx.clearRect(0, 0, w, h);
+          }
+        }
+        animId = requestAnimationFrame(tick);
+      }
+
+      window.replayS9Particles = runS9Assembly;
+      let wasRevealed = stage.classList.contains('revealed');
+      new MutationObserver(() => {
+        const isRev = stage.classList.contains('revealed');
+        if (isRev && !wasRevealed) runS9Assembly();
+        if (!isRev) frame.classList.remove('img-assembled');
+        wasRevealed = isRev;
+      }).observe(stage, { attributes: true, attributeFilter: ['class'] });
     })();
 
     animateAllCanvases(0);
