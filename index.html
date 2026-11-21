@@ -7,6 +7,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script>window.tailwind = { config: { corePlugins: { preflight: false } } };</script>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @property --a {
       syntax: '<angle>';
@@ -1391,6 +1394,120 @@
       z-index: 10;
     }
 
+
+    /* ==========================================================
+       TRÒ CHƠI MỞ ĐẦU: CHUYẾN TÀU ƯỚC MƠ (CÔ LẬP KHÔNG XUNG ĐỘT)
+       ========================================================== */
+    #trainGameOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10050;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #082f49;
+    }
+    #trainGameOverlay * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+    #trainGameOverlay .poster-title {
+      font-family: 'Baloo 2', cursive;
+      color: #e0f2fe;
+      -webkit-text-stroke: 3.5px #0284c7;
+      paint-order: stroke fill;
+      text-shadow: 0 6px 0 #0369a1, 0 12px 24px rgba(2, 132, 199, 0.35);
+      letter-spacing: 0.03em;
+      line-height: 1.05;
+    }
+    #trainGameOverlay .poster-subtitle {
+      font-family: 'Baloo 2', cursive;
+      color: #0369a1;
+      text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8);
+    }
+    #flash-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle, #ffffff 30%, #7dd3fc 80%, #0284c7 100%);
+      z-index: 10099;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.38s ease-out;
+    }
+    #flash-overlay.flash-active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    @keyframes crashShake {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      10% { transform: translate(-18px, -12px) rotate(-1.5deg); }
+      20% { transform: translate(16px, 10px) rotate(1.5deg); }
+      30% { transform: translate(-14px, 8px) rotate(-1deg); }
+      40% { transform: translate(12px, -8px) rotate(1deg); }
+      50% { transform: translate(-10px, 6px) rotate(-0.8deg); }
+      60% { transform: translate(8px, -4px) rotate(0.5deg); }
+      70% { transform: translate(-6px, 4px) rotate(-0.3deg); }
+      80% { transform: translate(4px, -2px) rotate(0.2deg); }
+    }
+    .shake-crash { animation: crashShake 0.65s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+    @keyframes trainVibrate {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(1.5px); }
+    }
+    .cockpit-running { animation: trainVibrate 0.18s infinite ease-in-out; }
+    @keyframes pulseQuestionBtn {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7), 0 0 25px rgba(56, 189, 248, 0.8), inset 0 2px 6px rgba(255,255,255,0.6); }
+      50% { box-shadow: 0 0 0 14px rgba(56, 189, 248, 0), 0 0 40px rgba(125, 211, 252, 1), inset 0 2px 8px rgba(255,255,255,0.9); }
+    }
+    .btn-question-center { animation: pulseQuestionBtn 2.2s infinite; }
+    @keyframes trainIdleFloat {
+      0%, 100% { transform: translate(0px, 0px); }
+      50% { transform: translate(5px, -3px); }
+    }
+    .train-hero-anim { animation: trainIdleFloat 3.8s ease-in-out infinite; }
+    @keyframes headlightGlow {
+      0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 14px #bae6fd); }
+      50% { opacity: 1; filter: drop-shadow(0 0 28px #ffffff); }
+    }
+    .headlight-glow { animation: headlightGlow 2s infinite ease-in-out; }
+    @keyframes speedStreakPulse {
+      0%, 100% { opacity: 0.45; }
+      50% { opacity: 0.95; }
+    }
+    .speed-streak { animation: speedStreakPulse 2.4s infinite ease-in-out; }
+    /* ICON LOA PHÁT ÂM THANH GÓC DƯỚI BÊN TRÁI SLIDE 9 */
+    .s9-speaker-btn {
+      position: absolute;
+      bottom: 1.25rem;
+      left: 1.5rem;
+      z-index: 60;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: rgba(12, 32, 64, 0.85);
+      border: 1.5px solid rgba(125, 211, 252, 0.5);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #bae6fd;
+      transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      backdrop-filter: blur(10px);
+    }
+    .s9-speaker-btn:hover {
+      background: var(--primary-cyan);
+      color: #0b1f3f;
+      border-color: var(--accent-gold);
+      transform: scale(1.08);
+    }
+    .s9-speaker-btn.playing {
+      color: var(--accent-gold);
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 20px rgba(253, 224, 71, 0.55);
+    }
+
   </style>
   <script>
     window.openCurtain = function() {
@@ -1465,6 +1582,511 @@
   </script>
 </head>
 <body>
+
+  <!-- LỚP LOÉ SÁNG CHUYỂN CẢNH TỪ TRÒ CHƠI TÀU SANG BÀI THUYẾT TRÌNH -->
+  <div id="flash-overlay"></div>
+
+  <!-- TRÒ CHƠI MỞ ĐẦU: CHUYẾN TÀU ƯỚC MƠ -->
+  <div id="trainGameOverlay">
+    <!-- 1. MÀN HÌNH CHỜ (START SCREEN) - PHỎNG THEO ẢNH MẪU VỚI TÔNG XANH DA TRỜI -->
+    <!-- ======================================================================= -->
+    <section id="start-screen" class="relative w-full h-full flex items-center justify-end overflow-hidden">
+        
+        <!-- Bức tranh Vector Illustration toàn màn hình (Đoàn tàu Shinkansen siêu chi tiết) -->
+        <svg class="absolute inset-0 w-full h-full object-cover" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <!-- Bầu trời xanh da trời chuyển sắc dịu mắt -->
+                <linearGradient id="skyBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#7dd3fc" />
+                    <stop offset="38%" stop-color="#bae6fd" />
+                    <stop offset="75%" stop-color="#e0f2fe" />
+                    <stop offset="100%" stop-color="#f0f9ff" />
+                </linearGradient>
+
+                <!-- Mặt đất/nền ga màu xanh da trời đậm như bố cục ảnh gốc -->
+                <linearGradient id="groundBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#0284c7" />
+                    <stop offset="55%" stop-color="#0369a1" />
+                    <stop offset="100%" stop-color="#0c4a6e" />
+                </linearGradient>
+
+                <!-- Sân ga chéo bên trái -->
+                <linearGradient id="platformGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#f0f9ff" />
+                    <stop offset="45%" stop-color="#bae6fd" />
+                    <stop offset="100%" stop-color="#38bdf8" />
+                </linearGradient>
+
+                <!-- Mái vòm nhà ga góc trên bên trái -->
+                <linearGradient id="canopyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#0369a1" />
+                    <stop offset="100%" stop-color="#082f49" />
+                </linearGradient>
+
+                <!-- Thân mũi tàu màu xanh dương kim loại đa tầng -->
+                <linearGradient id="trainNoseMetallic" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#7dd3fc" />
+                    <stop offset="22%" stop-color="#0ea5e9" />
+                    <stop offset="55%" stop-color="#0284c7" />
+                    <stop offset="82%" stop-color="#0369a1" />
+                    <stop offset="100%" stop-color="#082f49" />
+                </linearGradient>
+
+                <!-- Mảng vòm mũi tàu ánh sáng xanh ngọc -->
+                <linearGradient id="trainNoseHighlight" x1="0%" y1="0%" x2="100%" y2="80%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85" />
+                    <stop offset="45%" stop-color="#7dd3fc" stop-opacity="0.55" />
+                    <stop offset="100%" stop-color="#0284c7" stop-opacity="0" />
+                </linearGradient>
+
+                <!-- Thân tàu trắng ngọc trai ánh xanh -->
+                <linearGradient id="trainBodyPearl" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#ffffff" />
+                    <stop offset="52%" stop-color="#f0f9ff" />
+                    <stop offset="82%" stop-color="#bae6fd" />
+                    <stop offset="100%" stop-color="#7dd3fc" />
+                </linearGradient>
+
+                <!-- Gầm tàu kim loại tối -->
+                <linearGradient id="undercarriageGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#1e293b" />
+                    <stop offset="50%" stop-color="#0f172a" />
+                    <stop offset="100%" stop-color="#020617" />
+                </linearGradient>
+
+                <!-- Kính buồng lái đoàn tàu phản quang bầu trời -->
+                <linearGradient id="windshieldPanorama" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#020617" />
+                    <stop offset="35%" stop-color="#0c4a6e" />
+                    <stop offset="70%" stop-color="#0284c7" />
+                    <stop offset="100%" stop-color="#7dd3fc" />
+                </linearGradient>
+
+                <!-- Dải sọc vàng kim & xanh cyan sang trọng -->
+                <linearGradient id="goldStripeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#f59e0b" />
+                    <stop offset="50%" stop-color="#fde047" />
+                    <stop offset="100%" stop-color="#38bdf8" />
+                </linearGradient>
+
+                <!-- Luồng sáng đèn pha chiếu về phía trước -->
+                <linearGradient id="headlightBeamGrad" x1="0%" y1="0%" x2="100%" y2="20%">
+                    <stop offset="0%" stop-color="#fef08a" stop-opacity="0.7" />
+                    <stop offset="35%" stop-color="#7dd3fc" stop-opacity="0.35" />
+                    <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
+                </linearGradient>
+
+                <!-- Ánh sáng hào quang quanh đoàn tàu -->
+                <filter id="trainAura" x="-20%" y="-20%" width="150%" height="150%">
+                    <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#0284c7" flood-opacity="0.5"/>
+                    <feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="#7dd3fc" flood-opacity="0.45"/>
+                </filter>
+            </defs>
+
+            <!-- 1. Bầu trời phía trên -->
+            <rect width="1600" height="900" fill="url(#skyBgGrad)" />
+
+            <!-- Vầng sáng mặt trời dịu nhẹ phía chân trời -->
+            <circle cx="620" cy="520" r="360" fill="#ffffff" opacity="0.45" filter="blur(40px)" />
+
+            <!-- Các dải mây chéo nghệ thuật giống bố cục mẫu -->
+            <g fill="#ffffff" opacity="0.9">
+                <path d="M810,205 C860,178 920,155 1005,108 C962,148 912,182 835,212 Z" />
+                <path d="M570,255 C605,240 642,225 690,202 C665,232 622,248 582,262 Z" />
+                <path d="M300,275 C350,265 385,256 430,248 C395,268 352,276 308,280 Z" />
+                <path d="M85,342 C160,318 225,312 302,315 C235,334 152,345 92,347 Z" />
+                <path d="M1140,92 C1210,65 1270,48 1345,22 C1295,62 1230,82 1160,100 Z" opacity="0.65"/>
+            </g>
+
+            <!-- 2. Nền đất chân trời (bắt đầu từ Y=555 giống ảnh mẫu) -->
+            <polygon points="0,555 1600,555 1600,900 0,900" fill="url(#groundBlueGrad)" />
+
+            <!-- 3. Hệ thống đường ray đôi và tà-vẹt chạy chéo sắc nét -->
+            <g>
+                <!-- Vùng nền đá ballast đường ray -->
+                <polygon points="0,555 480,555 1600,775 1600,900 0,900" fill="#075985" />
+                
+                <!-- Các thanh tà-vẹt bê tông (sleepers) nghiêng theo phối cảnh -->
+                <g fill="#0c4a6e" stroke="#0284c7" stroke-width="1" opacity="0.85">
+                    <polygon points="560,645 635,632 668,640 592,655" />
+                    <polygon points="645,665 725,650 762,660 680,676" />
+                    <polygon points="745,688 835,670 875,682 785,700" />
+                    <polygon points="860,715 958,694 1005,708 905,730" />
+                    <polygon points="995,746 1102,722 1158,738 1048,764" />
+                    <polygon points="1150,782 1272,754 1338,772 1215,804" />
+                    <polygon points="1335,826 1472,794 1548,815 1412,850" />
+                </g>
+
+                <!-- Dải đường ray thép phát sáng xanh cyan & trắng -->
+                <polygon points="0,562 1600,872 1600,892 0,578" fill="#0284c7" />
+                <polygon points="0,556 1600,822 1600,832 0,562" fill="#7dd3fc" opacity="0.9" />
+                <polygon points="0,574 1600,888 1600,898 0,582" fill="#e0f2fe" opacity="0.95" />
+            </g>
+
+            <!-- 4. Thềm sân ga bên trái dưới (Platform) -->
+            <g>
+                <polygon points="0,582 1190,900 0,900" fill="url(#platformGrad)" />
+                <!-- Mép gờ sân ga ốp gạch cảnh báo vàng - xanh -->
+                <polygon points="0,582 1190,900 1140,900 0,594" fill="#0284c7" opacity="0.55" />
+                <polygon points="0,602 1010,900 960,900 0,614" fill="#fde047" opacity="0.75" />
+                <polygon points="0,628 820,900 790,900 0,636" fill="#ffffff" opacity="0.8" />
+            </g>
+
+            <!-- 5. Mái vòm nhà ga góc trên bên trái (Station Canopy) -->
+            <g>
+                <polygon points="0,0 570,0 502,58 0,318" fill="url(#canopyGrad)" />
+                <!-- Các thanh dầm ngang kết cấu thép -->
+                <polygon points="0,34 530,34 502,58 0,62" fill="#38bdf8" />
+                <polygon points="0,104 405,104 365,128 0,132" fill="#38bdf8" />
+                <polygon points="0,178 262,178 224,198 0,204" fill="#38bdf8" />
+                <polygon points="152,0 188,0 328,145 298,160" fill="#0ea5e9" opacity="0.85" />
+                <polygon points="342,0 382,0 498,55 468,70" fill="#0ea5e9" opacity="0.85" />
+                <polygon points="552,0 574,0 508,60 0,324 0,312 498,54" fill="#7dd3fc" />
+
+                <!-- Biển báo điện tử treo dưới mái vòm -->
+                <line x1="52" y1="128" x2="52" y2="236" stroke="#082f49" stroke-width="4" />
+                <rect x="4" y="232" width="84" height="58" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5" />
+                <rect x="14" y="246" width="62" height="9" rx="4" fill="#38bdf8" />
+                <rect x="14" y="264" width="42" height="8" rx="4" fill="#fde047" />
+            </g>
+
+            <!-- 6. ĐOÀN TÀU CAO TỐC SHINKANSEN ƯỚC MƠ (PHIÊN BẢN NÂNG CẤP SIÊU ĐẸP) -->
+            <g class="train-hero-anim" filter="url(#trainAura)">
+                
+                <!-- Luồng ánh sáng đèn pha chiếu rọi mặt đường ray phía trước -->
+                <polygon points="465,565 1180,695 1120,765 445,585" fill="url(#headlightBeamGrad)" class="speed-streak" />
+                <polygon points="622,572 1320,690 1280,745 605,590" fill="url(#headlightBeamGrad)" class="speed-streak" />
+
+                <!-- Bóng đổ mềm dưới gầm tàu -->
+                <path d="M0,568 L395,696 C485,722 595,716 642,678 L652,652 L0,520 Z" fill="#020617" opacity="0.82" />
+
+                <!-- Hệ thống gầm tàu, bánh tàu & giảm chấn (Bogies & Undercarriage) -->
+                <path d="M0,525 L395,638 C485,665 588,666 645,635 L628,668 C565,696 465,692 382,664 L0,556 Z" fill="url(#undercarriageGrad)" />
+                <!-- Chi tiết cơ khí gầm tàu & bánh xe hợp kim -->
+                <g fill="#334155" stroke="#64748b" stroke-width="1.5">
+                    <circle cx="85" cy="566" r="14" fill="#0f172a" />
+                    <circle cx="85" cy="566" r="6" fill="#38bdf8" />
+                    <circle cx="145" cy="582" r="15" fill="#0f172a" />
+                    <circle cx="145" cy="582" r="6" fill="#38bdf8" />
+                    <circle cx="265" cy="614" r="16" fill="#0f172a" />
+                    <circle cx="265" cy="614" r="7" fill="#38bdf8" />
+                    <circle cx="335" cy="632" r="17" fill="#0f172a" />
+                    <circle cx="335" cy="632" r="7" fill="#38bdf8" />
+                </g>
+
+                <!-- Cản khí động học phía trước mũi tàu (Front Aerodynamic Splitter) -->
+                <path d="M392,636 C472,662 572,664 645,632 L660,645 C592,682 478,682 385,652 Z" fill="#38bdf8" />
+                <path d="M462,598 C525,616 592,615 636,596 L622,628 C575,642 512,640 468,622 Z" fill="#090d16" stroke="#38bdf8" stroke-width="1.5" />
+
+                <!-- Thân tàu chính màu trắng ngọc trai kéo dài từ ga ra -->
+                <path d="M0,445 L368,378 C438,366 508,374 558,405 L665,552 C692,590 682,632 632,656 C565,682 465,676 385,650 L0,545 Z" fill="url(#trainBodyPearl)" />
+
+                <!-- Khe nối giữa các toa tàu (Carriage Articulation) -->
+                <line x1="128" y1="422" x2="112" y2="572" stroke="#94a3b8" stroke-width="2.5" opacity="0.7" />
+                <line x1="238" y1="402" x2="222" y2="600" stroke="#94a3b8" stroke-width="2.5" opacity="0.7" />
+
+                <!-- Phần đầu mũi tàu Khí Động Học (Aerodynamic Nose Cone) sơn Xanh Da Trời Kim Loại -->
+                <path d="M368,378 C438,366 512,374 558,405 L668,554 C688,582 684,614 650,626 C618,635 595,614 575,600 C538,580 485,580 452,594 C422,606 388,588 372,555 C358,525 368,494 352,468 C334,442 332,392 368,378 Z" fill="url(#trainNoseMetallic)" />
+
+                <!-- Mảng phản quang bóng gương trên mũi tàu (Glossy Highlight) -->
+                <path d="M385,386 C445,376 505,384 548,412 L642,542 C605,532 545,495 485,465 C435,440 395,412 385,386 Z" fill="url(#trainNoseHighlight)" />
+                <path d="M475,462 L568,464 L642,578 C602,594 552,594 508,578 Z" fill="#38bdf8" opacity="0.45" />
+                <path d="M518,463 L552,464 L618,582 L584,585 Z" fill="#e0f2fe" opacity="0.65" />
+
+                <!-- Các dải sọc tốc độ Xanh Dương & Vàng Kim dọc thân tàu -->
+                <polygon points="0,455 348,392 345,405 0,464" fill="#0284c7" />
+                <polygon points="0,464 345,405 344,412 0,469" fill="url(#goldStripeGrad)" />
+                <polygon points="0,512 258,542 284,582 388,598 378,614 248,590 226,554 0,524" fill="#0284c7" />
+                <polygon points="0,506 262,534 288,574 415,594 410,600 284,580 258,540 0,511" fill="url(#goldStripeGrad)" />
+
+                <!-- Kính chắn gió buồng lái Panorama (Panoramic Cockpit Windshield) -->
+                <path d="M376,406 C442,396 518,402 572,416 L606,464 C544,454 455,448 384,452 Z" fill="url(#windshieldPanorama)" stroke="#e0f2fe" stroke-width="3.5" />
+                <!-- Khung viền titan quanh kính lái -->
+                <path d="M376,406 C442,396 518,402 572,416" fill="none" stroke="#38bdf8" stroke-width="2" />
+                <!-- Ánh phản chiếu bầu trời trên kính chắn gió -->
+                <polygon points="455,404 508,408 545,456 492,452" fill="#ffffff" opacity="0.52" />
+                <polygon points="518,410 536,412 570,458 552,456" fill="#bae6fd" opacity="0.4" />
+
+                <!-- Đèn pha nóc tàu (Roof High-Beam LED) -->
+                <ellipse cx="465" cy="384" rx="34" ry="7" fill="#ffffff" stroke="#7dd3fc" stroke-width="2" class="headlight-glow" />
+
+                <!-- Hệ thống cửa sổ khoang hành khách cao cấp có ánh sáng bên trong -->
+                <g transform="skewX(-5)">
+                    <!-- Cửa lên xuống khoang đầu -->
+                    <rect x="302" y="446" width="24" height="58" rx="6" fill="#0c4a6e" stroke="#7dd3fc" stroke-width="2.5" />
+                    <rect x="307" y="454" width="14" height="24" rx="3" fill="#38bdf8" opacity="0.85" />
+                    
+                    <rect x="264" y="452" width="24" height="56" rx="6" fill="#0c4a6e" stroke="#7dd3fc" stroke-width="2.5" />
+                    <rect x="269" y="460" width="14" height="24" rx="3" fill="#38bdf8" opacity="0.85" />
+
+                    <!-- Dãy cửa sổ Panorama hành khách phát sáng ấm áp -->
+                    <g fill="#0284c7" stroke="#bae6fd" stroke-width="2">
+                        <rect x="206" y="462" width="19" height="36" rx="5" />
+                        <rect x="170" y="467" width="18" height="34" rx="5" />
+                        <rect x="136" y="472" width="16" height="32" rx="4" />
+                        <rect x="104" y="476" width="15" height="30" rx="4" />
+                        <rect x="66" y="481" width="13" height="28" rx="4" />
+                        <rect x="38" y="485" width="11" height="26" rx="3" />
+                        <rect x="12" y="489" width="10" height="24" rx="3" />
+                    </g>
+                    <!-- Ánh phản chiếu chéo trên từng ô cửa sổ -->
+                    <g fill="#e0f2fe" opacity="0.65">
+                        <polygon points="209,465 218,465 212,495 209,495" />
+                        <polygon points="173,470 181,470 176,498 173,498" />
+                        <polygon points="139,475 146,475 142,501 139,501" />
+                        <polygon points="107,479 113,479 110,503 107,503" />
+                    </g>
+                </g>
+
+                <!-- Cụm đèn pha Bi-LED đôi trước mũi tàu phát sáng rực rỡ -->
+                <g class="headlight-glow">
+                    <!-- Đèn pha trái -->
+                    <ellipse cx="472" cy="558" rx="18" ry="24" transform="rotate(-18 472 558)" fill="#38bdf8" />
+                    <ellipse cx="472" cy="558" rx="13" ry="18" transform="rotate(-18 472 558)" fill="#fef08a" stroke="#ffffff" stroke-width="3" />
+                    <ellipse cx="470" cy="555" rx="6" ry="9" transform="rotate(-18 470 555)" fill="#ffffff" />
+
+                    <!-- Đèn pha phải -->
+                    <ellipse cx="655" cy="570" rx="14" ry="22" transform="rotate(14 655 570)" fill="#38bdf8" />
+                    <ellipse cx="655" cy="570" rx="10" ry="16" transform="rotate(14 655 570)" fill="#fef08a" stroke="#ffffff" stroke-width="3" />
+                    <ellipse cx="655" cy="568" rx="5" ry="8" transform="rotate(14 655 568)" fill="#ffffff" />
+                </g>
+
+                <!-- Các tia sáng tốc độ lướt dọc thân tàu -->
+                <g stroke="#ffffff" stroke-linecap="round" class="speed-streak">
+                    <line x1="180" y1="395" x2="340" y2="368" stroke-width="3" opacity="0.75" />
+                    <line x1="40" y1="430" x2="195" y2="405" stroke-width="2" opacity="0.55" />
+                    <line x1="280" y1="648" x2="460" y2="695" stroke-width="3.5" stroke="#7dd3fc" opacity="0.8" />
+                </g>
+            </g>
+        </svg>
+
+        <!-- Cụm Chữ Tiêu Đề & Nút BẮT ĐẦU bên phải -->
+        <div class="relative z-10 w-full md:w-3/5 lg:w-7/12 px-6 sm:px-12 md:pr-20 flex flex-col items-end text-right mt-[-4vh]">
+            
+            <!-- Nhãn nhỏ phía trên -->
+            <div id="intro-badge" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/85 border-2 border-sky-400 text-sky-700 font-bold text-xs sm:text-sm mb-3 shadow-md backdrop-blur-sm">
+                <span class="w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping"></span>
+                <span>TRÒ CHƠI MỞ ĐẦU THUYẾT TRÌNH</span>
+            </div>
+
+            <!-- Tiêu đề lớn 2 dòng phong cách GROUP PROJECT -->
+            <h1 id="display-title-line1" class="poster-title text-5xl sm:text-7xl lg:text-8xl font-extrabold uppercase tracking-wide select-none">
+                CHUYẾN TÀU
+            </h1>
+            <h1 id="display-title-line2" class="poster-title text-5xl sm:text-7xl lg:text-8xl font-extrabold uppercase tracking-wide -mt-1 sm:-mt-3 select-none">
+                ƯỚC MƠ
+            </h1>
+
+            <!-- Phụ đề bên dưới -->
+            <p id="display-subtitle" class="poster-subtitle text-xl sm:text-3xl lg:text-4xl font-bold mt-3 sm:mt-4 mb-8">
+                Vượt qua rào cản • Chạm tới tương lai
+            </p>
+
+            <!-- Nút BẮT ĐẦU nổi bật -->
+            <div id="start-btn-container" class="flex flex-col sm:flex-row items-center gap-4">
+                <button id="btn-start-game" onclick="startGameWithFlash()" 
+                    class="group relative px-10 py-4 sm:px-14 sm:py-5 rounded-2xl bg-gradient-to-r from-sky-400 via-sky-500 to-blue-600 hover:from-sky-300 hover:to-blue-500 text-white font-black text-xl sm:text-2xl tracking-wider uppercase shadow-[0_12px_35px_rgba(2,132,199,0.65)] border-2 border-white/90 hover:scale-105 active:scale-95 transition-all duration-200 flex items-center gap-3 cursor-pointer">
+                    <span>BẮT ĐẦU HÀNH TRÌNH</span>
+                    <span class="text-2xl group-hover:translate-x-1.5 transition-transform">🚄</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- 2. MÀN HÌNH GÓC NHÌN TRONG BUỒNG LÁI ĐOÀN TÀU (FIRST-PERSON COCKPIT)    -->
+    <!-- ======================================================================= -->
+    <section id="cockpit-screen" class="hidden relative w-full h-full flex-col justify-between overflow-hidden bg-sky-950">
+        
+        <!-- PHẦN TRÊN (70%): KÍNH CHẮN GIÓ BUỒNG LÁI & ĐƯỜNG RAY 3D -->
+        <div id="windshield-container" class="relative w-full h-[70%] overflow-hidden bg-sky-200">
+            
+            <!-- Canvas vẽ phối cảnh đường ray 3D, mây trời, bức tường rào cản & mảnh vỡ -->
+            <canvas id="track-canvas" class="w-full h-full block"></canvas>
+
+            <!-- Hiệu ứng vết nứt kính chắn gió khi tông mạnh vào bức tường -->
+            <svg id="windshield-crack" class="hidden absolute inset-0 w-full h-full pointer-events-none z-20 opacity-85" viewBox="0 0 1000 600" preserveAspectRatio="none">
+                <g stroke="#e0f2fe" stroke-width="2.5" fill="none" filter="drop-shadow(0 0 6px #38bdf8)">
+                    <path d="M500,320 L420,210 L350,180 M420,210 L440,120" />
+                    <path d="M500,320 L610,220 L710,190 M610,220 L640,110" />
+                    <path d="M500,320 L380,360 L260,410 M380,360 L330,480" />
+                    <path d="M500,320 L630,350 L760,420 M630,350 L670,490" />
+                    <circle cx="500" cy="320" r="18" stroke-width="3" />
+                    <circle cx="500" cy="320" r="45" stroke-width="1.5" stroke-dasharray="12 6" />
+                </g>
+            </svg>
+
+            <!-- Khung trụ buồng lái (Cockpit Pillars) hai bên trái phải và trần tàu -->
+            <div class="absolute inset-0 pointer-events-none z-10">
+                <!-- Viền trần buồng lái tinh gọn, hoàn toàn sạch sẽ không chứa chữ -->
+                <div class="w-full h-4 bg-gradient-to-b from-slate-950 to-transparent border-b border-sky-400/20"></div>
+                <!-- Trụ chữ A bên trái -->
+                <div class="absolute top-0 bottom-0 left-0 w-6 sm:w-12 bg-gradient-to-r from-slate-950 via-sky-950 to-transparent border-r-2 border-sky-500/30 transform -skew-x-3 origin-bottom"></div>
+                <!-- Trụ chữ A bên phải -->
+                <div class="absolute top-0 bottom-0 right-0 w-6 sm:w-12 bg-gradient-to-l from-slate-950 via-sky-950 to-transparent border-l-2 border-sky-500/30 transform skew-x-3 origin-bottom"></div>
+            </div>
+
+            <!-- =============================================================== -->
+            <!-- HỘP THOẠI CÂU HỎI (HIỆN LÊN KHI TÀU TÔNG VÀO BỨC TƯỜNG)         -->
+            <!-- =============================================================== -->
+            <div id="question-overlay" class="hidden absolute inset-0 z-30 flex items-center justify-center p-4 bg-slate-950/55 backdrop-blur-[3px]">
+                <div id="question-card" class="w-full max-w-3xl rounded-3xl bg-gradient-to-b from-sky-950/95 via-slate-900/95 to-slate-950/95 border-2 border-sky-400 shadow-[0_0_50px_rgba(56,189,248,0.45)] p-5 sm:p-7 text-white transform transition-all">
+                    
+                    <!-- Header cảnh báo va chạm rào cản -->
+                    <div class="flex items-center justify-between gap-2 pb-3 mb-4 border-b border-sky-500/30">
+                        <div class="flex items-center gap-2.5">
+                            <span class="px-3 py-1 rounded-lg bg-rose-500/20 border border-rose-400 text-rose-300 font-black text-xs sm:text-sm uppercase animate-pulse">
+                                ⚠️ ĐÃ VA CHẠM BỨC TƯỜNG!
+                            </span>
+                        </div>
+                        <span class="text-xs text-sky-300/80 hidden sm:inline">Chọn đáp án đúng để phá vỡ bức tường</span>
+                    </div>
+
+                    <!-- Tên rào cản trên bức tường -->
+                    <div id="q-wall-title" class="text-amber-300 font-extrabold text-sm sm:text-base uppercase tracking-wider mb-1">
+                        RÀO CẢN
+                    </div>
+
+                    <!-- Nội dung câu hỏi -->
+                    <h2 id="q-text" class="text-lg sm:text-2xl font-extrabold text-white leading-snug mb-5">
+                        Nội dung câu hỏi
+                    </h2>
+
+                    <!-- Danh sách các đáp án -->
+                    <div id="q-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                        <!-- Render bằng JS -->
+                    </div>
+
+                    <!-- Thông báo phản hồi đúng/sai -->
+                    <div id="q-feedback" class="hidden rounded-2xl p-3.5 text-sm sm:text-base font-bold flex items-center justify-between gap-3">
+                        <span id="q-feedback-text"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- PHẦN DƯỚI (30%): BẢNG ĐIỀU KHIỂN ĐOÀN TÀU (ĐÃ XOÁ PHẦN TỐC ĐỘ)      -->
+        <!-- =================================================================== -->
+        <div class="relative w-full h-[30%] bg-gradient-to-b from-slate-800 via-slate-900 to-slate-950 border-t-4 border-sky-400 shadow-[0_-10px_35px_rgba(2,132,199,0.5)] z-30 px-4 sm:px-10 py-3 flex items-center justify-between">
+            
+            <!-- Dải đèn LED xanh da trời trang trí mép trên bảng điều khiển -->
+            <div class="absolute top-0 left-1/4 right-1/4 h-1.5 bg-gradient-to-r from-transparent via-sky-300 to-transparent shadow-[0_0_15px_#38bdf8]"></div>
+
+            <!-- CỘT TRÁI: Radar quét chướng ngại vật phía trước -->
+            <div class="w-1/3 flex items-center">
+                <div class="w-full max-w-xs bg-slate-950/90 border border-sky-500/40 rounded-2xl p-3 sm:p-4 shadow-inner">
+                    <div class="flex items-center justify-between text-xs font-bold text-sky-300 mb-2">
+                        <span>📡 RADAR ĐƯỜNG RAY</span>
+                        <span id="radar-status" class="text-amber-300">Đang dò đường...</span>
+                    </div>
+                    <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden border border-sky-500/30">
+                        <div id="wall-approach-bar" class="h-full bg-gradient-to-r from-sky-400 via-amber-400 to-rose-500 w-0 transition-all duration-150"></div>
+                    </div>
+                    <p id="dashboard-tip" class="text-[11px] sm:text-xs text-sky-200/80 mt-2 truncate">
+                        Con tàu đang tiến về phía Trạm Ước Mơ...
+                    </p>
+                </div>
+            </div>
+
+            <!-- =============================================================== -->
+            <!-- CỘT GIỮA: NÚT TRÒN DẤU ? HƯỚNG DẪN CÁCH CHƠI & LUẬT CHƠI       -->
+            <!-- =============================================================== -->
+            <div class="w-1/3 flex flex-col items-center justify-center relative">
+                <!-- Vòng kim loại bao quanh nút trung tâm -->
+                <div class="p-2 sm:p-2.5 rounded-full bg-gradient-to-b from-slate-700 to-slate-900 border-2 border-sky-400/60 shadow-2xl">
+                    <button id="btn-dashboard-rules" onclick="openRulesModal()" title="Bấm để xem Luật Chơi & Hướng dẫn"
+                        class="btn-question-center w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-sky-300 via-sky-500 to-blue-700 hover:from-sky-200 hover:to-blue-600 text-white border-4 border-white flex flex-col items-center justify-center transition transform hover:scale-105 active:scale-95 cursor-pointer">
+                        <span class="text-3xl sm:text-5xl font-black leading-none drop-shadow">?</span>
+                    </button>
+                </div>
+                <span class="mt-1.5 px-3 py-0.5 rounded-full bg-sky-900/90 border border-sky-400/50 text-[10px] sm:text-xs font-extrabold text-sky-200 uppercase tracking-wider shadow">
+                    Luật chơi & Hướng dẫn
+                </span>
+            </div>
+
+            <!-- CỘT PHẢI: 4 Đèn báo năng lượng tương ứng 4 bức tường & Cần lái -->
+            <div class="w-1/3 flex items-center justify-end gap-3 sm:gap-5">
+                <div class="hidden sm:flex flex-col flex-1 max-w-xs bg-slate-950/90 border border-sky-500/40 rounded-2xl p-3 sm:p-4">
+                    <div class="text-xs font-bold text-sky-300 mb-2 flex items-center justify-between">
+                        <span>⚡ NĂNG LƯỢNG PHÁ TƯỜNG</span>
+                        <span class="text-emerald-400 text-[11px]">4 CHẶNG</span>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2">
+                        <div id="lamp-1" class="h-3 rounded bg-slate-800 border border-sky-500/40 transition-all"></div>
+                        <div id="lamp-2" class="h-3 rounded bg-slate-800 border border-sky-500/40 transition-all"></div>
+                        <div id="lamp-3" class="h-3 rounded bg-slate-800 border border-sky-500/40 transition-all"></div>
+                        <div id="lamp-4" class="h-3 rounded bg-slate-800 border border-sky-500/40 transition-all"></div>
+                    </div>
+                    <div class="mt-2 flex items-center justify-between text-[11px] text-slate-400">
+                        <span>Đích đến: <strong class="text-sky-300">ƯỚC MƠ</strong></span>
+                        <span class="text-sky-400 font-semibold">4 Bức tường</span>
+                    </div>
+                </div>
+
+                <!-- Cần lái đoàn tàu -->
+                <div class="flex flex-col items-center bg-slate-950 border-2 border-slate-700 rounded-2xl px-3 py-2 shrink-0">
+                    <span class="text-[9px] font-bold text-sky-400 uppercase mb-1">CẦN LÁI</span>
+                    <div class="relative w-8 h-16 sm:h-20 bg-slate-800 rounded-lg border border-slate-600 flex justify-center p-1">
+                        <div id="throttle-handle" class="w-10 h-5 rounded-md bg-gradient-to-r from-sky-400 to-blue-600 border border-white shadow-md transition-all duration-300 transform translate-y-0"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- 3. MODAL HƯỚNG DẪN & LUẬT CHƠI (KHI BẤM NÚT TRÒN DẤU ? GIỮA TÀU)        -->
+    <!-- ======================================================================= -->
+    <div id="rules-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+        <div class="w-full max-w-xl rounded-3xl bg-gradient-to-b from-sky-900 via-slate-900 to-slate-950 border-2 border-sky-400 shadow-[0_0_50px_rgba(56,189,248,0.5)] p-6 sm:p-8 text-white relative">
+            
+            <!-- Icon dấu ? lớn ở đầu modal -->
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-sky-300 to-blue-600 border-4 border-white flex items-center justify-center mx-auto -mt-14 mb-4 shadow-xl">
+                <span class="text-4xl font-black text-white">?</span>
+            </div>
+
+            <h3 class="text-2xl sm:text-3xl font-extrabold text-center text-sky-200 uppercase tracking-wide mb-4">
+                Hướng Dẫn & Luật Chơi
+            </h3>
+
+            <!-- Câu Luật Chơi chính xác theo yêu cầu của người dùng -->
+            <div class="p-5 rounded-2xl bg-sky-500/15 border-2 border-sky-400/70 shadow-inner mb-5">
+                <p class="text-base sm:text-xl font-extrabold text-center text-white leading-relaxed">
+                    "Hãy giúp đoàn tàu trả lời các câu hỏi giúp phá vỡ rào cản để con tàu chở bạn tiến đến ước mơ!"
+                </p>
+            </div>
+
+            <!-- Các bước chơi chi tiết -->
+            <div class="space-y-3 text-sm sm:text-base text-sky-100 mb-6">
+                <div class="flex items-start gap-3 bg-slate-900/70 p-3 rounded-xl border border-sky-500/20">
+                    <span class="w-7 h-7 rounded-lg bg-sky-500 text-slate-950 font-black flex items-center justify-center shrink-0">1</span>
+                    <p><strong>Hành trình:</strong> Con tàu chở bạn băng qua đường ray hướng tới <strong>Trạm Ước Mơ</strong> với 4 bức tường thử thách chắn ngang.</p>
+                </div>
+                <div class="flex items-start gap-3 bg-slate-900/70 p-3 rounded-xl border border-sky-500/20">
+                    <span class="w-7 h-7 rounded-lg bg-amber-400 text-slate-950 font-black flex items-center justify-center shrink-0">2</span>
+                    <p><strong>Đối mặt rào cản:</strong> Khi đoàn tàu tông vào bức tường, một câu hỏi trắc nghiệm (A, B, C, D) sẽ hiện lên màn hình.</p>
+                </div>
+                <div class="flex items-start gap-3 bg-slate-900/70 p-3 rounded-xl border border-sky-500/20">
+                    <span class="w-7 h-7 rounded-lg bg-emerald-400 text-slate-950 font-black flex items-center justify-center shrink-0">3</span>
+                    <p><strong>Phá vỡ bức tường:</strong> Chọn đáp án đúng để đoàn tàu nạp năng lượng húc vỡ bức tường và tiến thẳng đến ước mơ!</p>
+                </div>
+            </div>
+
+            <div class="flex justify-center">
+                <button onclick="closeRulesModal()" 
+                    class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-sky-400 to-blue-600 hover:from-sky-300 hover:to-blue-500 text-white font-extrabold text-base sm:text-lg shadow-lg border border-white/60 transition transform hover:scale-105 cursor-pointer">
+                    Đã hiểu! Tiếp tục hành trình 🚄
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+  </div>
+
 
   <div class="aurora"><i></i><i></i><i></i></div>
   <div class="vertical-optic-axis"></div>
@@ -1864,8 +2486,17 @@
             <img src="slide%209.png.png" data-base="slide 9" onload="window.onImgLoad(this)" onerror="window.resolveImg(this)" alt="Áp lực đồng trang lứa và bình phong cầu toàn">
             <canvas class="s9-particle-canvas" id="s9ParticleCanvas"></canvas>
           </div>
-        </div></div>
+        </div>
       </div>
+
+      <audio id="s9Audio" src="cho%20anh%20chut%20thoi.MP3" preload="auto"></audio>
+      <button type="button" class="s9-speaker-btn" id="s9SpeakerBtn" onclick="event.stopPropagation(); window.toggleS9Audio();" aria-label="Phát âm thanh">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+        </svg>
+      </button>
     </div>
 
     <!-- SLIDE 10 (fx-10): IV. LỘ TRÌNH THỰC CHIẾN -->
@@ -2804,6 +3435,7 @@
     }
 
     window.addEventListener('keydown', (e) => {
+      if (window._trainGameActive) return;
       if (curtainStage && !curtainStage.classList.contains('curtain-opened')) {
         if (e.key === ' ' || e.key === 'Enter') {
           e.preventDefault();
@@ -3732,8 +4364,1063 @@
       }).observe(stage, { attributes: true, attributeFilter: ['class'] });
     })();
 
+    // Phát âm thanh ở Slide 9 (chỉ phát/tạm dừng, tự tắt khi rời Slide 9, không xung đột)
+    (function() {
+      const audio = document.getElementById('s9Audio');
+      const btn = document.getElementById('s9SpeakerBtn');
+      if (!audio || !btn) return;
+      const slide9 = btn.closest('.slide');
+
+      audio.addEventListener('error', function() {
+        if (!audio.dataset.fallbackTried) {
+          audio.dataset.fallbackTried = '1';
+          audio.src = 'cho%20anh%20chut%20thoi.mp3';
+        }
+      });
+
+      audio.addEventListener('ended', function() {
+        btn.classList.remove('playing');
+      });
+
+      window.toggleS9Audio = function() {
+        if (audio.paused) {
+          audio.play().then(() => btn.classList.add('playing')).catch(() => {});
+        } else {
+          audio.pause();
+          btn.classList.remove('playing');
+        }
+      };
+
+      if (slide9) {
+        new MutationObserver(() => {
+          if (!slide9.classList.contains('active') && !audio.paused) {
+            audio.pause();
+            audio.currentTime = 0;
+            btn.classList.remove('playing');
+          }
+        }).observe(slide9, { attributes: true, attributeFilter: ['class'] });
+      }
+    })();
     animateAllCanvases(0);
     showSlide(0);
+
+    // =========================================================================
+    // TRÒ CHƠI MỞ ĐẦU: CHUYẾN TÀU ƯỚC MƠ (CHẠY TRƯỚC BÀI THUYẾT TRÌNH)
+    // =========================================================================
+    (function() {
+
+        /* -------------------------------------------------------------------
+         * 1. BỘ 4 CÂU HỎI & ĐÁP ÁN CHÍNH XÁC THEO YÊU CẦU
+         * ------------------------------------------------------------------- */
+        const GAME_DATA = {
+            barriers: [
+                {
+                    wallName: "RÀO CẢN 1: ĐIỂM BẮT ĐẦU CỦA HÀNH TRÌNH",
+                    wallShortLabel: "KHỞI ĐẦU HÀNH TRÌNH",
+                    question: "Theo bạn, điều gì là điểm bắt đầu của hành trình tuổi trẻ?",
+                    options: [
+                        "Sự may mắn",
+                        "Ước mơ",
+                        "Tiền bạc",
+                        "Thành công"
+                    ],
+                    correctIndex: 1 // B. Ước mơ
+                },
+                {
+                    wallName: "RÀO CẢN 2: ĐỐI MẶT VỚI THẤT BẠI",
+                    wallShortLabel: "VƯỢT QUA THẤT BẠI",
+                    question: "Điều gì giúp chúng ta tiếp tục hành trình khi gặp thất bại?",
+                    options: [
+                        "Bỏ cuộc",
+                        "Đổ lỗi",
+                        "Kiên trì và học hỏi",
+                        "Quay lại vùng an toàn"
+                    ],
+                    correctIndex: 2 // C. Kiên trì và học hỏi
+                },
+                {
+                    wallName: "RÀO CẢN 3: CÁI BẪY CỦA SỰ TRÌ HOÃN",
+                    wallShortLabel: "SỰ TRÌ HOÃN",
+                    question: "Một người luôn nói “Tôi đang chờ thời điểm thích hợp để bắt đầu”. Vấn đề lớn nhất có thể nằm ở đâu?",
+                    options: [
+                        "Họ chưa có ước mơ",
+                        "Họ đang biến sự chuẩn bị thành lý do để trì hoãn",
+                        "Họ quá kiên trì",
+                        "Họ chưa gặp đủ thất bại"
+                    ],
+                    correctIndex: 1 // B. Họ đang biến sự chuẩn bị thành lý do để trì hoãn
+                },
+                {
+                    wallName: "RÀO CẢN 4: BƯỚC RA KHỎI VÙNG AN TOÀN",
+                    wallShortLabel: "VÙNG AN TOÀN",
+                    question: "Điều nào sau đây KHÔNG đồng nghĩa với việc bước ra khỏi vùng an toàn?",
+                    options: [
+                        "Thử một điều mới dù chưa chắc thành công",
+                        "Chấp nhận khả năng mắc sai lầm",
+                        "Làm điều mạo hiểm mà không tính đến hậu quả",
+                        "Chủ động đối mặt với thử thách"
+                    ],
+                    correctIndex: 2 // C. Làm điều mạo hiểm mà không tính đến hậu quả
+                }
+            ]
+        };
+
+        /* -------------------------------------------------------------------
+         * 2. BỘ TỔNG HỢP ÂM THANH WEB AUDIO API TỰ ĐỘNG (CÓ TIẾNG RAY & ĐỘNG CƠ)
+         * ------------------------------------------------------------------- */
+        let audioCtx = null;
+        let railSoundTimer = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) {
+                    audioCtx = new AudioContextClass();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        // Tiếng ray nghiến và nhịp bánh sắt lướt nhanh
+        function playRailClickSound(speedRate = 1) {
+            if (!audioCtx) return;
+            const now = audioCtx.currentTime;
+            
+            // Nhịp lách-cách bánh sắt
+            [0, 0.08].forEach((offset) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(85 * speedRate, now + offset);
+                osc.frequency.exponentialRampToValueAtTime(32, now + offset + 0.05);
+
+                gain.gain.setValueAtTime(0.045, now + offset);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.06);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now + offset);
+                osc.stop(now + offset + 0.07);
+            });
+        }
+
+        function startRailAudioLoop() {
+            if (railSoundTimer) clearInterval(railSoundTimer);
+            railSoundTimer = setInterval(() => {
+                if (currentState === STATE.RUNNING || currentState === STATE.APPROACHING_DREAM) {
+                    playRailClickSound(motionFactor > 1.2 ? 1.4 : 1.0);
+                }
+            }, 190);
+        }
+
+        function stopRailAudioLoop() {
+            if (railSoundTimer) {
+                clearInterval(railSoundTimer);
+                railSoundTimer = null;
+            }
+        }
+
+        // Tiếng còi tàu + loé sáng khi bấm BẮT ĐẦU
+        function playTrainHornAndFlashSound() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const now = audioCtx.currentTime;
+            [349.23, 440, 587.33].forEach((freq) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(freq, now);
+                osc.frequency.exponentialRampToValueAtTime(freq * 1.04, now + 1.1);
+
+                gain.gain.setValueAtTime(0.001, now);
+                gain.gain.linearRampToValueAtTime(0.12, now + 0.08);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 1.25);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 1.28);
+            });
+        }
+
+        // Tiếng va chạm mạnh khi tàu tông vào tường
+        function playCrashSound() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(160, now);
+            osc.frequency.exponentialRampToValueAtTime(25, now + 0.6);
+
+            gain.gain.setValueAtTime(0.55, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.68);
+
+            const bufferSize = audioCtx.sampleRate * 0.5;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.15));
+            }
+            const noise = audioCtx.createBufferSource();
+            const noiseGain = audioCtx.createGain();
+            noise.buffer = buffer;
+            noiseGain.gain.setValueAtTime(0.35, now);
+            noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+            noise.connect(noiseGain);
+            noiseGain.connect(audioCtx.destination);
+            noise.start(now);
+        }
+
+        // Tiếng phá vỡ bức tường thành công
+        function playSmashWallSound() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const now = audioCtx.currentTime;
+            const notes = [523.25, 659.25, 783.99, 1046.5];
+            notes.forEach((freq, idx) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+                gain.gain.setValueAtTime(0.2, now + idx * 0.06);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.45);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now + idx * 0.06);
+                osc.stop(now + idx * 0.06 + 0.48);
+            });
+            playCrashSound();
+        }
+
+        // Tiếng chọn đáp án sai
+        function playWrongSound() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(190, now);
+            osc.frequency.linearRampToValueAtTime(120, now + 0.35);
+            gain.gain.setValueAtTime(0.2, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.4);
+        }
+
+        // Tiếng pháo hoa chiến thắng cuối game
+        function playVictoryFanfare() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const now = audioCtx.currentTime;
+            const chord = [523.25, 659.25, 783.99, 987.77, 1046.5, 1318.5];
+            chord.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now + i * 0.1);
+                gain.gain.setValueAtTime(0.18, now + i * 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 1.4);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now + i * 0.1);
+                osc.stop(now + i * 0.1 + 1.45);
+            });
+        }
+
+        /* -------------------------------------------------------------------
+         * 3. BIẾN TRẠNG THÁI GAMEPLAY & ĐỒ HỌA 3D PHỐI CẢNH CAO TỐC
+         * ------------------------------------------------------------------- */
+        const STATE = {
+            START_SCREEN: 'START_SCREEN',
+            RUNNING: 'RUNNING',
+            CRASHED_QUESTION: 'CRASHED_QUESTION',
+            SMASHING: 'SMASHING',
+            APPROACHING_DREAM: 'APPROACHING_DREAM',
+            PRESENTATION: 'PRESENTATION'
+        };
+
+        let currentState = STATE.START_SCREEN;
+        let currentBarrierIndex = 0;
+
+        // Vận tốc và quán tính chuyển động
+        let motionFactor = 0;
+        let targetMotionFactor = 0;
+        let trackOffset = 0;
+
+        // Quãng đường đo bằng metric thực tế (bắt đầu từ 100 = tít tắp chân trời)
+        let wallDist = 100.0;
+        let wallCrackedLevel = 0;
+        let wallRedFlash = 0;
+        let dreamGlowProgress = 0;
+
+        // Mảng hiệu ứng hạt, cột điện, mây và tia tốc độ
+        let debrisParticles = [];
+        let sidePoles = [0.08, 0.22, 0.38, 0.55, 0.72, 0.88];
+        let clouds = [
+            { x: 0.12, y: 0.14, s: 1.1, speed: 0.0003 },
+            { x: 0.48, y: 0.09, s: 0.85, speed: 0.0002 },
+            { x: 0.78, y: 0.18, s: 1.25, speed: 0.00035 }
+        ];
+
+        const canvas = document.getElementById('track-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            const container = document.getElementById('windshield-container');
+            if (!container) return;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        /* -------------------------------------------------------------------
+         * 4. CHUYỂN CẢNH LOÉ SÁNG & BẮT ĐẦU HÀNH TRÌNH
+         * ------------------------------------------------------------------- */
+        function startGameWithFlash() {
+            playTrainHornAndFlashSound();
+
+            const flashEl = document.getElementById('flash-overlay');
+            flashEl.classList.add('flash-active');
+
+            setTimeout(() => {
+                document.getElementById('start-screen').classList.add('hidden');
+                const cockpit = document.getElementById('cockpit-screen');
+                cockpit.classList.remove('hidden');
+                cockpit.classList.add('flex');
+
+                resizeCanvas();
+                initJourneyState();
+                startRailAudioLoop();
+
+                setTimeout(() => {
+                    flashEl.classList.remove('flash-active');
+                }, 180);
+            }, 380);
+        }
+
+        function initJourneyState() {
+            currentBarrierIndex = 0;
+            currentState = STATE.RUNNING;
+            motionFactor = 0.5;
+            targetMotionFactor = 1.35; // Tốc độ chạy rất nhanh và mạnh mẽ
+            wallDist = 100.0;          // Bắt đầu từ khoảng cách xa hun hút
+            wallCrackedLevel = 0;
+            dreamGlowProgress = 0;
+            debrisParticles = [];
+
+            document.getElementById('windshield-crack').classList.add('hidden');
+            document.getElementById('question-overlay').classList.add('hidden');
+            document.getElementById('windshield-container').classList.add('cockpit-running');
+
+            updateDashboardHUD();
+        }
+
+        function restartFromCockpit() {
+            playTrainHornAndFlashSound();
+            initJourneyState();
+            startRailAudioLoop();
+        }
+
+        function backToStartScreen() {
+            stopRailAudioLoop();
+            currentState = STATE.START_SCREEN;
+            const badge = document.getElementById('intro-badge');
+            if (badge) badge.classList.remove('hidden');
+            const btnContainer = document.getElementById('start-btn-container');
+            if (btnContainer) btnContainer.classList.remove('hidden');
+
+            document.getElementById('cockpit-screen').classList.add('hidden');
+            document.getElementById('cockpit-screen').classList.remove('flex');
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+
+        /* -------------------------------------------------------------------
+         * 5. LOGIC VA CHẠM TƯỜNG & HIỂN THỊ CÂU HỎI
+         * ------------------------------------------------------------------- */
+        function triggerWallCrash() {
+            currentState = STATE.CRASHED_QUESTION;
+            motionFactor = 0;
+            targetMotionFactor = 0;
+            wallCrackedLevel = 1;
+
+            playCrashSound();
+
+            // Rung chấn buồng lái mạnh khi va chạm
+            const cockpit = document.getElementById('cockpit-screen');
+            cockpit.classList.remove('shake-crash');
+            void cockpit.offsetWidth;
+            cockpit.classList.add('shake-crash');
+
+            document.getElementById('windshield-container').classList.remove('cockpit-running');
+            document.getElementById('windshield-crack').classList.remove('hidden');
+
+            updateDashboardHUD();
+            spawnBrickDebris(30, false);
+
+            setTimeout(() => {
+                if (currentState === STATE.CRASHED_QUESTION) {
+                    showQuestionModalForCurrentWall();
+                }
+            }, 380);
+        }
+
+        function showQuestionModalForCurrentWall() {
+            const barrier = GAME_DATA.barriers[currentBarrierIndex];
+            if (!barrier) return;
+
+            document.getElementById('q-wall-title').textContent = barrier.wallName;
+            document.getElementById('q-text').textContent = barrier.question;
+
+            const feedbackEl = document.getElementById('q-feedback');
+            feedbackEl.classList.add('hidden');
+
+            const optionsContainer = document.getElementById('q-options');
+            optionsContainer.innerHTML = '';
+
+            const labels = ['A', 'B', 'C', 'D'];
+            barrier.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "group w-full text-left p-3.5 sm:p-4 rounded-2xl bg-slate-800/90 hover:bg-sky-600/40 border-2 border-sky-400/40 hover:border-sky-300 transition-all flex items-start gap-3 shadow-md cursor-pointer";
+                btn.onclick = () => selectAnswer(idx, btn);
+                btn.innerHTML = `
+                    <span class="w-8 h-8 rounded-xl bg-sky-500 group-hover:bg-white text-slate-950 font-black flex items-center justify-center shrink-0 text-sm sm:text-base transition">
+                        ${labels[idx]}
+                    </span>
+                    <span class="text-sm sm:text-base font-bold text-sky-50 leading-snug pt-0.5">${optText}</span>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('question-overlay').classList.remove('hidden');
+        }
+
+        function selectAnswer(selectedIndex, btnElement) {
+            if (currentState !== STATE.CRASHED_QUESTION) return;
+
+            const barrier = GAME_DATA.barriers[currentBarrierIndex];
+            const feedbackEl = document.getElementById('q-feedback');
+            const feedbackText = document.getElementById('q-feedback-text');
+            feedbackEl.classList.remove('hidden');
+
+            const labels = ['A', 'B', 'C', 'D'];
+
+            if (selectedIndex === barrier.correctIndex) {
+                // ĐÁP ÁN ĐÚNG -> Tông vỡ bức tường!
+                btnElement.className = "w-full text-left p-3.5 sm:p-4 rounded-2xl bg-emerald-500/30 border-2 border-emerald-400 flex items-start gap-3 shadow-lg";
+                feedbackEl.className = "rounded-2xl p-3.5 text-sm sm:text-base font-extrabold bg-emerald-500/20 border border-emerald-400 text-emerald-200 flex items-center justify-between";
+                feedbackText.innerHTML = `🎉 CHÍNH XÁC! Đáp án ${labels[barrier.correctIndex]} giúp đoàn tàu phá vỡ bức tường rào cản!`;
+
+                smashThroughCurrentWall();
+            } else {
+                // ĐÁP ÁN SAI -> Nháy đỏ bức tường
+                playWrongSound();
+                wallRedFlash = 1.0;
+                btnElement.className = "w-full text-left p-3.5 sm:p-4 rounded-2xl bg-rose-500/30 border-2 border-rose-400 flex items-start gap-3 opacity-80";
+                feedbackEl.className = "rounded-2xl p-3.5 text-sm sm:text-base font-extrabold bg-rose-500/20 border border-rose-400 text-rose-200 flex items-center justify-between";
+                feedbackText.innerHTML = "❌ Chưa chính xác! Bức tường vẫn còn kiên cố, hãy chọn đáp án khác nhé!";
+            }
+        }
+
+        function smashThroughCurrentWall() {
+            currentState = STATE.SMASHING;
+            playSmashWallSound();
+
+            spawnBrickDebris(110, true);
+
+            setTimeout(() => {
+                document.getElementById('question-overlay').classList.add('hidden');
+                document.getElementById('windshield-crack').classList.add('hidden');
+                document.getElementById('windshield-container').classList.add('cockpit-running');
+
+                currentBarrierIndex++;
+                updateDashboardHUD();
+
+                if (currentBarrierIndex >= GAME_DATA.barriers.length) {
+                    // HOÀN THÀNH CÂU HỎI CUỐI (CÂU 4):
+                    // Bức tường cuối vỡ tan -> Bắt đầu bừng sáng "ƯỚC MƠ" ở chân trời và lao thẳng đến đích!
+                    currentState = STATE.APPROACHING_DREAM;
+                    motionFactor = 1.0;
+                    targetMotionFactor = 2.4; // Tăng tốc cực đại tiến vào ước mơ
+                    dreamGlowProgress = 0;
+                    playVictoryFanfare();
+                    
+                    const tipEl = document.getElementById('dashboard-tip');
+                    if (tipEl) tipEl.textContent = "Đã phá tan rào cản cuối cùng! Đang tiến thẳng vào ƯỚC MƠ...";
+
+                    // Sau khi tàu lao thẳng vào vầng sáng "ƯỚC MƠ", tự động loé sáng chuyển vào bài thuyết trình
+                    setTimeout(() => {
+                        enterPresentationSlide();
+                    }, 3200);
+                } else {
+                    // Tiếp tục chặng kế tiếp: bức tường bắt đầu lại từ xa tít tắp (100)
+                    currentState = STATE.RUNNING;
+                    motionFactor = 0.8;
+                    targetMotionFactor = 1.4;
+                    wallDist = 100.0;
+                    wallCrackedLevel = 0;
+                    updateDashboardHUD();
+                }
+            }, 650);
+        }
+
+        /* -------------------------------------------------------------------
+         * 5.1 CHUYỂN THẲNG VÀO SLIDE BÀI THUYẾT TRÌNH
+         * ------------------------------------------------------------------- */
+        function enterPresentationSlide() {
+            stopRailAudioLoop();
+            const flashEl = document.getElementById('flash-overlay');
+            flashEl.classList.add('flash-active');
+
+            setTimeout(() => {
+                const overlay = document.getElementById('trainGameOverlay');
+                if (overlay) overlay.style.display = 'none';
+                window._trainGameActive = false;
+
+                // Giữ nguyên rèm xanh đóng lại; sau khi lóe sáng xong, người dùng nhấp vào để mở rèm như bình thường
+                const cs = document.getElementById('curtainStage');
+                if (cs) {
+                    cs.classList.remove('curtain-opened');
+                    cs.style.display = 'flex';
+                }
+                if (typeof window.goToSlide === 'function') window.goToSlide(0);
+
+                currentState = STATE.PRESENTATION;
+
+                setTimeout(() => {
+                    flashEl.classList.remove('flash-active');
+                }, 420);
+            }, 480);
+        }
+
+        /* -------------------------------------------------------------------
+         * 6. CẬP NHẬT BẢNG ĐIỀU KHIỂN (DASHBOARD HUD)
+         * ------------------------------------------------------------------- */
+        function updateDashboardHUD() {
+            const total = GAME_DATA.barriers.length;
+            const passed = Math.min(currentBarrierIndex, total);
+
+            for (let i = 1; i <= 4; i++) {
+                const lamp = document.getElementById(`lamp-${i}`);
+                if (!lamp) continue;
+                if (i <= passed) {
+                    lamp.className = "h-3 rounded bg-sky-400 border border-white shadow-[0_0_12px_#38bdf8] transition-all";
+                } else {
+                    lamp.className = "h-3 rounded bg-slate-800 border border-sky-500/40 transition-all";
+                }
+            }
+
+            const tipEl = document.getElementById('dashboard-tip');
+            const handleEl = document.getElementById('throttle-handle');
+
+            if (currentState === STATE.RUNNING) {
+                tipEl.textContent = "Con tàu đang chạy tốc độ cao trên đường ray thẳng tắp...";
+                handleEl.style.transform = "translateY(0px)";
+            } else if (currentState === STATE.CRASHED_QUESTION) {
+                tipEl.textContent = "Hãy trả lời câu hỏi trên màn hình để phá vỡ bức tường!";
+                handleEl.style.transform = "translateY(36px)";
+            } else if (currentState === STATE.APPROACHING_DREAM) {
+                tipEl.textContent = "Đang tiến thẳng vào ƯỚC MƠ!";
+                handleEl.style.transform = "translateY(0px)";
+            }
+        }
+
+        /* -------------------------------------------------------------------
+         * 7. VẼ ĐỒ HỌA 3D PHỐI CẢNH ĐƯỜNG RAY SÂU HUN HÚT & TỐC ĐỘ CAO (CANVAS)
+         * ------------------------------------------------------------------- */
+        function spawnBrickDebris(count, explosive) {
+            const w = canvas.width;
+            const h = canvas.height;
+            const cx = w * 0.5;
+            const cy = h * 0.52;
+
+            const colors = ['#0284c7', '#0369a1', '#38bdf8', '#7dd3fc', '#cbd5e1', '#1e293b'];
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = explosive ? (5 + Math.random() * 22) : (2 + Math.random() * 9);
+                debrisParticles.push({
+                    x: cx + (Math.random() - 0.5) * w * 0.35,
+                    y: cy + (Math.random() - 0.5) * h * 0.35,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed - (explosive ? 5 : 1),
+                    size: 10 + Math.random() * 30,
+                    rot: Math.random() * Math.PI,
+                    vRot: (Math.random() - 0.5) * 0.28,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    alpha: 1
+                });
+            }
+        }
+
+        function renderCockpitScene() {
+            if (currentState === STATE.START_SCREEN || currentState === STATE.PRESENTATION) {
+                requestAnimationFrame(renderCockpitScene);
+                return;
+            }
+
+            const w = canvas.width;
+            const h = canvas.height;
+            
+            // Điểm tụ chân trời sâu hơn và sắc nét hơn
+            const horizonY = h * 0.40;
+            const vanishX = w * 0.5;
+
+            motionFactor += (targetMotionFactor - motionFactor) * 0.08;
+
+            ctx.save();
+
+            // Hiệu ứng micro-shake rung chấn nhẹ khi tàu chạy tốc độ cao
+            if (motionFactor > 0.4) {
+                const shakeIntensity = motionFactor * 1.5;
+                const shakeX = (Math.random() - 0.5) * shakeIntensity;
+                const shakeY = (Math.random() - 0.5) * shakeIntensity * 0.7;
+                ctx.translate(shakeX, shakeY);
+            }
+
+            // 1. VẼ BẦU TRỜI XANH DA TRỜI
+            const skyGrad = ctx.createLinearGradient(0, 0, 0, horizonY);
+            if (currentState === STATE.APPROACHING_DREAM) {
+                skyGrad.addColorStop(0, '#0284c7');
+                skyGrad.addColorStop(0.35, '#38bdf8');
+                skyGrad.addColorStop(0.75, '#fef08a');
+                skyGrad.addColorStop(1, '#ffffff');
+            } else {
+                skyGrad.addColorStop(0, '#0369a1');
+                skyGrad.addColorStop(0.5, '#38bdf8');
+                skyGrad.addColorStop(1, '#e0f2fe');
+            }
+            ctx.fillStyle = skyGrad;
+            ctx.fillRect(0, 0, w, horizonY);
+
+            // Vầng sáng bình thường ở chân trời
+            if (currentState !== STATE.APPROACHING_DREAM) {
+                const normalSunGrad = ctx.createRadialGradient(vanishX, horizonY, 5, vanishX, horizonY, w * 0.22);
+                normalSunGrad.addColorStop(0, 'rgba(224, 242, 254, 0.7)');
+                normalSunGrad.addColorStop(1, 'rgba(56, 189, 248, 0)');
+                ctx.fillStyle = normalSunGrad;
+                ctx.fillRect(0, 0, w, horizonY + 25);
+            }
+
+            // Vẽ mây trôi xa
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+            clouds.forEach(c => {
+                c.x -= c.speed * (1 + motionFactor * 2.2);
+                if (c.x < -0.2) c.x = 1.2;
+                const cx = c.x * w;
+                const cy = c.y * horizonY;
+                ctx.beginPath();
+                ctx.ellipse(cx, cy, 70 * c.s, 22 * c.s, 0, 0, Math.PI * 2);
+                ctx.ellipse(cx - 35 * c.s, cy + 6 * c.s, 45 * c.s, 16 * c.s, 0, 0, Math.PI * 2);
+                ctx.ellipse(cx + 40 * c.s, cy + 5 * c.s, 50 * c.s, 17 * c.s, 0, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // 2. MẶT ĐẤT & ĐƯỜNG RAY PHỐI CẢNH SIÊU SÂU
+            const groundGrad = ctx.createLinearGradient(0, horizonY, 0, h);
+            groundGrad.addColorStop(0, '#075985');
+            groundGrad.addColorStop(0.4, '#0369a1');
+            groundGrad.addColorStop(1, '#082f49');
+            ctx.fillStyle = groundGrad;
+            ctx.fillRect(0, horizonY, w, h - horizonY);
+
+            // Đường ray ở xa thu nhỏ tít tắp thành 1 điểm, ở gần trải rộng tới mép kính lái
+            const trackTopWidth = Math.max(2, w * 0.005);
+            const trackBottomWidth = w * 0.96;
+
+            // Nền đá ballast
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath();
+            ctx.moveTo(vanishX - trackTopWidth * 2.5, horizonY);
+            ctx.lineTo(vanishX + trackTopWidth * 2.5, horizonY);
+            ctx.lineTo(vanishX + trackBottomWidth * 1.05, h);
+            ctx.lineTo(vanishX - trackBottomWidth * 1.05, h);
+            ctx.closePath();
+            ctx.fill();
+
+            // Tốc độ cuộn của đường ray và tà-vẹt tăng mạnh
+            const moveDelta = motionFactor * 0.052;
+            trackOffset = (trackOffset + moveDelta) % 1;
+
+            // Vẽ 30 thanh tà-vẹt với luật phối cảnh lũy thừa cao (Math.pow 3.3) tạo chiều sâu hun hút
+            const numSleepers = 30;
+            for (let i = 0; i < numSleepers; i++) {
+                let t = ((i / numSleepers) + trackOffset) % 1;
+                let p = Math.pow(t, 3.3);
+                let y = horizonY + p * (h - horizonY);
+                let halfW = (trackTopWidth + p * (trackBottomWidth - trackTopWidth)) * 0.94;
+                let thickness = Math.max(1.5, p * 20);
+
+                ctx.fillStyle = `rgba(56, 189, 248, ${0.12 + p * 0.65})`;
+                ctx.fillRect(vanishX - halfW, y, halfW * 2, thickness);
+            }
+
+            // Hệ thống 4 thanh ray thép cao tốc (2 thanh ngoài + 2 thanh dẫn hướng)
+            ctx.strokeStyle = '#7dd3fc';
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            // Ray chính trái & phải
+            ctx.moveTo(vanishX - trackTopWidth * 0.75, horizonY);
+            ctx.lineTo(vanishX - trackBottomWidth * 0.72, h);
+            ctx.moveTo(vanishX + trackTopWidth * 0.75, horizonY);
+            ctx.lineTo(vanishX + trackBottomWidth * 0.72, h);
+            ctx.stroke();
+
+            // Ray dẫn hướng bên trong
+            ctx.strokeStyle = 'rgba(224, 242, 254, 0.6)';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(vanishX - trackTopWidth * 0.4, horizonY);
+            ctx.lineTo(vanishX - trackBottomWidth * 0.42, h);
+            ctx.moveTo(vanishX + trackTopWidth * 0.4, horizonY);
+            ctx.lineTo(vanishX + trackBottomWidth * 0.42, h);
+            ctx.stroke();
+
+            // Cột điện cao tốc hai bên đường ray lao vụt về sau từ tít chân trời
+            sidePoles.forEach((poleT, idx) => {
+                sidePoles[idx] = (poleT + moveDelta * 1.1) % 1;
+                let p = Math.pow(sidePoles[idx], 3.1);
+                let yBase = horizonY + p * (h - horizonY);
+                let offsetX = (trackTopWidth + p * (trackBottomWidth - trackTopWidth)) * 1.25;
+                let poleH = Math.max(4, p * 320);
+                let poleW = Math.max(1.5, p * 12);
+
+                ctx.fillStyle = `rgba(186, 230, 253, ${0.15 + p * 0.75})`;
+                // Cột trái
+                ctx.fillRect(vanishX - offsetX - poleW, yBase - poleH, poleW, poleH);
+                // Xà ngang cột trái
+                ctx.fillRect(vanishX - offsetX - poleW, yBase - poleH, poleW * 3.5, Math.max(1, p * 4));
+
+                // Cột phải
+                ctx.fillRect(vanishX + offsetX, yBase - poleH, poleW, poleH);
+                // Xà ngang cột phải
+                ctx.fillRect(vanishX + offsetX - poleW * 2.5, yBase - poleH, poleW * 3.5, Math.max(1, p * 4));
+            });
+
+            // 3. HIỆU ỨNG VỆT GIÓ TỐC ĐỘ XUYÊN TÂM (RADIAL SPEED LINES)
+            if (motionFactor > 0.4) {
+                const numLines = Math.floor(18 + motionFactor * 14);
+                ctx.save();
+                for (let i = 0; i < numLines; i++) {
+                    const angle = (i / numLines) * Math.PI * 2 + Math.sin(Date.now() * 0.008 + i) * 0.2;
+                    const minR = w * 0.12;
+                    const maxR = minR + (w * 0.5 * (motionFactor / 1.4));
+                    
+                    ctx.strokeStyle = '#bae6fd';
+                    ctx.globalAlpha = (0.08 + Math.random() * 0.22) * Math.min(1, motionFactor);
+                    ctx.lineWidth = 1 + Math.random() * 2.5;
+
+                    ctx.beginPath();
+                    ctx.moveTo(vanishX + Math.cos(angle) * minR, horizonY + Math.sin(angle) * minR * 0.65);
+                    ctx.lineTo(vanishX + Math.cos(angle) * maxR, horizonY + Math.sin(angle) * maxR * 0.65);
+                    ctx.stroke();
+                }
+                ctx.restore();
+            }
+
+            // 4. TIẾP CẬN BỨC TƯỜNG TỪ XA TÍT TẮP
+            if (currentState === STATE.RUNNING) {
+                // Giảm khoảng cách dựa trên vận tốc
+                wallDist -= motionFactor * 0.36;
+                const progressPercent = Math.min(100, Math.max(0, Math.round((100 - wallDist) / 98.8 * 100)));
+                document.getElementById('wall-approach-bar').style.width = `${progressPercent}%`;
+
+                if (wallDist > 60) {
+                    document.getElementById('radar-status').textContent = `Tít xa: Phát hiện rào cản...`;
+                } else if (wallDist > 20) {
+                    document.getElementById('radar-status').textContent = `Đang lao nhanh đến bức tường!`;
+                } else {
+                    document.getElementById('radar-status').textContent = `⚠️ VA CHẠM TRONG GANG TẤC!`;
+                }
+
+                if (wallDist <= 1.2) {
+                    wallDist = 1.2;
+                    triggerWallCrash();
+                }
+            } else if (currentState === STATE.CRASHED_QUESTION) {
+                document.getElementById('wall-approach-bar').style.width = `100%`;
+                document.getElementById('radar-status').textContent = `Đang bị chắn ngang!`;
+            } else if (currentState === STATE.APPROACHING_DREAM) {
+                document.getElementById('wall-approach-bar').style.width = `100%`;
+                document.getElementById('radar-status').textContent = `ƯỚC MƠ ĐÃ MỞ RA!`;
+            } else {
+                document.getElementById('wall-approach-bar').style.width = `0%`;
+                document.getElementById('radar-status').textContent = `Đường thông thoáng`;
+            }
+
+            if ((currentState === STATE.RUNNING || currentState === STATE.CRASHED_QUESTION) && currentBarrierIndex < GAME_DATA.barriers.length) {
+                drawBarrierWallByDistance(vanishX, horizonY, w, h, wallDist);
+            }
+
+            // CHỈ KHI hoàn thành câu hỏi thứ 4 thì vầng sáng rực rỡ và chữ "ƯỚC MƠ" mới xuất hiện
+            if (currentState === STATE.APPROACHING_DREAM) {
+                dreamGlowProgress = Math.min(1, dreamGlowProgress + 0.012);
+                drawDreamHorizonRays(vanishX, horizonY, w, h, dreamGlowProgress);
+            }
+
+            // 5. MẢNH VỠ BỨC TƯỜNG (DEBRIS PARTICLES)
+            for (let i = debrisParticles.length - 1; i >= 0; i--) {
+                const p = debrisParticles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.42;
+                p.rot += p.vRot;
+                p.alpha -= 0.016;
+
+                if (p.alpha <= 0) {
+                    debrisParticles.splice(i, 1);
+                    continue;
+                }
+
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, p.alpha);
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rot);
+                ctx.fillStyle = p.color;
+                ctx.strokeStyle = '#e0f2fe';
+                ctx.lineWidth = 1.5;
+                ctx.fillRect(-p.size / 2, -p.size / 3, p.size, p.size * 0.66);
+                ctx.strokeRect(-p.size / 2, -p.size / 3, p.size, p.size * 0.66);
+                ctx.restore();
+            }
+
+            ctx.restore();
+            requestAnimationFrame(renderCockpitScene);
+        }
+
+        // Vẽ bức tường với tỉ lệ chuyển đổi từ khoảng cách xa (bắt đầu từ 1 chấm nhỏ)
+        function drawBarrierWallByDistance(vanishX, horizonY, w, h, distance) {
+            // Biến đổi khoảng cách 100 -> 1.2 thành tỉ lệ phóng đại phối cảnh mượt mà
+            const norm = Math.max(0, (100 - distance) / 98.8);
+            const scale = Math.pow(norm, 3.6); // Khởi đầu nhỏ tít tắp, sau đó gia tốc phóng to nhanh khi đến gần
+
+            const wallW = Math.max(12, w * 0.88 * scale);
+            const wallH = Math.max(8, h * 0.72 * scale);
+            const baseY = horizonY + scale * (h - horizonY) * 0.84;
+            const leftX = vanishX - wallW / 2;
+            const topY = baseY - wallH;
+
+            ctx.save();
+
+            // Bóng đổ
+            ctx.fillStyle = 'rgba(2, 6, 23, 0.55)';
+            ctx.fillRect(leftX - 8, baseY - 6, wallW + 16, Math.max(4, 20 * scale));
+
+            const wallGrad = ctx.createLinearGradient(leftX, topY, leftX, baseY);
+            if (wallRedFlash > 0) {
+                wallGrad.addColorStop(0, '#e11d48');
+                wallGrad.addColorStop(1, '#881337');
+                wallRedFlash = Math.max(0, wallRedFlash - 0.05);
+            } else {
+                wallGrad.addColorStop(0, '#1e293b');
+                wallGrad.addColorStop(0.5, '#334155');
+                wallGrad.addColorStop(1, '#0f172a');
+            }
+            ctx.fillStyle = wallGrad;
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = Math.max(1.5, 5 * scale);
+            ctx.fillRect(leftX, topY, wallW, wallH);
+            ctx.strokeRect(leftX, topY, wallW, wallH);
+
+            // Mạch gạch
+            if (scale > 0.08) {
+                const rows = 5;
+                const cols = 4;
+                const rowH = wallH / rows;
+                const colW = wallW / cols;
+                ctx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
+                ctx.lineWidth = Math.max(1, 2 * scale);
+
+                for (let r = 1; r < rows; r++) {
+                    const ry = topY + r * rowH;
+                    ctx.beginPath();
+                    ctx.moveTo(leftX, ry);
+                    ctx.lineTo(leftX + wallW, ry);
+                    ctx.stroke();
+                }
+                for (let r = 0; r < rows; r++) {
+                    const shift = (r % 2) * (colW * 0.5);
+                    for (let c = 1; c < cols; c++) {
+                        const cx = leftX + c * colW - shift;
+                        if (cx > leftX && cx < leftX + wallW) {
+                            ctx.beginPath();
+                            ctx.moveTo(cx, topY + r * rowH);
+                            ctx.lineTo(cx, topY + (r + 1) * rowH);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                const stripeH = Math.max(3, wallH * 0.08);
+                ctx.fillStyle = '#f59e0b';
+                ctx.fillRect(leftX, topY, wallW, stripeH);
+                ctx.fillRect(leftX, baseY - stripeH, wallW, stripeH);
+            }
+
+            if (wallCrackedLevel >= 1) {
+                ctx.strokeStyle = '#38bdf8';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(vanishX, topY + wallH * 0.5);
+                ctx.lineTo(leftX + wallW * 0.25, topY + wallH * 0.15);
+                ctx.moveTo(vanishX, topY + wallH * 0.5);
+                ctx.lineTo(leftX + wallW * 0.78, topY + wallH * 0.2);
+                ctx.moveTo(vanishX, topY + wallH * 0.5);
+                ctx.lineTo(leftX + wallW * 0.3, baseY - wallH * 0.1);
+                ctx.moveTo(vanishX, topY + wallH * 0.5);
+                ctx.lineTo(leftX + wallW * 0.72, baseY - wallH * 0.12);
+                ctx.stroke();
+            }
+
+            const barrier = GAME_DATA.barriers[currentBarrierIndex];
+            if (barrier && scale > 0.18) {
+                ctx.fillStyle = 'rgba(2, 132, 199, 0.94)';
+                const bannerW = wallW * 0.86;
+                const bannerH = wallH * 0.34;
+                const bx = vanishX - bannerW / 2;
+                const by = topY + (wallH - bannerH) / 2;
+                ctx.fillRect(bx, by, bannerW, bannerH);
+                ctx.strokeStyle = '#bae6fd';
+                ctx.lineWidth = Math.max(1.5, 3 * scale);
+                ctx.strokeRect(bx, by, bannerW, bannerH);
+
+                ctx.fillStyle = '#fde047';
+                ctx.font = `800 ${Math.max(10, Math.floor(20 * scale))}px "Plus Jakarta Sans", sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(`🚧 RÀO CẢN THỬ THÁCH`, vanishX, by + bannerH * 0.33);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = `800 ${Math.max(12, Math.floor(26 * scale))}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillText(barrier.wallShortLabel, vanishX, by + bannerH * 0.72);
+            }
+
+            ctx.restore();
+        }
+
+        // CHỈ GỌI KHI HOÀN THÀNH CÂU HỎI CUỐI: Vẽ vầng hào quang bừng sáng và dòng chữ "ƯỚC MƠ"
+        function drawDreamHorizonRays(vanishX, horizonY, w, h, progress) {
+            ctx.save();
+
+            const numRays = 20;
+            const rayAngle = (Date.now() * 0.0014) % (Math.PI * 2);
+            for (let i = 0; i < numRays; i++) {
+                const angle = rayAngle + (i * Math.PI * 2) / numRays;
+                ctx.fillStyle = `rgba(254, 240, 138, ${0.14 * progress})`;
+                ctx.beginPath();
+                ctx.moveTo(vanishX, horizonY);
+                ctx.arc(vanishX, horizonY, w * 0.95, angle, angle + Math.PI / numRays * 0.75);
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            const sunGlow = ctx.createRadialGradient(vanishX, horizonY, 5, vanishX, horizonY, w * 0.48 * progress);
+            sunGlow.addColorStop(0, `rgba(255, 255, 255, ${0.98 * progress})`);
+            sunGlow.addColorStop(0.3, `rgba(254, 240, 138, ${0.88 * progress})`);
+            sunGlow.addColorStop(0.7, `rgba(56, 189, 248, ${0.55 * progress})`);
+            sunGlow.addColorStop(1, 'rgba(56, 189, 248, 0)');
+            ctx.fillStyle = sunGlow;
+            ctx.fillRect(0, 0, w, h);
+
+            const textScale = 1 + progress * 1.8;
+            const fontSize = Math.floor(Math.max(26, 38 * textScale));
+            
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.font = `900 ${fontSize}px "Baloo 2", cursive`;
+
+            ctx.shadowColor = '#fef08a';
+            ctx.shadowBlur = 40 * progress;
+
+            ctx.strokeStyle = '#0284c7';
+            ctx.lineWidth = Math.max(3, 7 * textScale * 0.5);
+            ctx.strokeText('✨ ƯỚC MƠ ✨', vanishX, horizonY - 12);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText('✨ ƯỚC MƠ ✨', vanishX, horizonY - 12);
+
+            ctx.shadowBlur = 15;
+            ctx.font = `800 ${Math.floor(fontSize * 0.38)}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = '#fef08a';
+            ctx.fillText('ĐÍCH ĐẾN ĐÃ MỞ RA!', vanishX, horizonY + 24);
+
+            ctx.restore();
+        }
+
+        /* -------------------------------------------------------------------
+         * 8. MODAL LUẬT CHƠI (MỞ KHI BẤM NÚT TRÒN DẤU ? GIỮA TÀU)
+         * ------------------------------------------------------------------- */
+        function openRulesModal() {
+            document.getElementById('rules-modal').classList.remove('hidden');
+        }
+
+        function closeRulesModal() {
+            document.getElementById('rules-modal').classList.add('hidden');
+        }
+
+        /* -------------------------------------------------------------------
+         * 9. PHÍM TẮT HỖ TRỢ THUYẾT TRÌNH MƯỢT MÀ
+         * ------------------------------------------------------------------- */
+        window.addEventListener('keydown', (e) => {
+            if (!window._trainGameActive) return;
+            if (e.key === '?' || e.key === 'h' || e.key === 'H') {
+                const rulesModal = document.getElementById('rules-modal');
+                if (rulesModal.classList.contains('hidden')) openRulesModal();
+                else closeRulesModal();
+                return;
+            }
+
+            if (e.key === 'Escape') {
+                closeRulesModal();
+                return;
+            }
+
+            if (e.code === 'Space' && currentState === STATE.START_SCREEN) {
+                e.preventDefault();
+                startGameWithFlash();
+                return;
+            }
+
+            if (currentState === STATE.CRASHED_QUESTION) {
+                const keyMap = {
+                    '1': 0, '2': 1, '3': 2, '4': 3,
+                    'a': 0, 'b': 1, 'c': 2, 'd': 3,
+                    'A': 0, 'B': 1, 'C': 2, 'D': 3
+                };
+                if (keyMap[e.key] !== undefined) {
+                    const idx = keyMap[e.key];
+                    const buttons = document.getElementById('q-options').querySelectorAll('button');
+                    if (buttons[idx]) {
+                        buttons[idx].click();
+                    }
+                }
+            }
+        });
+
+        window.startGameWithFlash = startGameWithFlash;
+        window.openRulesModal = openRulesModal;
+        window.closeRulesModal = closeRulesModal;
+        window._trainGameActive = true;
+        resizeCanvas();
+        requestAnimationFrame(renderCockpitScene);
+    
+    })();
+
   </script>
 </body>
 </html>
