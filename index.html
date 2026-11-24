@@ -265,19 +265,6 @@
       100% { transform: rotate(18deg); }
     }
 
-    /* SLIDE 7: NHỊP TIM ECG CHẠY LIÊN TỤC */
-    .ecg-pulse-line {
-      stroke-dasharray: 420;
-      stroke-dashoffset: 420;
-      filter: drop-shadow(0 0 8px rgba(253, 224, 71, 0.8));
-      animation: ecgTrace 2.8s linear infinite;
-    }
-    @keyframes ecgTrace {
-      0% { stroke-dashoffset: 420; opacity: 0.4; }
-      50% { opacity: 1; }
-      100% { stroke-dashoffset: 0; opacity: 0.9; }
-    }
-
     /* SLIDE 8: RADAR 4 VÒNG TRÒN VÙNG AN TOÀN -> TĂNG TRƯỞNG (ĐÃ BỔ SUNG CSS HOÀN CHỈNH) */
     .zone-radar {
       position: relative; width: 260px; height: 260px;
@@ -2401,37 +2388,6 @@
       </div>
     </div>
 
-    <!-- SLIDE 7 (fx-7): VÍ DỤ BẠN TRẺ NUÔI MỘNG LÀM BÁC SĨ -->
-    <div class="slide" data-fx="fx-7" data-section="PHẦN II" data-title="Chủ động cầm lái số phận">
-      <div class="part-capsule step-item">II. VÌ SAO TUỔI TRẺ CẦN CÓ ƯỚC MƠ?</div>
-      <h2 class="slide-title">Chủ động cầm lái số phận</h2>
-      <div class="grid-asymmetric">
-        <div style="display: flex; flex-direction: column; gap: 0.95rem;">
-          <div class="neo-card step-item" style="border-left: 4px solid var(--accent-gold);">
-            <div class="badge-sub" style="background: rgba(253, 224, 71, 0.22); color: var(--accent-gold);">MINH CHỨNG TUỔI TRẺ</div>
-            <div class="card-title-lg">Một bạn trẻ nuôi mộng làm bác sĩ</div>
-            <div class="card-content-p">
-              Sẽ có lý do để <span class="hl-underline">miệt mài bên trang sách</span>.
-            </div>
-          </div>
-          <div class="quote-cinematic-banner step-item" style="margin-bottom: 0;">
-            “Nếu sau này thấy hướng đi ấy chưa phù hợp, bạn vẫn có quyền rẽ lối; điều quý giá nhất là bạn đã <span class="hl-marker">chủ động cầm lái số phận</span>, thay vì <span class="hl-rose">phó mặc cho dòng đời đưa đẩy</span>.”
-          </div>
-        </div>
-        <div class="visual-stage">
-          <svg viewBox="0 0 380 240" style="width: 100%; height: 100%;">
-            <path d="M70 195 Q130 175 190 198 Q250 175 310 195 L310 145 Q250 125 190 148 Q130 125 70 145 Z" fill="rgba(30, 58, 138, 0.65)" stroke="#7dd3fc" stroke-width="2.2"/>
-            <line x1="190" y1="148" x2="190" y2="198" stroke="#fde047" stroke-width="2.5"/>
-
-            <circle cx="190" cy="86" r="52" fill="rgba(12, 34, 68, 0.9)" stroke="rgba(52, 211, 153, 0.6)" stroke-width="2"/>
-            <path d="M174 86 H206 M190 70 V102" stroke="#34d399" stroke-width="7" stroke-linecap="round"/>
-
-            <polyline class="ecg-pulse-line" points="25,86 115,86 132,58 148,118 166,42 184,112 200,72 214,86 355,86" fill="none" stroke="#fde047" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-            <text x="190" y="224" text-anchor="middle" fill="#fde047" font-size="11.5" font-weight="800" letter-spacing="1.2">KHÁT VỌNG Y KHOA VÀ BẢN LĨNH TỰ CHỦ</text>
-          </svg>
-        </div>
-      </div>
-    </div>
 
     <!-- SLIDE 8 (fx-8): III. VÙNG AN TOÀN & GÔNG CÙM 1 (RADAR 4 VÒNG) -->
     <div class="slide" data-fx="fx-8" data-section="PHẦN III" data-title="Cơ chế tâm lý vùng an toàn">
@@ -3290,17 +3246,17 @@
       document.querySelectorAll('.manual-focus').forEach(el => el.classList.remove('manual-focus'));
     }
 
-    function triggerSlideSpecialEffects(idx) {
+function triggerSlideSpecialEffects(idx) {
       const activeSlide = slides[idx];
       if (!activeSlide) return;
       if (idx === 4) window.startAutoIroning();
-      if (idx === 10 || idx === 12) window.runNumberCounters(activeSlide);
-      if (idx === 11 && typeof window.resetS12Game === 'function') window.resetS12Game();
-      if (idx === 13) {
+      if (idx === 9 || idx === 11) window.runNumberCounters(activeSlide);
+      if (idx === 10 && typeof window.resetS12Game === 'function') window.resetS12Game();
+      if (idx === 12) {
         window.runMatrixCipher();
         window.replayBambooGrowth();
       }
-      if (idx === 14 && typeof window.enterTheaterSlide === 'function') {
+      if (idx === 13 && typeof window.enterTheaterSlide === 'function') {
         window.enterTheaterSlide();
       } else if (typeof window.leaveTheaterSlide === 'function') {
         window.leaveTheaterSlide();
@@ -3512,7 +3468,7 @@
         ctx.fill();
       });
 
-      if (nCtx && currentSlide === 9) {
+      if (nCtx && currentSlide === 8) {
         const w = netCanvas.width, h = netCanvas.height;
         nCtx.clearRect(0, 0, w, h);
         const center = netNodes[0];
